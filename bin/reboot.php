@@ -1,18 +1,17 @@
 <?php
+
+declare(strict_types=1);
 /**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
+ * This file is part of Hyperf.
  *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 /**
- * 强制重启服务脚本，并清理缓存代理类
+ * 强制重启服务脚本，并清理缓存代理类.
  */
-
 $pid = shell_exec(sprintf('cat %s/../runtime/hyperf.pid', __DIR__));
 $rebootCmd = sprintf('rm -rf %s/../runtime/container/* && php %s/hyperf.php start > /dev/null 2>/dev/null &', __DIR__, __DIR__);
 
@@ -32,7 +31,7 @@ $pidList = explode("\n", trim($output));
 // 遍历进程 ID 列表并杀死相应进程
 foreach ($pidList as $pid) {
     if (is_numeric($pid)) {
-        shell_exec("kill -9 $pid");
-        echo "进程 $pid 已杀死\n";
+        shell_exec("kill -9 {$pid}");
+        echo "进程 {$pid} 已杀死\n";
     }
 }

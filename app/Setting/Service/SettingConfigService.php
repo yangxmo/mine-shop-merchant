@@ -1,19 +1,28 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Setting\Service;
 
-
 use App\Setting\Mapper\SettingConfigMapper;
-use Hyperf\Config\Annotation\Value;
-use Hyperf\Redis\Redis;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\DependProxy;
 use Mine\Annotation\Transaction;
+use Mine\Cache\MineCache;
 use Mine\Interfaces\ServiceInterface\ConfigServiceInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use RedisException;
 
-#[DependProxy(values: [ ConfigServiceInterface::class ])]
+#[DependProxy(values: [ConfigServiceInterface::class])]
 class SettingConfigService extends AbstractService implements ConfigServiceInterface
 {
     /**
@@ -21,95 +30,55 @@ class SettingConfigService extends AbstractService implements ConfigServiceInter
      */
     public $mapper;
 
-    /**
-     * @var ContainerInterface
-     */
     protected ContainerInterface $container;
 
-    /**
-     * @var Redis
-     */
-    protected Redis $redis;
-
-    /**
-     * @var string
-     */
-    #[Value("cache.default.prefix")]
-    protected string $prefix;
-
-    /**
-     * @var string
-     */
-    protected string $cacheGroupName;
-
-    /**
-     * @var string
-     */
-    protected string $cacheName;
+    protected MineCache $redis;
 
     /**
      * SettingConfigService constructor.
-     * @param SettingConfigMapper $mapper
-     * @param ContainerInterface $container
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct(SettingConfigMapper $mapper, ContainerInterface $container)
     {
         $this->mapper = $mapper;
         $this->container = $container;
-        $this->setCacheGroupName($this->prefix . 'configGroup:');
-        $this->setCacheName($this->prefix . 'config:');
-        $this->redis = $this->container->get(Redis::class);
+        $this->redis = $this->container->get(MineCache::class);
     }
 
     /**
-     * 按key获取配置，并缓存
-     * @param string $key
-     * @return array|null
-     * @throws \RedisException
+     * 按key获取配置，并缓存.
+     * @throws RedisException
      */
     public function getConfigByKey(string $key): ?array
     {
-        if (empty($key)) return [];
-        $cacheKey = $this->getCacheName() . $key;
-        if (($data = $this->redis->get($cacheKey))) {
-            return unserialize($data);
-        } else {
-            $data = $this->mapper->getConfigByKey($key);
-            if ($data) {
-                $this->redis->set($cacheKey, serialize($data));
-                return $data;
-            }
-            return null;
+        if (empty($key)) {
+            return [];
         }
+        if ($data = $this->redis->getUploadCache($key)) {
+            return unserialize($data);
+        }
+        $data = $this->mapper->getConfigByKey($key);
+        if ($data) {
+            $this->redis->setUploadCache($key, serialize($data));
+            return $data;
+        }
+        return null;
     }
 
     /**
-     * 清除缓存
-     * @return bool
-     * @throws \RedisException
+     * 清除缓存.
+     * @throws RedisException
      */
     public function clearCache(): bool
     {
-        $groupCache = $this->redis->keys($this->getCacheGroupName().'*');
-        $keyCache = $this->redis->keys($this->getCacheName().'*');
-        foreach ($groupCache as $item) {
-            $this->redis->del($item);
-        }
-
-        foreach($keyCache as $item) {
-            $this->redis->del($item);
-        }
+        $this->redis->delUploadOrUploadGroup();
 
         return true;
     }
 
     /**
-     * 更新配置
-     * @param string $key
-     * @param array $data
-     * @return bool
+     * 更新配置.
      */
     public function updated(string $key, array $data): bool
     {
@@ -117,9 +86,7 @@ class SettingConfigService extends AbstractService implements ConfigServiceInter
     }
 
     /**
-     * 按 keys 更新配置
-     * @param array $data
-     * @return bool
+     * 按 keys 更新配置.
      */
     #[Transaction]
     public function updatedByKeys(array $data): bool
@@ -129,38 +96,4 @@ class SettingConfigService extends AbstractService implements ConfigServiceInter
         }
         return true;
     }
-
-    /**
-     * @return string
-     */
-    public function getCacheGroupName(): string
-    {
-        return $this->cacheGroupName;
-    }
-
-    /**
-     * @param string $cacheGroupName
-     */
-    public function setCacheGroupName(string $cacheGroupName): void
-    {
-        $this->cacheGroupName = $cacheGroupName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheName(): string
-    {
-        return $this->cacheName;
-    }
-
-    /**
-     * @param string $cacheName
-     */
-    public function setCacheName(string $cacheName): void
-    {
-        $this->cacheName = $cacheName;
-    }
-
-
 }

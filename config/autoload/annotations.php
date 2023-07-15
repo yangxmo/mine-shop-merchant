@@ -28,7 +28,7 @@ return [
         ],
         'ignore_annotations' => [
             'mixin',
-            'required'
+            'required',
         ],
     ],
 ];

@@ -1,8 +1,15 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Setting\Service;
-
 
 use App\Setting\Mapper\SettingConfigGroupMapper;
 use Mine\Abstracts\AbstractService;
@@ -17,7 +24,6 @@ class SettingConfigGroupService extends AbstractService
 
     /**
      * SettingConfigGroupService constructor.
-     * @param SettingConfigGroupMapper $mapper
      */
     public function __construct(SettingConfigGroupMapper $mapper)
     {
@@ -25,9 +31,7 @@ class SettingConfigGroupService extends AbstractService
     }
 
     /**
-     * 删除配置组和其所属配置
-     * @param int $id
-     * @return bool
+     * 删除配置组和其所属配置.
      */
     #[Transaction]
     public function deleteConfigGroup(int $id): bool

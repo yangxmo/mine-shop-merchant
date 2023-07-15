@@ -10,7 +10,14 @@
  */
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 return [
     'no_login' => 'The user is abnormal or not logged in, please log in again',
     'token_blacklist' => 'Token has been blacklisted, please login again',

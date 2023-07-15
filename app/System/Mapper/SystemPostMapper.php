@@ -1,8 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Mapper;
-
 
 use App\System\Model\SystemPost;
 use Hyperf\Database\Model\Builder;
@@ -21,26 +28,23 @@ class SystemPostMapper extends AbstractMapper
     }
 
     /**
-     * 搜索处理器
-     * @param Builder $query
-     * @param array $params
-     * @return Builder
+     * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        if (!empty($params['name'])) {
-            $query->where('name', 'like', '%'.$params['name'].'%');
+        if (! empty($params['name'])) {
+            $query->where('name', 'like', '%' . $params['name'] . '%');
         }
-        if (!empty($params['code'])) {
+        if (! empty($params['code'])) {
             $query->where('code', $params['code']);
         }
-        if (!empty($params['status'])) {
+        if (! empty($params['status'])) {
             $query->where('status', $params['status']);
         }
-        if (!empty($params['created_at']) && is_array($params['created_at']) && count($params['created_at']) == 2) {
+        if (! empty($params['created_at']) && is_array($params['created_at']) && count($params['created_at']) == 2) {
             $query->whereBetween(
                 'created_at',
-                [ $params['created_at'][0] . ' 00:00:00', $params['created_at'][1] . ' 23:59:59' ]
+                [$params['created_at'][0] . ' 00:00:00', $params['created_at'][1] . ' 23:59:59']
             );
         }
         return $query;

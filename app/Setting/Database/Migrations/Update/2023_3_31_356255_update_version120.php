@@ -1,14 +1,23 @@
 <?php
 
-use Hyperf\Database\Schema\Schema;
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
+use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
+use Mine\Abstracts\AbstractMigration;
 
 /**
- * 升级1.2.0版
+ * 升级1.2.0版.
  */
-class UpdateVersion120 extends Migration
+class UpdateVersion120 extends AbstractMigration
 {
     /**
      * Run the migrations.
@@ -20,9 +29,9 @@ class UpdateVersion120 extends Migration
             $table->comment('数据源表');
             $table->bigIncrements('id')->comment('主键');
             $table->addColumn('string', 'source_name', ['length' => 32, 'comment' => '数据源名称']);
-            $table->addColumn('string', 'dsn', ['length'=> 255, 'comment' => '连接dsn字符串'])->nullable();
-            $table->addColumn('string', 'username', ['length'=> 64, 'comment' => '数据库名称'])->nullable();
-            $table->addColumn('string', 'password', ['length'=> 32, 'comment' => '数据库用户'])->nullable();
+            $table->addColumn('string', 'dsn', ['length' => 255, 'comment' => '连接dsn字符串'])->nullable();
+            $table->addColumn('string', 'username', ['length' => 64, 'comment' => '数据库名称'])->nullable();
+            $table->addColumn('string', 'password', ['length' => 32, 'comment' => '数据库用户'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
@@ -40,7 +49,7 @@ class UpdateVersion120 extends Migration
                 'icon' => 'icon-storage',
                 'route' => 'setting/datasource',
                 'component' => 'setting/datasource/index',
-                'redirect' => NULL,
+                'redirect' => null,
                 'is_hidden' => '2',
                 'type' => 'M',
                 'status' => '1',
@@ -49,8 +58,8 @@ class UpdateVersion120 extends Migration
                 'updated_by' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
-                'deleted_at' => NULL,
-                'remark' => NULL,
+                'deleted_at' => null,
+                'remark' => null,
             ]
         );
 
@@ -69,8 +78,6 @@ class UpdateVersion120 extends Migration
         foreach ($sql as $item) {
             Db::insert($item);
         }
-
-        redis()->flushAll();
     }
 
     /**

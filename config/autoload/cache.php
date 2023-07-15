@@ -9,10 +9,19 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use Mine\Kernel\Redis\RedisDriver;
+
 return [
     'default' => [
-        'driver' => Hyperf\Cache\Driver\RedisDriver::class,
+        'driver' => RedisDriver::class,
         'packer' => Hyperf\Utils\Packer\PhpSerializerPacker::class,
-        'prefix' => 'MineAdmin:',
+        'prefix' => 'ms:',
+        'pool_name' => 'default',
+    ],
+    'user' => [
+        'driver' => RedisDriver::class,
+        'packer' => Hyperf\Utils\Packer\PhpSerializerPacker::class,
+        'prefix' => 'ms:',
+        'pool_name' => 'user',
     ],
 ];

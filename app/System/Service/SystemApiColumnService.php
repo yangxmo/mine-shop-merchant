@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Service;
 
 use App\System\Mapper\SystemApiColumnMapper;
@@ -8,8 +16,7 @@ use Mine\Abstracts\AbstractService;
 
 /**
  * api接口字段业务
- * Class SystemApiColumnService
- * @package App\System\Service
+ * Class SystemApiColumnService.
  */
 class SystemApiColumnService extends AbstractService
 {

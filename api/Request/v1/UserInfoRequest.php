@@ -1,5 +1,14 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace Api\Request\v1;
 
 use Hyperf\Validation\Request\FormRequest;
@@ -21,7 +30,7 @@ class UserInfoRequest extends FormRequest
         ];
     }
 
-    /**
+    /*
      * 验证消息.
      */
     // public function messages(): array

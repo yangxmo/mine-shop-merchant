@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Mapper;
 
 use App\System\Model\SystemDictData;
@@ -9,8 +18,7 @@ use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
 
 /**
- * Class SystemUserMapper
- * @package App\System\Mapper
+ * Class SystemUserMapper.
  */
 class SystemDictTypeMapper extends AbstractMapper
 {
@@ -24,11 +32,6 @@ class SystemDictTypeMapper extends AbstractMapper
         $this->model = SystemDictType::class;
     }
 
-    /**
-     * @param int $id
-     * @param array $data
-     * @return bool
-     */
     #[Transaction]
     public function update(int $id, array $data): bool
     {
@@ -37,10 +40,6 @@ class SystemDictTypeMapper extends AbstractMapper
         return true;
     }
 
-    /**
-     * @param array $ids
-     * @return bool
-     */
     #[Transaction]
     public function realDelete(array $ids): bool
     {
@@ -55,20 +54,17 @@ class SystemDictTypeMapper extends AbstractMapper
     }
 
     /**
-     * 搜索处理器
-     * @param Builder $query
-     * @param array $params
-     * @return Builder
+     * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        if (!empty($params['code'])) {
-            $query->where('code', 'like', '%'.$params['code'].'%');
+        if (! empty($params['code'])) {
+            $query->where('code', 'like', '%' . $params['code'] . '%');
         }
-        if (!empty($params['name'])) {
-            $query->where('name', 'like', '%'.$params['name'].'%');
+        if (! empty($params['name'])) {
+            $query->where('name', 'like', '%' . $params['name'] . '%');
         }
-        if (!empty($params['status'])) {
+        if (! empty($params['status'])) {
             $query->where('status', $params['status']);
         }
         return $query;

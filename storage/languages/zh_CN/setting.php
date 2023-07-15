@@ -10,7 +10,14 @@
  */
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 return [
     'gen_code_edit' => '请先编辑配置生成信息',
     'gen_model_error' => '生成模型错误，请检查模块与表名称是否匹配',

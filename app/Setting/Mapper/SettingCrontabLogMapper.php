@@ -1,8 +1,15 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Setting\Mapper;
-
 
 use App\Setting\Model\SettingCrontabLog;
 use Hyperf\Database\Model\Builder;
@@ -21,10 +28,7 @@ class SettingCrontabLogMapper extends AbstractMapper
     }
 
     /**
-     * 搜索处理器
-     * @param Builder $query
-     * @param array $params
-     * @return Builder
+     * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
@@ -33,5 +37,4 @@ class SettingCrontabLogMapper extends AbstractMapper
         }
         return $query;
     }
-
 }

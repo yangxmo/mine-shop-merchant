@@ -1,6 +1,14 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Crontab;
 
 use App\System\Model\SystemApiLog;
@@ -12,8 +20,7 @@ use Mine\Annotation\Transaction;
 class ClearLogCrontab
 {
     /**
-     * 清理所有日志
-     * @return string
+     * 清理所有日志.
      */
     #[Transaction]
     public function execute(): string

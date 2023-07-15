@@ -1,19 +1,19 @@
 <?php
+
+declare(strict_types=1);
 /**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
+ * This file is part of Hyperf.
  *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
-use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
+use Hyperf\Database\Schema\Schema;
+use Mine\Abstracts\AbstractMigration;
 
-class CreateSystemApiLogTable extends Migration
+class CreateSystemApiLogTable extends AbstractMigration
 {
     /**
      * Run the migrations.

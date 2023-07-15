@@ -1,10 +1,19 @@
 <?php
 
-use Hyperf\Database\Schema\Schema;
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
+use Hyperf\Database\Schema\Schema;
+use Mine\Abstracts\AbstractMigration;
 
-class CreateSettingGenerateColumnsTable extends Migration
+class CreateSettingGenerateColumnsTable extends AbstractMigration
 {
     /**
      * Run the migrations.
@@ -26,19 +35,21 @@ class CreateSettingGenerateColumnsTable extends Migration
             $table->addColumn('smallInteger', 'is_list', ['default' => 1, 'comment' => '1 非列表显示字段 2 列表显示字段'])->nullable();
             $table->addColumn('smallInteger', 'is_query', ['default' => 1, 'comment' => '1 非查询字段 2 查询字段'])->nullable();
             $table->addColumn(
-                'string', 'query_type',
+                'string',
+                'query_type',
                 [
                     'length' => 100,
                     'default' => 'eq',
-                    'comment' => '查询方式 eq 等于, neq 不等于, gt 大于, lt 小于, like 范围'
+                    'comment' => '查询方式 eq 等于, neq 不等于, gt 大于, lt 小于, like 范围',
                 ]
             )->nullable();
             $table->addColumn(
-                'string', 'view_type',
+                'string',
+                'view_type',
                 [
                     'length' => 100,
                     'default' => 'text',
-                    'comment' => '页面控件，text, textarea, password, select, checkbox, radio, date, upload, ma-upload（封装的上传控件）'
+                    'comment' => '页面控件，text, textarea, password, select, checkbox, radio, date, upload, ma-upload（封装的上传控件）',
                 ]
             )->nullable();
             $table->addColumn('string', 'dict_type', ['length' => 200, 'comment' => '字典类型'])->nullable();

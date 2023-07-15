@@ -1,16 +1,26 @@
 <?php
+
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Request;
 
 use App\Setting\Service\SettingConfigService;
 use Mine\MineFormRequest;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use RedisException;
 
 class UploadRequest extends MineFormRequest
 {
     /**
-     * 公共规则
+     * 公共规则.
      */
     public function commonRules(): array
     {
@@ -18,11 +28,11 @@ class UploadRequest extends MineFormRequest
     }
 
     /**
-     * 上传文件验证规则
+     * 上传文件验证规则.
      * @return string[]
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function uploadFileRules(): array
     {
@@ -33,11 +43,11 @@ class UploadRequest extends MineFormRequest
     }
 
     /**
-     * 上传图片验证规则
+     * 上传图片验证规则.
      * @return string[]
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function uploadImageRules(): array
     {
@@ -48,51 +58,38 @@ class UploadRequest extends MineFormRequest
     }
 
     /**
-     * 分块上传验证规则
+     * 分块上传验证规则.
      * @return string[]
      */
     public function chunkUploadRules(): array
     {
         return [
             'package' => 'required',
-            'total'   => 'required',
-            'index'   => 'required',
-            'hash'    => 'required',
-            'ext'     => 'required',
-            'type'    => 'required',
-            'name'    => 'required',
-            'size'    => 'required',
+            'total' => 'required',
+            'index' => 'required',
+            'hash' => 'required',
+            'ext' => 'required',
+            'type' => 'required',
+            'name' => 'required',
+            'size' => 'required',
         ];
     }
 
     /**
-     * 分块上传验证规则
+     * 分块上传验证规则.
      * @return string[]
      */
     public function saveNetworkImageRules(): array
     {
         return [
-            'url'   => 'required',
-            'path'  => 'max:30',
+            'url' => 'required',
+            'path' => 'max:30',
         ];
     }
 
     /**
-     * 获取Mimes
-     * @param $key
-     * @return string
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws \RedisException
-     */
-    protected function getMimes($key): string
-    {
-        return container()->get(SettingConfigService::class)->getConfigByKey($key)['value'] ?? '';
-    }
-
-    /**
      * 字段映射名称
-     * return array
+     * return array.
      */
     public function attributes(): array
     {
@@ -102,14 +99,25 @@ class UploadRequest extends MineFormRequest
             'image' => '上传图片',
             'file' => '上传文件',
             'package' => '文件数据包',
-            'total'   => '总分块数',
-            'index'   => '分块索引',
-            'hash'    => '文件hash',
-            'ext'     => '文件扩展名',
-            'type'    => '文件类型',
-            'name'    => '文件名称',
-            'size'    => '文件大小',
+            'total' => '总分块数',
+            'index' => '分块索引',
+            'hash' => '文件hash',
+            'ext' => '文件扩展名',
+            'type' => '文件类型',
+            'name' => '文件名称',
+            'size' => '文件大小',
         ];
     }
 
+    /**
+     * 获取Mimes.
+     * @param mixed $key
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws RedisException
+     */
+    protected function getMimes($key): string
+    {
+        return container()->get(SettingConfigService::class)->getConfigByKey($key)['value'] ?? '';
+    }
 }

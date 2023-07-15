@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Request;
 
 use Mine\MineFormRequest;
@@ -7,7 +16,7 @@ use Mine\MineFormRequest;
 class SystemMenuRequest extends MineFormRequest
 {
     /**
-     * 公共规则
+     * 公共规则.
      */
     public function commonRules(): array
     {
@@ -16,7 +25,7 @@ class SystemMenuRequest extends MineFormRequest
 
     /**
      * 新增数据验证规则
-     * return array
+     * return array.
      */
     public function saveRules(): array
     {
@@ -28,7 +37,7 @@ class SystemMenuRequest extends MineFormRequest
 
     /**
      * 更新数据验证规则
-     * return array
+     * return array.
      */
     public function updateRules(): array
     {
@@ -40,19 +49,19 @@ class SystemMenuRequest extends MineFormRequest
 
     /**
      * 修改状态数据验证规则
-     * return array
+     * return array.
      */
     public function changeStatusRules(): array
     {
         return [
             'id' => 'required',
-            'status' => 'required'
+            'status' => 'required',
         ];
     }
 
     /**
      * 字段映射名称
-     * return array
+     * return array.
      */
     public function attributes(): array
     {
@@ -63,5 +72,4 @@ class SystemMenuRequest extends MineFormRequest
             'status' => '菜单状态',
         ];
     }
-
 }

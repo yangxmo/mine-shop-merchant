@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Mapper;
 
 use App\System\Model\SystemApi;
@@ -7,8 +16,7 @@ use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 /**
- * Class SystemApiMapper
- * @package App\System\Mapper
+ * Class SystemApiMapper.
  */
 class SystemApiMapper extends AbstractMapper
 {
@@ -23,10 +31,7 @@ class SystemApiMapper extends AbstractMapper
     }
 
     /**
-     * 搜索处理器
-     * @param Builder $query
-     * @param array $params
-     * @return Builder
+     * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
@@ -34,13 +39,11 @@ class SystemApiMapper extends AbstractMapper
     }
 
     /**
-     * 通过api获取字段列表
-     * @param string $id
-     * @return array
+     * 通过api获取字段列表.
      */
     public function getColumnListByApiId(string $id): array
     {
-        return $this->model::query()->where('id', $id)->with(['apiColumn' => function($query) {
+        return $this->model::query()->where('id', $id)->with(['apiColumn' => function ($query) {
             $query->where('status', $this->model::ENABLE);
         }])->first()->toArray();
     }

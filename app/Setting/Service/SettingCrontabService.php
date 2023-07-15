@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingCrontabMapper;
@@ -12,6 +20,7 @@ use Mine\Annotation\DeleteCache;
 use Mine\Crontab\MineCrontab;
 use Mine\Crontab\MineExecutor;
 use Psr\Container\ContainerInterface;
+use RedisException;
 
 class SettingCrontabService extends AbstractService
 {
@@ -20,25 +29,15 @@ class SettingCrontabService extends AbstractService
      */
     public $mapper;
 
-    /**
-     * @var ContainerInterface
-     */
     #[Inject]
     protected ContainerInterface $container;
 
-    /**
-     * @var Redis
-     */
     protected Redis $redis;
 
-    /**
-     * @var string
-     */
-    #[Value("cache.default.prefix")]
+    #[Value('cache.default.prefix')]
     protected string $prefix;
 
     /**
-     * @param SettingCrontabMapper $mapper
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -49,10 +48,8 @@ class SettingCrontabService extends AbstractService
     }
 
     /**
-     * 保存
-     * @param array $data
-     * @return int
-     * @throws \RedisException
+     * 保存.
+     * @throws RedisException
      */
     public function save(array $data): int
     {
@@ -63,11 +60,8 @@ class SettingCrontabService extends AbstractService
     }
 
     /**
-     * 更新
-     * @param int $id
-     * @param array $data
-     * @return bool
-     * @throws \RedisException
+     * 更新.
+     * @throws RedisException
      */
     public function update(int $id, array $data): bool
     {
@@ -94,8 +88,7 @@ class SettingCrontabService extends AbstractService
 
     /**
      * 立即执行一次定时任务
-     * @param $id
-     * @return bool|null
+     * @param mixed $id
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */

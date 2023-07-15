@@ -22,6 +22,6 @@ Router::get('/favicon.ico', function () {
 // 消息ws服务器
 Router::addServer('message', function () {
     Router::get('/message.io', 'App\System\Controller\ServerController', [
-        'middleware' => [ \App\System\Middleware\WsAuthMiddleware::class ]
+        'middleware' => [\App\System\Middleware\WsAuthMiddleware::class],
     ]);
 });

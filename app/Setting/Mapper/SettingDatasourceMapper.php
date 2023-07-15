@@ -1,15 +1,14 @@
 <?php
+
 declare(strict_types=1);
 /**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
+ * This file is part of Hyperf.
  *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace App\Setting\Mapper;
 
 use App\Setting\Model\SettingDatasource;
@@ -17,11 +16,13 @@ use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Exception\MineException;
+use PDO;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Throwable;
 
 /**
- * 数据源管理Mapper类
+ * 数据源管理Mapper类.
  */
 class SettingDatasourceMapper extends AbstractMapper
 {
@@ -36,69 +37,58 @@ class SettingDatasourceMapper extends AbstractMapper
     }
 
     /**
-     * 搜索处理器
-     * @param Builder $query
-     * @param array $params
-     * @return Builder
+     * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        
         // 数据源名称
-        if (!empty($params['source_name'])) {
-            $query->where('source_name', 'like', '%'.$params['source_name'].'%');
+        if (! empty($params['source_name'])) {
+            $query->where('source_name', 'like', '%' . $params['source_name'] . '%');
         }
 
         return $query;
     }
 
     /**
-     * 测试数据库连接
-     * @param Object|array $params
-     * @return array
+     * 测试数据库连接.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getDataSourceTableList(Object|array $params): array
+    public function getDataSourceTableList(object|array $params): array
     {
         try {
             return $this->connectionDb($params)->query('SHOW TABLE STATUS')->fetchAll();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new MineException($e->getMessage(), 500);
         }
     }
 
     /**
-     * 获取创建表结构SQL
-     * @param Object|array $params
-     * @param string $tableName
-     * @return string
+     * 获取创建表结构SQL.
      */
-    public function getCreateTableSql(Object|array $params, string $tableName): string
+    public function getCreateTableSql(object|array $params, string $tableName): string
     {
         try {
             return $this->connectionDb($params)->query(
                 sprintf('SHOW CREATE TABLE %s', $tableName)
             )->fetch()['Create Table'];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new MineException($e->getMessage(), 500);
         }
     }
 
     /**
-     * 通过SQL创建表
-     * @param string $sql
-     * @return bool
+     * 通过SQL创建表.
      */
     public function createTable(string $sql): bool
     {
         return Db::connection('default')->getPdo()->exec($sql) > 0;
     }
 
-    public function connectionDb(Object|array $params): \PDO
+    public function connectionDb(object|array $params): PDO
     {
-        return new \PDO($params['dsn'], $params['username'], $params['password'], [
-            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        return new PDO($params['dsn'], $params['username'], $params['password'], [
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
     }
 }

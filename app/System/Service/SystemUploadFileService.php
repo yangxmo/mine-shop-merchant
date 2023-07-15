@@ -1,40 +1,44 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\System\Service;
 
 use App\System\Mapper\SystemUploadFileMapper;
+use Exception;
+use Hyperf\Collection\Collection;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Upload\UploadedFile;
-use \Hyperf\Collection\Collection;
 use Mine\Abstracts\AbstractService;
 use Mine\Exception\NormalStatusException;
 use Mine\MineUpload;
 
 /**
  * 文件上传业务
- * Class SystemLoginLogService
- * @package App\System\Service
+ * Class SystemLoginLogService.
  */
 class SystemUploadFileService extends AbstractService
 {
-    /**
-     * @var ConfigInterface
-     */
-    #[Inject]
-    protected $config;
-
     /**
      * @var SystemUploadFileMapper
      */
     public $mapper;
 
     /**
-     * @var MineUpload
+     * @var ConfigInterface
      */
-    protected MineUpload $mineUpload;
+    #[Inject]
+    protected $config;
 
+    protected MineUpload $mineUpload;
 
     public function __construct(SystemUploadFileMapper $mapper, MineUpload $mineUpload)
     {
@@ -43,10 +47,7 @@ class SystemUploadFileService extends AbstractService
     }
 
     /**
-     * 上传文件
-     * @param UploadedFile $uploadedFile
-     * @param array $config
-     * @return array
+     * 上传文件.
      * @throws \League\Flysystem\FileExistsException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -58,15 +59,14 @@ class SystemUploadFileService extends AbstractService
             if ($model = $this->mapper->getFileInfoByHash($hash)) {
                 return $model->toArray();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new NormalStatusException('获取文件Hash失败', 500);
         }
         $data = $this->mineUpload->upload($uploadedFile, $config);
         if ($this->save($data)) {
             return $data;
-        } else {
-            return [];
         }
+        return [];
     }
 
     public function chunkUpload(array $data): array
@@ -82,9 +82,7 @@ class SystemUploadFileService extends AbstractService
     }
 
     /**
-     * 获取当前目录下所有文件（包含目录）
-     * @param array $params
-     * @return array
+     * 获取当前目录下所有文件（包含目录）.
      */
     public function getAllFile(array $params = []): array
     {
@@ -92,10 +90,31 @@ class SystemUploadFileService extends AbstractService
     }
 
     /**
-     * 数组数据搜索器
-     * @param Collection $collect
-     * @param array $params
-     * @return Collection
+     * 保存网络图片.
+     * @param array $data ['url', 'path']
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function saveNetworkImage(array $data): array
+    {
+        $data = $this->mineUpload->handleSaveNetworkImage($data);
+        if (! isset($data['id']) && $this->save($data)) {
+            return $data;
+        }
+        return $data;
+    }
+
+    /**
+     * 通过hash获取文件信息.
+     * @return null|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     */
+    public function readByHash(string $hash)
+    {
+        return $this->mapper->getFileInfoByHash($hash);
+    }
+
+    /**
+     * 数组数据搜索器.
      */
     protected function handleArraySearch(Collection $collect, array $params): Collection
     {
@@ -111,32 +130,5 @@ class SystemUploadFileService extends AbstractService
             });
         }
         return $collect;
-    }
-
-    /**
-     * 保存网络图片
-     * @param array $data ['url', 'path']
-     * @return array
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function saveNetworkImage(array $data): array
-    {
-        $data = $this->mineUpload->handleSaveNetworkImage($data);
-        if (! isset($data['id']) && $this->save($data)) {
-            return $data;
-        } else {
-            return $data;
-        }
-    }
-
-    /**
-     * 通过hash获取文件信息
-     * @param string $hash
-     * @return \Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object|null
-     */
-    public function readByHash(string $hash)
-    {
-        return $this->mapper->getFileInfoByHash($hash);
     }
 }
