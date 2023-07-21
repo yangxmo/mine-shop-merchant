@@ -12,11 +12,12 @@ declare(strict_types=1);
 namespace App\System\Cache;
 
 use Hyperf\Config\Annotation\Value;
+use Mine\Abstracts\AbstractRedis;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use RedisException;
 
-class UserCache extends \Mine\Abstracts\AbstractRedis
+class UserCache extends AbstractRedis
 {
     #[value('redis.user.prefix')]
     protected ?string $prefix;
@@ -68,6 +69,17 @@ class UserCache extends \Mine\Abstracts\AbstractRedis
     public function delUserTokenCache(int $uid): void
     {
         $key = $this->getKey('Token:' . $uid);
+        $this->redis('user')->del($key);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws RedisException
+     */
+    public function delUserCache(int $uid): void
+    {
+        $key = $this->getKey('userInfo_' . $uid);
         $this->redis('user')->del($key);
     }
 }

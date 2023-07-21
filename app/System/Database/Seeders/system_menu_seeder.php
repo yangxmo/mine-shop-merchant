@@ -18,10 +18,10 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-use Hyperf\Database\Seeders\Seeder;
 use Hyperf\DbConnection\Db;
+use Mine\Abstracts\AbstractSeeder;
 
-class SystemMenuSeeder extends Seeder
+class SystemMenuSeeder extends AbstractSeeder
 {
     /**
      * Run the database seeds.

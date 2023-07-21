@@ -9,14 +9,17 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Setting\Service;
 
-use Hyperf\Utils\Collection;
+use Hyperf\Collection\Collection;
+use Hyperf\Database\Migrations\Migrator;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\DependProxy;
 use Mine\Cache\MineCache;
 use Mine\Generator\ModuleGenerator;
+use Mine\Helper\Str;
 use Mine\Interfaces\ServiceInterface\ModuleServiceInterface;
 use Mine\Mine;
 use Psr\Container\ContainerExceptionInterface;
@@ -50,7 +53,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     /**
      * 创建模块.
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface|RedisException
      */
     public function createModule(array $moduleInfo): bool
     {
@@ -69,8 +72,8 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     public function installModuleData(string $name): bool
     {
         try {
-            $migrateCommand = ['command' => 'mine:migrate-run', 'name' => $name];
-            $seedCommand = ['command' => 'mine:seeder-run', 'name' => $name];
+            $migrateCommand = ['command' => 'mine:migrate-run', 'name' => $name, 'init' => true];
+            $seedCommand = ['command' => 'mine:seeder-run', 'name' => $name, 'init' => true];
             $application = container()->get(\Hyperf\Contract\ApplicationInterface::class);
             $application->setAutoExit(false);
             $application->run(new ArrayInput($migrateCommand), new NullOutput());
@@ -92,7 +95,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     public function uninstallModule(string $name): bool
     {
         try {
-            $migrate = container()->get(\Hyperf\Database\Migrations\Migrator::class);
+            $migrate = container()->get(Migrator::class);
             $path = BASE_PATH . '/app/' . $name . '/Database/Migrations';
             $migrate->rollback([$path]);
             is_dir($path . '/Update') && $migrate->rollback([$path . '/Update']);
@@ -127,7 +130,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     {
         $this->mine->scanModule();
         $modules = $this->mine->getModuleInfo();
-        if (! empty($moduleName)) {
+        if (!empty($moduleName)) {
             $modules[$moduleName] = $data;
         }
         $this->mineCache->setModuleCache(serialize($modules));
@@ -136,13 +139,13 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     /**
      * 获取模块缓存信息.
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface|RedisException
      */
     public function getModuleCache(?string $moduleName = null): array
     {
         if ($data = $this->mineCache->getModuleCache()) {
             $data = unserialize($data);
-            return ! empty($moduleName) && isset($data[$moduleName]) ? $data[$moduleName] : $data;
+            return !empty($moduleName) && isset($data[$moduleName]) ? $data[$moduleName] : $data;
         }
         $this->setModuleCache();
         $this->mine->scanModule();
@@ -152,7 +155,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     /**
      * 启停用模块.
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface|RedisException
      */
     public function modifyStatus(array $data): bool
     {
@@ -165,7 +168,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
                 '"enabled": ' . $status . ',',
                 file_get_contents($filePath)
             );
-            $result = (bool) file_put_contents($filePath, $content);
+            $result = (bool)file_put_contents($filePath, $content);
             $this->setModuleCache();
             return $result;
         }
@@ -179,13 +182,13 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     {
         if ($params['name'] ?? false) {
             $collect = $collect->filter(function ($row) use ($params) {
-                return \Mine\Helper\Str::contains($row['name'], $params['name']);
+                return Str::contains($row['name'], $params['name']);
             });
         }
 
         if ($params['label'] ?? false) {
             $collect = $collect->filter(function ($row) use ($params) {
-                return \Mine\Helper\Str::contains($row['label'], $params['label']);
+                return Str::contains($row['label'], $params['label']);
             });
         }
         return $collect;
@@ -194,7 +197,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     /**
      * 设置需要分页的数组数据.
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface|RedisException
      */
     protected function getArrayData(array $params = []): array
     {

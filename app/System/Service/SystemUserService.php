@@ -209,7 +209,7 @@ class SystemUserService extends AbstractService implements UserServiceInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface|RedisException
      */
-    public function clearCache(): bool
+    public function clearCache(int $userId = 0): bool
     {
         $iterator = null;
         while (false !== ($configKey = $this->mineCache->scan($iterator, 'config:*'))) {
@@ -220,6 +220,8 @@ class SystemUserService extends AbstractService implements UserServiceInterface
         }
         $this->mineCache->delCrontabCache();
         $this->mineCache->delModuleCache();
+
+        $userId && $this->userCache->delUserCache($userId);
 
         return true;
     }
