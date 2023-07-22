@@ -1,7 +1,14 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Goods\Model;
 
 use Hyperf\Codec\Json;
@@ -50,33 +57,38 @@ class Goods extends MineModel
         'deleted_at',
     ];
 
-    public function setGoodsImagesAttribute($value)
-    {
-        $this->attributes['goods_images'] = Json::encode(($value));
-    }
-
-    public function getGoodsImagesAttribute($value)
-    {
-        $this->attributes['goods_images'] = Json::decode(($value));
-    }
-
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'goods_plat_no', 'goods_name', 'goods_plat_name', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_images', 'goods_plat_images', 'goods_video', 'goods_plat_video', 'goods_category_id', 'goods_source', 'goods_status', 'goods_language', 'goods_sell_start_time', 'goods_description', 'goods_plat_description', 'created_at', 'updated_at', 'deleted_at'];
+    protected array $fillable = ['id', 'goods_name', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_images', 'goods_video', 'goods_category_id', 'goods_language', 'goods_description', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'goods_plat_no' => 'integer', 'goods_sale' => 'integer', 'goods_category_id' => 'string', 'goods_source' => 'integer', 'goods_status' => 'integer', 'goods_language' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected array $casts = ['id' => 'integer', 'goods_sale' => 'integer', 'goods_category_id' => 'string', 'goods_status' => 'integer', 'goods_language' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    public function setGoodsImagesAttribute($value): void
+    {
+        $this->attributes['goods_images'] = Json::encode($value);
+    }
+
+    public function getGoodsImagesAttribute($value): void
+    {
+        $this->attributes['goods_images'] = Json::decode($value);
+    }
 
     public function attribute(): HasMany
     {
-        return $this->hasMany(GoodsAttribute::class, 'id', 'goods_no');
+        return $this->hasMany(GoodsAttribute::class, 'goods_no', 'id');
+    }
+
+    public function attributeValue(): HasMany
+    {
+        return $this->hasMany(GoodsAttributesValue::class, 'goods_no', 'id');
     }
 
     public function sku(): HasMany
     {
-        return $this->hasMany(GoodsSku::class, 'id', 'goods_no');
+        return $this->hasMany(GoodsSku::class, 'goods_no', 'id');
     }
 }

@@ -1,7 +1,14 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Goods\Resource;
 
 use Hyperf\Codec\Json;
@@ -10,7 +17,7 @@ use Hyperf\Resource\Json\JsonResource;
 /**
  * This file is part of Hyperf.
  *
- * @link     https://www.hyperf.io
+ * @see     https://www.hyperf.io
  * @document https://hyperf.wiki
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
@@ -32,13 +39,13 @@ class GoodsResource extends JsonResource
 
         foreach ($data['items'] as $dataKey => &$datum) {
             $productInfo = $datum['product_data'] ?? [];
-            $productImages = !empty($productInfo['product_images']) ? Json::decode($productInfo['product_images']) : [];
+            $productImages = ! empty($productInfo['product_images']) ? Json::decode($productInfo['product_images']) : [];
             // 代发价格
             [$productAgentPrice, $skuMinPrice] = $this->getSkuPrice($datum);
             // 市场价格
             [$productMarketPrice, $skuMinMarketPrice] = $this->getSkuMarketPrice($datum);
 
-            /**
+            /*
              * 成本 = 销售价 = 供货价
              * 利润=市场价-供货价
              * 利润率 = 利润÷成本×100%
@@ -50,15 +57,14 @@ class GoodsResource extends JsonResource
                 $profit = $productProfit = $productGrossProfit = $productDiscount = 0;
             } else {
                 // 计算利润
-                $profit = bcsub((string)$skuMinMarketPrice, (string)$skuMinPrice, 2);
+                $profit = bcsub((string) $skuMinMarketPrice, (string) $skuMinPrice, 2);
                 // 计算利润率
-                $productProfit = $profit ? bcmul(bcdiv($profit, (string)$skuMinPrice, 2), '100') : 0;
+                $productProfit = $profit ? bcmul(bcdiv($profit, (string) $skuMinPrice, 2), '100') : 0;
                 // 计算毛利率
-                $productGrossProfit = bcmul(bcdiv(bcsub((string)$skuMinMarketPrice, (string)$skuMinPrice, 2), (string)$skuMinMarketPrice, 2), '100');
+                $productGrossProfit = bcmul(bcdiv(bcsub((string) $skuMinMarketPrice, (string) $skuMinPrice, 2), (string) $skuMinMarketPrice, 2), '100');
                 // 计算折扣
-                $productDiscount = bcmul(bcdiv((string)$skuMinMarketPrice, (string)$skuMinPrice, 2), '10');
+                $productDiscount = bcmul(bcdiv((string) $skuMinMarketPrice, (string) $skuMinPrice, 2), '10');
             }
-
 
             $newData[] = [
                 'product_no' => $productInfo['product_no'] ?? '',
@@ -91,10 +97,9 @@ class GoodsResource extends JsonResource
         ];
     }
 
-
     private function getSkuPrice($product)
     {
-        if (!empty($productSku = $product['product_sku_data'])) {
+        if (! empty($productSku = $product['product_sku_data'])) {
             $skuMinPrice = min(array_column($productSku, 'product_sku_price'));
             $skuMaxPrice = max(array_column($productSku, 'product_sku_price'));
             if ($skuMinPrice == $skuMaxPrice) {
@@ -102,7 +107,6 @@ class GoodsResource extends JsonResource
             } else {
                 $productAgentPrice = floatval($skuMinPrice) . '~' . floatval($skuMaxPrice);
             }
-
         } else {
             $skuMinPrice = floatval($product['product_data']['product_price']);
             $productAgentPrice = floatval($skuMinPrice);
@@ -113,7 +117,7 @@ class GoodsResource extends JsonResource
 
     private function getSkuMarketPrice($product)
     {
-        if (!empty($productSku = $product['product_sku_data'])) {
+        if (! empty($productSku = $product['product_sku_data'])) {
             $skuMinMarketPrice = min(array_column($productSku, 'product_sku_market_price'));
             $skuMaxMarketPrice = max(array_column($productSku, 'product_sku_market_price'));
             if ($skuMinMarketPrice == $skuMaxMarketPrice) {
@@ -121,7 +125,6 @@ class GoodsResource extends JsonResource
             } else {
                 $productMarketPrice = floatval($skuMinMarketPrice) . '~' . floatval($skuMaxMarketPrice);
             }
-
         } else {
             $skuMinMarketPrice = floatval($product['product_data']['product_price']);
             $productMarketPrice = floatval($skuMinMarketPrice);

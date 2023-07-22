@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace App\Setting\Service;
 
 use Hyperf\Collection\Collection;
@@ -130,7 +129,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     {
         $this->mine->scanModule();
         $modules = $this->mine->getModuleInfo();
-        if (!empty($moduleName)) {
+        if (! empty($moduleName)) {
             $modules[$moduleName] = $data;
         }
         $this->mineCache->setModuleCache(serialize($modules));
@@ -145,7 +144,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
     {
         if ($data = $this->mineCache->getModuleCache()) {
             $data = unserialize($data);
-            return !empty($moduleName) && isset($data[$moduleName]) ? $data[$moduleName] : $data;
+            return ! empty($moduleName) && isset($data[$moduleName]) ? $data[$moduleName] : $data;
         }
         $this->setModuleCache();
         $this->mine->scanModule();
@@ -168,7 +167,7 @@ class ModuleService extends AbstractService implements ModuleServiceInterface
                 '"enabled": ' . $status . ',',
                 file_get_contents($filePath)
             );
-            $result = (bool)file_put_contents($filePath, $content);
+            $result = (bool) file_put_contents($filePath, $content);
             $this->setModuleCache();
             return $result;
         }

@@ -47,6 +47,7 @@ class UserCache extends AbstractRedis
     }
 
     /**
+     * @param mixed $iterator
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

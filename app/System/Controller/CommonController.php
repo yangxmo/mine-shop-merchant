@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace App\System\Controller;
 
 use App\System\Service\SystemDeptService;
@@ -29,6 +28,7 @@ use Mine\MineController;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
+use RedisException;
 
 /**
  * 公共方法控制器
@@ -80,7 +80,7 @@ class CommonController extends MineController
     #[PostMapping('getUserInfoByIds')]
     public function getUserInfoByIds(): ResponseInterface
     {
-        return $this->success($this->userService->getUserInfoByIds((array)$this->request->input('ids', [])));
+        return $this->success($this->userService->getUserInfoByIds((array) $this->request->input('ids', [])));
     }
 
     /**
@@ -159,7 +159,7 @@ class CommonController extends MineController
      * 清除所有缓存.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     #[GetMapping('clearAllCache')]
     public function clearAllCache(): ResponseInterface

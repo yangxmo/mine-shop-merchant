@@ -1,23 +1,25 @@
 <?php
+
 declare(strict_types=1);
 /**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
+ * This file is part of Hyperf.
  *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
 namespace App\Goods\Service;
 
-
 use App\Goods\Mapper\GoodsMapper;
+use Hyperf\Collection\Arr;
 use Mine\Abstracts\AbstractService;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * 商品分类服务类
+ * 商品分类服务类.
  */
 class GoodsService extends AbstractService
 {
@@ -31,11 +33,30 @@ class GoodsService extends AbstractService
         $this->mapper = $mapper;
     }
 
-    // 商品保存
+    /**
+     * @param array $data
+     * @return int
+     */
     public function save(array $data): int
     {
-        $data['goods_no'] = snowflake_id();
-        $data['goods_images'] = array_column($data['goods_images'], 'url');
+        // build sku属性
+        $data['sku_data'] = Arr::where($data['sku_data'], function (&$value) {
+            $value['goods_sku_id'] = (int)snowflake_id();
+            return $value;
+        });
+        // build 属性
+        $data['attributes_data'] = Arr::where($data['attributes_data'], function (&$value) {
+                $attributesNo = snowflake_id();
+                $value['attributes_no'] = rand(10000, (int)$attributesNo);
+                $value['value'] = Arr::where($value['value'], function (&$values) use ($value){
+                    $values['attr_no'] = $value['attributes_no'];
+                    return $values;
+                });
+                return $value;
+            }
+        );
+        // build 属性值
+        $data['attributes_value'] = Arr::collapse(array_column($data['attributes_data'], 'value'));
 
         return $this->mapper->save($data);
     }

@@ -19,6 +19,26 @@ if (! function_exists('env')) {
     }
 }
 
+if (! function_exists('data_set')) {
+    /**
+     * 获取环境变量信息.
+     */
+    function data_set(array &$data, string $key, mixed $value): void
+    {
+        \Hyperf\Collection\data_set($data, $key, $value);
+    }
+}
+
+if (! function_exists('data_get')) {
+    /**
+     * 获取环境变量信息.
+     */
+    function data_get(array $data, string $key): array
+    {
+        return \Hyperf\Collection\data_get($data, $key);
+    }
+}
+
 if (! function_exists('config')) {
     /**
      * 获取配置信息.
