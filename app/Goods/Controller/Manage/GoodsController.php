@@ -61,7 +61,7 @@ class GoodsController extends MineController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[PostMapping('save')]
+    #[PostMapping('save'), Permission('goods:manage:save')]
     public function save(GoodsRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->validated())]);
@@ -86,7 +86,7 @@ class GoodsController extends MineController
     #[PutMapping('update/{id}'), Permission('goods:manage:update'), OperationLog]
     public function update(int $id, GoodsRequest $request): ResponseInterface
     {
-        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
+        return $this->service->update($id, $request->validated()) ? $this->success() : $this->error();
     }
 
     /**
@@ -97,7 +97,7 @@ class GoodsController extends MineController
     #[DeleteMapping('delete/{id}'), Permission('goods:manage:delete'), OperationLog]
     public function delete(int $id): ResponseInterface
     {
-        return $this->service->delete([$id]) ? $this->success() : $this->error();
+        return $this->service->delete(['id' => $id]) ? $this->success() : $this->error();
     }
 
     /**

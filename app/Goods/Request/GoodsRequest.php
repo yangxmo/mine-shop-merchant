@@ -92,7 +92,7 @@ class GoodsRequest extends MineFormRequest
             // 商品名称 验证
             'goods_data.goods_name' => 'required_with:goods_data|between:2,50',
             // 分类排序 验证
-            'goods_data.goods_category_id' => ['required', 'integer', Rule::exists('goods_category', 'id')],
+            'goods_data.goods_category_id' => ['required', 'integer'], // Rule::exists('goods_category', 'id')
             // 产品价格
             'goods_data.goods_price' => 'required|numeric|min:0.01|max:9999999',
             // 市场价
@@ -111,19 +111,21 @@ class GoodsRequest extends MineFormRequest
             // 商品属性数据
             'attributes_data' => 'nullable|array',
             // 商品属性数据no
-            'attributes_data.*.attributes_no' => ['required_with:attributes_data', 'integer'],
+            'attributes_data.*.attributes_no' => ['nullable', 'integer'],
             // 商品分类ID
             'attributes_data.*.goods_category_id' => ['required_with:attributes_data', 'integer', 'between:1,20'],
             // 商品属性数据名称
             'attributes_data.*.attributes_name' => ['required_with:attributes_data', 'between:1,20'],
             // 商品属性值数据
             'attributes_data.*.value' => 'required_with:attributes_data|array',
+            // 商品属性值ID
+            'attributes_data.*.value.*.attr_no' => ['nullable', 'integer'],
             // 商品属性值数据
             'attributes_data.*.value.*.attr_value_data' => ['required_with:attributes_data', 'between:1,20'],
             // 商品sku
             'sku_data' => 'nullable|array',
             // 商品skuID
-            'sku_data.*.goods_sku_id' => ['required_with:sku_data', 'integer', 'between:1,20'],
+            'sku_data.*.goods_sku_id' => ['nullable', 'integer'],
             // 商品sku名称
             'sku_data.*.goods_sku_name' => ['required_with:sku_data', 'between:1,20'],
             // 商品sku值

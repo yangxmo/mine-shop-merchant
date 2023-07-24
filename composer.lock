@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "618c92abd9198cad9369b77595900747",
+    "content-hash": "636974b9aa03ed2ffd0b349567024955",
     "packages": [
         {
             "name": "alapi/hyperf-meilisearch",
@@ -355,16 +355,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.6.4",
+            "version": "3.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "19f0dec95edd6a3c3c5ff1d188ea94c6b7fc903f"
+                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/19f0dec95edd6a3c3c5ff1d188ea94c6b7fc903f",
-                "reference": "19f0dec95edd6a3c3c5ff1d188ea94c6b7fc903f",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
+                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
                 "shasum": ""
             },
             "require": {
@@ -379,10 +379,10 @@
             "require-dev": {
                 "doctrine/coding-standard": "12.0.0",
                 "fig/log-test": "^1",
-                "jetbrains/phpstorm-stubs": "2022.3",
-                "phpstan/phpstan": "1.10.14",
+                "jetbrains/phpstorm-stubs": "2023.1",
+                "phpstan/phpstan": "1.10.21",
                 "phpstan/phpstan-strict-rules": "^1.5",
-                "phpunit/phpunit": "9.6.7",
+                "phpunit/phpunit": "9.6.9",
                 "psalm/plugin-phpunit": "0.18.4",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^5.4|^6.0",
@@ -447,7 +447,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.6.4"
+                "source": "https://github.com/doctrine/dbal/tree/3.6.5"
             },
             "funding": [
                 {
@@ -463,7 +463,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-15T07:40:12+00:00"
+            "time": "2023-07-17T09:15:50+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1534,16 +1534,16 @@
         },
         {
             "name": "hyperf/amqp",
-            "version": "v3.0.18",
+            "version": "v3.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/amqp.git",
-                "reference": "701520b989a0277d2faded8a1141e1c4545261c2"
+                "reference": "9ec17402a985f4fd8f9b664ce43602596f6ef9a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/amqp/zipball/701520b989a0277d2faded8a1141e1c4545261c2",
-                "reference": "701520b989a0277d2faded8a1141e1c4545261c2",
+                "url": "https://api.github.com/repos/hyperf/amqp/zipball/9ec17402a985f4fd8f9b664ce43602596f6ef9a9",
+                "reference": "9ec17402a985f4fd8f9b664ce43602596f6ef9a9",
                 "shasum": ""
             },
             "require": {
@@ -1596,7 +1596,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2023-04-26T03:02:31+00:00"
+            "time": "2023-07-15T00:53:13+00:00"
         },
         {
             "name": "hyperf/async-queue",
@@ -1780,16 +1780,16 @@
         },
         {
             "name": "hyperf/codec",
-            "version": "v3.0.1",
+            "version": "v3.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/codec.git",
-                "reference": "7d3cbfa06c50ef52809acadfcbcd59424366f591"
+                "reference": "30b170b59770c7f92ae845fca777b8ea8a953599"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/codec/zipball/7d3cbfa06c50ef52809acadfcbcd59424366f591",
-                "reference": "7d3cbfa06c50ef52809acadfcbcd59424366f591",
+                "url": "https://api.github.com/repos/hyperf/codec/zipball/30b170b59770c7f92ae845fca777b8ea8a953599",
+                "reference": "30b170b59770c7f92ae845fca777b8ea8a953599",
                 "shasum": ""
             },
             "require": {
@@ -1797,6 +1797,9 @@
                 "ext-xml": "*",
                 "hyperf/contract": "~3.0.0",
                 "php": ">=8.0"
+            },
+            "suggest": {
+                "ext-igbinary": "Required to use IgbinarySerializerPacker."
             },
             "type": "library",
             "extra": {
@@ -1827,7 +1830,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2023-04-24T09:49:41+00:00"
+            "time": "2023-07-18T12:10:42+00:00"
         },
         {
             "name": "hyperf/collection",
@@ -2048,6 +2051,62 @@
                 "source": "https://github.com/hyperf/hyperf"
             },
             "time": "2023-05-09T03:02:12+00:00"
+        },
+        {
+            "name": "hyperf/constants",
+            "version": "v3.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyperf/constants.git",
+                "reference": "71eadfcf6495eb4945a2416569649e39a89a55e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyperf/constants/zipball/71eadfcf6495eb4945a2416569649e39a89a55e3",
+                "reference": "71eadfcf6495eb4945a2416569649e39a89a55e3",
+                "shasum": ""
+            },
+            "require": {
+                "hyperf/di": "~3.0.0",
+                "hyperf/support": "~3.0.0",
+                "hyperf/utils": "~3.0.0",
+                "php": ">=8.0"
+            },
+            "suggest": {
+                "hyperf/translation": "Required to use translation."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                },
+                "hyperf": {
+                    "config": "Hyperf\\Constants\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hyperf\\Constants\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A constants component for hyperf.",
+            "homepage": "https://hyperf.io",
+            "keywords": [
+                "constants",
+                "hyperf",
+                "php"
+            ],
+            "support": {
+                "docs": "https://hyperf.wiki",
+                "issues": "https://github.com/hyperf/hyperf/issues",
+                "pull-request": "https://github.com/hyperf/hyperf/pulls",
+                "source": "https://github.com/hyperf/hyperf"
+            },
+            "time": "2023-04-26T03:02:31+00:00"
         },
         {
             "name": "hyperf/context",
@@ -2309,16 +2368,16 @@
         },
         {
             "name": "hyperf/database",
-            "version": "v3.0.27",
+            "version": "v3.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/database.git",
-                "reference": "a966a0d211df5a7c7eff62cbc83c9acb87d4cb71"
+                "reference": "2b6178219951df7044417de1412a20a08cc331fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/database/zipball/a966a0d211df5a7c7eff62cbc83c9acb87d4cb71",
-                "reference": "a966a0d211df5a7c7eff62cbc83c9acb87d4cb71",
+                "url": "https://api.github.com/repos/hyperf/database/zipball/2b6178219951df7044417de1412a20a08cc331fa",
+                "reference": "2b6178219951df7044417de1412a20a08cc331fa",
                 "shasum": ""
             },
             "require": {
@@ -2366,7 +2425,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2023-06-30T01:20:59+00:00"
+            "time": "2023-07-17T12:16:22+00:00"
         },
         {
             "name": "hyperf/db-connection",
@@ -3423,6 +3482,68 @@
             "time": "2023-04-26T03:02:31+00:00"
         },
         {
+            "name": "hyperf/nsq",
+            "version": "v3.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyperf/nsq.git",
+                "reference": "16a98577c69048f363e8c5c5eed2d4fbbff627b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyperf/nsq/zipball/16a98577c69048f363e8c5c5eed2d4fbbff627b7",
+                "reference": "16a98577c69048f363e8c5c5eed2d4fbbff627b7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "hyperf/code-parser": "~3.0.0",
+                "hyperf/codec": "~3.0.0",
+                "hyperf/contract": "~3.0.0",
+                "hyperf/engine": ">=1.3",
+                "hyperf/support": "~3.0.0",
+                "hyperf/utils": "~3.0.0",
+                "jean85/pretty-package-versions": "^1.2|^2.0",
+                "php": ">=8.0"
+            },
+            "suggest": {
+                "hyperf/guzzle": "Required to use coroutine nsqd http api. (~2.2.0)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                },
+                "hyperf": {
+                    "config": "Hyperf\\Nsq\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hyperf\\Nsq\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A nsq library for Hyperf.",
+            "homepage": "https://hyperf.io",
+            "keywords": [
+                "hyperf",
+                "nsq",
+                "php",
+                "swoole"
+            ],
+            "support": {
+                "docs": "https://hyperf.wiki",
+                "issues": "https://github.com/hyperf/hyperf/issues",
+                "pull-request": "https://github.com/hyperf/hyperf/pulls",
+                "source": "https://github.com/hyperf/hyperf"
+            },
+            "time": "2023-04-26T03:02:31+00:00"
+        },
+        {
             "name": "hyperf/paginator",
             "version": "v3.0.18",
             "source": {
@@ -4422,6 +4543,65 @@
             "time": "2023-04-26T03:02:31+00:00"
         },
         {
+            "name": "jean85/pretty-package-versions",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jean85/pretty-package-versions.git",
+                "reference": "ae547e455a3d8babd07b96966b17d7fd21d9c6af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/ae547e455a3d8babd07b96966b17d7fd21d9c6af",
+                "reference": "ae547e455a3d8babd07b96966b17d7fd21d9c6af",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.0.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "jean85/composer-provided-replaced-stub-package": "^1.0",
+                "phpstan/phpstan": "^0.12.66",
+                "phpunit/phpunit": "^7.5|^8.5|^9.4",
+                "vimeo/psalm": "^4.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jean85\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Lai",
+                    "email": "alessandro.lai85@gmail.com"
+                }
+            ],
+            "description": "A library to get pretty versions strings of installed dependencies",
+            "keywords": [
+                "composer",
+                "package",
+                "release",
+                "versions"
+            ],
+            "support": {
+                "issues": "https://github.com/Jean85/pretty-package-versions/issues",
+                "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.5"
+            },
+            "time": "2021-10-08T21:21:46+00:00"
+        },
+        {
             "name": "laminas/laminas-mime",
             "version": "2.11.0",
             "source": {
@@ -4882,6 +5062,57 @@
                 }
             ],
             "time": "2022-04-17T13:12:02+00:00"
+        },
+        {
+            "name": "lysice/hyperf-redis-lock",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lysice/hyperf-redis-lock.git",
+                "reference": "8c5c6c0ccaf41bb8486d97ca7bf66eed01446962"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lysice/hyperf-redis-lock/zipball/8c5c6c0ccaf41bb8486d97ca7bf66eed01446962",
+                "reference": "8c5c6c0ccaf41bb8486d97ca7bf66eed01446962",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.14",
+                "mockery/mockery": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": ">=7.0",
+                "swoole/ide-helper": "dev-master",
+                "swow/swow": "dev-develop",
+                "symfony/var-dumper": "^5.1"
+            },
+            "type": "library",
+            "extra": {
+                "hyperf": {
+                    "config": "Lysice\\HyperfRedisLock\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Lysice\\HyperfRedisLock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "keywords": [
+                "hyperf",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/Lysice/hyperf-redis-lock/issues",
+                "source": "https://github.com/Lysice/hyperf-redis-lock/tree/v2.1.1"
+            },
+            "time": "2022-12-07T04:48:41+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -9546,6 +9777,53 @@
             "time": "2023-06-15T09:32:43+00:00"
         },
         {
+            "name": "yangxmo/hyperf-tcc",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "/Users/since/PhpstormProjects/hyperf-tcc-main",
+                "reference": "a88c84c371003f6c6a9a1cf930d3ecd1dd9c99e8"
+            },
+            "require": {
+                "hyperf/database": "~3.0.0",
+                "hyperf/db-connection": "~3.0.0",
+                "hyperf/logger": "~3.0.0",
+                "hyperf/nsq": "~3.0.0",
+                "hyperf/redis": "~3.0.0",
+                "hyperf/snowflake": "~3.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "hyperf": {
+                    "config": "Tcc\\TccTransaction\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tcc\\TccTransaction\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "since",
+                    "email": "529393997@qq.com"
+                }
+            ],
+            "description": "基于Hyperf框架的TCC分布式事务组件",
+            "homepage": "https://github.com/yangxmo/hyperf-tcc",
+            "keywords": [
+                "hyperf",
+                "tcc",
+                "transaction"
+            ],
+            "transport-options": {
+                "relative": false
+            }
+        },
+        {
             "name": "yangxmo/mine-shop-core",
             "version": "dev-master",
             "dist": {
@@ -9554,6 +9832,7 @@
                 "reference": "bc0a1fdb6420adb558b9c430e2b2c39aaf5302de"
             },
             "require": {
+                "alapi/hyperf-meilisearch": "^3.0",
                 "doctrine/dbal": "^3.1",
                 "ext-gd": "*",
                 "ext-json": "*",
@@ -9569,6 +9848,7 @@
                 "hyperf/codec": "^3.0",
                 "hyperf/command": "3.0.*",
                 "hyperf/config": "3.0.*",
+                "hyperf/constants": "^3.0",
                 "hyperf/crontab": "3.0.*",
                 "hyperf/database": "3.0.*",
                 "hyperf/db-connection": "3.0.*",
@@ -9581,6 +9861,7 @@
                 "hyperf/logger": "3.0.*",
                 "hyperf/memory": "3.0.*",
                 "hyperf/model-cache": "3.0.*",
+                "hyperf/nsq": "3.0.*",
                 "hyperf/paginator": "3.0.*",
                 "hyperf/pool": "3.0.*",
                 "hyperf/process": "3.0.*",
@@ -9591,6 +9872,7 @@
                 "hyperf/translation": "3.0.*",
                 "hyperf/validation": "3.0.*",
                 "hyperf/websocket-server": "3.0.*",
+                "lysice/hyperf-redis-lock": "^2.1",
                 "overtrue/flysystem-cos": "^5.0",
                 "overtrue/flysystem-qiniu": "^3.0",
                 "php": ">=8.0",
@@ -10278,16 +10560,16 @@
         },
         {
             "name": "hyperf/testing",
-            "version": "v3.0.23",
+            "version": "v3.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/testing.git",
-                "reference": "e660ba6f6f4c1dd46cc6203feeefd4638454108c"
+                "reference": "fa9d8c1e79bc4958be5a2642387e1915a7fc9f13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/testing/zipball/e660ba6f6f4c1dd46cc6203feeefd4638454108c",
-                "reference": "e660ba6f6f4c1dd46cc6203feeefd4638454108c",
+                "url": "https://api.github.com/repos/hyperf/testing/zipball/fa9d8c1e79bc4958be5a2642387e1915a7fc9f13",
+                "reference": "fa9d8c1e79bc4958be5a2642387e1915a7fc9f13",
                 "shasum": ""
             },
             "require": {
@@ -10329,9 +10611,9 @@
                 "testing"
             ],
             "support": {
-                "source": "https://github.com/hyperf/testing/tree/v3.0.23"
+                "source": "https://github.com/hyperf/testing/tree/v3.0.30"
             },
-            "time": "2023-06-01T08:26:57+00:00"
+            "time": "2023-07-21T03:15:25+00:00"
         },
         {
             "name": "hyperf/watcher",
@@ -10390,37 +10672,33 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.6.2",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "13a7fa2642c76c58fa2806ef7f565344c817a191"
+                "reference": "d1413755e26fe56a63455f7753221c86cbb88f66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/13a7fa2642c76c58fa2806ef7f565344c817a191",
-                "reference": "13a7fa2642c76c58fa2806ef7f565344c817a191",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/d1413755e26fe56a63455f7753221c86cbb88f66",
+                "reference": "d1413755e26fe56a63455f7753221c86cbb88f66",
                 "shasum": ""
             },
             "require": {
                 "hamcrest/hamcrest-php": "^2.0.1",
                 "lib-pcre": ">=7.0",
-                "php": "^7.4 || ^8.0"
+                "php": ">=7.4,<8.3"
             },
             "conflict": {
                 "phpunit/phpunit": "<8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5 || ^9.3",
-                "psalm/plugin-phpunit": "^0.18",
-                "vimeo/psalm": "^5.9"
+                "psalm/plugin-phpunit": "^0.18.4",
+                "symplify/easy-coding-standard": "^11.5.0",
+                "vimeo/psalm": "^5.13.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.6.x-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "library/helpers.php",
@@ -10438,12 +10716,20 @@
                 {
                     "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
-                    "homepage": "http://blog.astrumfutura.com"
+                    "homepage": "https://github.com/padraic",
+                    "role": "Author"
                 },
                 {
                     "name": "Dave Marshall",
                     "email": "dave.marshall@atstsolutions.co.uk",
-                    "homepage": "http://davedevelopment.co.uk"
+                    "homepage": "https://davedevelopment.co.uk",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nathanael Esayeas",
+                    "email": "nathanael.esayeas@protonmail.com",
+                    "homepage": "https://github.com/ghostwriter",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "Mockery is a simple yet flexible PHP mock object framework",
@@ -10461,10 +10747,13 @@
                 "testing"
             ],
             "support": {
+                "docs": "https://docs.mockery.io/",
                 "issues": "https://github.com/mockery/mockery/issues",
-                "source": "https://github.com/mockery/mockery/tree/1.6.2"
+                "rss": "https://github.com/mockery/mockery/releases.atom",
+                "security": "https://github.com/mockery/mockery/security/advisories",
+                "source": "https://github.com/mockery/mockery"
             },
-            "time": "2023-06-07T09:07:52+00:00"
+            "time": "2023-07-19T15:51:02+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -10638,16 +10927,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.25",
+            "version": "1.10.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "578f4e70d117f9a90699324c555922800ac38d8c"
+                "reference": "5d660cbb7e1b89253a47147ae44044f49832351f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578f4e70d117f9a90699324c555922800ac38d8c",
-                "reference": "578f4e70d117f9a90699324c555922800ac38d8c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5d660cbb7e1b89253a47147ae44044f49832351f",
+                "reference": "5d660cbb7e1b89253a47147ae44044f49832351f",
                 "shasum": ""
             },
             "require": {
@@ -10696,7 +10985,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-06T12:11:37+00:00"
+            "time": "2023-07-19T12:44:37+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -12895,6 +13184,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "yangxmo/hyperf-tcc": 20,
         "yangxmo/mine-shop-core": 20
     },
     "prefer-stable": true,

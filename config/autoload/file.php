@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
-    'default' => 'local',
+    'default' => 'oss',
     'storage' => [
         'local' => [
             'driver' => \Hyperf\Filesystem\Adapter\LocalAdapterFactory::class,
@@ -18,11 +18,11 @@ return [
         ],
         'oss' => [
             'driver' => \Hyperf\Filesystem\Adapter\AliyunOssAdapterFactory::class,
-            'accessId' => '',
-            'accessSecret' => '',
-            'bucket' => '',
-            'endpoint' => '',
-            'domain' => '',
+            'accessId' => 'LTAIej8wXHjQ7pxn',
+            'accessSecret' => 'XYmOaFTz0FxAjRPtPId9FZbsIS0Erl',
+            'bucket' => 'mine-shop',
+            'endpoint' => 'oss-cn-guangzhou.aliyuncs.com',
+            'domain' => 'https://mine-shop.oss-cn-guangzhou.aliyuncs.com',
             'schema' => 'http://',
             'isCName' => false,
             // 'timeout'        => 3600,

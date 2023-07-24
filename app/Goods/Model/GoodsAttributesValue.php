@@ -23,6 +23,8 @@ class GoodsAttributesValue extends MineModel
 {
     public bool $timestamps = false;
 
+    protected string $primaryKey = 'attr_no';
+
     /**
      * The table associated with the model.
      */
@@ -31,7 +33,7 @@ class GoodsAttributesValue extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'goods_no', 'attr_no', 'attr_value_data'];
+    protected array $fillable = ['goods_no', 'attr_no', 'attr_value_data'];
 
     /**
      * The attributes that should be cast to native types.
