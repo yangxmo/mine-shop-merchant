@@ -11,42 +11,28 @@ declare(strict_types=1);
  */
 namespace App\Order\Request;
 
-use Mine\MineFormRequest;
+use Mine\MineApiFormRequest;
 
 /**
  * 商品购物车验证数据类.
  */
-class OrderPreviewRequest extends MineFormRequest
+class OrderPreviewRequest extends MineApiFormRequest
 {
-    /**
-     * 公共规则.
-     */
-    public function commonRules(): array
-    {
-        return [];
-    }
-
-    public function confirmRules(): array
-    {
-        return ['order_no' => 'required|string'];
-    }
 
     /**
      * 获取订单确认页面数据验证规则
      * return array.
      */
-    public function viewRules(): array
+    public function getOrderPreviewRules(): array
     {
         return [
-            'product' => 'required|array',
+            'goods' => 'required|array',
             // 商品ID 验证
-            'product.*.product_id' => 'required|integer',
+            'goods.*.goods_id' => 'required|integer',
             // 商品skuID
-            'product.*.product_sku_id' => 'nullable|string',
+            'goods.*.goods_sku_id' => 'nullable|integer',
             // 商品数量 验证
-            'product.*.product_num' => 'required|integer|min:1',
-            // 商品来源
-            'product.*.product_source' => 'required|integer|in:1,2',
+            'goods.*.goods_num' => 'required|integer|min:1',
             // 地址
             'address' => 'required|array',
             'address.province_name' => 'required|string',
@@ -60,25 +46,8 @@ class OrderPreviewRequest extends MineFormRequest
             'address.description' => 'required|string',
             'address.mobile' => 'required|numeric',
             'address.username' => 'required|string',
-            'address.post_code' => 'required|integer',
             // 是否购物车
             'is_cart' => 'required|boolean',
-        ];
-    }
-
-    /**
-     * 减少购物车
-     * return array.
-     */
-    public function reduceCartRules(): array
-    {
-        return [
-            // 商品ID 验证
-            'product_id' => 'required|integer',
-            // 商品skuID
-            'product_sku_id' => 'nullable',
-            // 商品数量 验证
-            'num' => 'required|integer|min:1',
         ];
     }
 

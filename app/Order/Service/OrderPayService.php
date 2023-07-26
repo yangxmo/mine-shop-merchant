@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace App\Order\Service;
+namespace Api\Service\Order;
 
 use App\JsonRpc\Interface\OrderPayInterface;
 use Hyperf\Di\Annotation\Inject;

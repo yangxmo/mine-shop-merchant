@@ -28,5 +28,4 @@ class GoodsSkuDomainService extends AbstractService
     {
         $this->mapper = $mapper;
     }
-
 }

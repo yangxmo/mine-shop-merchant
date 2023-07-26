@@ -26,6 +26,7 @@ class OrderBaseMapper extends AbstractMapper
     {
         $this->model = OrderBase::class;
     }
+
     /**
      * 搜索处理器.
      */

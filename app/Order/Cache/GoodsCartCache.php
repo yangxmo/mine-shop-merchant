@@ -17,12 +17,10 @@ use RedisException;
 class GoodsCartCache extends AbstractRedis
 {
     protected ?string $prefix = 'yx_goods';
+
     protected string $typeName = 'cart';
 
     /**
-     * @param int $productId
-     * @param int|null $skuId
-     * @return bool
      * @throws RedisException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface

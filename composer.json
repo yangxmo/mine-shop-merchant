@@ -1,5 +1,5 @@
 {
-  "name": "xmo/mineadmin",
+  "name": "yangxmo/mineadmin-shop",
   "type": "project",
   "keywords": [
     "mineadmin",
@@ -38,8 +38,7 @@
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "Api\\": "api/",
-      "Plugin\\": "plugin/"
+      "Api\\": "api/"
     }
   },
   "autoload-dev": {
@@ -76,7 +75,7 @@
   "repositories": {
     "yangxmo/mine-shop-core": {
       "type": "path",
-      "url": "/Users/since/PhpstormProjects/mine-core"
+      "url": "/Users/since/PhpstormProjects/mine-shop-core"
     },
     "yangxmo/hyperf-tcc": {
       "type": "path",

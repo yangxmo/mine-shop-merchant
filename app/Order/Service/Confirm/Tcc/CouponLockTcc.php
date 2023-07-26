@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace App\Order\Service\Confirm;
+namespace App\Order\Service\Confirm\Tcc;
 
 use Mine\Abstracts\AbstractService;
 

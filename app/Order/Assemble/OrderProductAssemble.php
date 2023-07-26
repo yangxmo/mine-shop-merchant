@@ -16,40 +16,31 @@ use Carbon\Carbon;
 
 class OrderProductAssemble
 {
+    /**
+     * 构建订单产品数据
+     * @param OrderServiceVo $vo 订单服务对象
+     * @return array
+     */
     public static function buildOrderProductData(OrderServiceVo $vo): array
     {
         $productData = [];
-        foreach ($vo->getProductData() as $datum) {
+        foreach ($vo->getGoodsData() as $datum) {
             $productData[] = [
                 'order_no' => $vo->getOrderNo(),
-                'product_name' => $datum['product_name'],
-                'product_sku_name' => $datum['product_sku_name'],
-                'product_sku_value' => $datum['product_sku_value'],
-                'product_image' => $datum['product_image'],
-                'product_no' => $datum['product_no'],
-                'product_sku_no' => $datum['product_sku_id'],
-                'product_num' => $datum['product_num'],
-                'product_price' => $datum['product_price'],
-                'product_pay_price' => $datum['product_price'] + $datum['product_freight_price'],
-                'product_freight_price' => $datum['product_freight_price'],
-                'product_discount_price' => $datum['product_discount_price'],
-                'product_plat' => $datum['product_plat'],
+                'goods_name' => $datum['goods_name'],
+                'goods_sku_name' => $datum['goods_sku_name'],
+                'goods_sku_value' => $datum['goods_sku_value'],
+                'goods_image' => $datum['goods_image'],
+                'goods_id' => $datum['goods_id'],
+                'goods_sku_id' => $datum['goods_sku_id'],
+                'goods_num' => $datum['goods_num'],
+                'goods_price' => $datum['goods_price'],
+                'goods_pay_price' => $datum['goods_price'] + $datum['goods_freight_price'],
+                'goods_freight_price' => $datum['goods_freight_price'],
+                'goods_discount_price' => $datum['goods_discount_price'],
+                'goods_plat' => $datum['goods_plat'],
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
-            ];
-        }
-
-        return $productData;
-    }
-
-    public static function buildOrderLuaProductData(OrderServiceVo $vo): array
-    {
-        $productData = [];
-        foreach ($vo->getProductData() as $datum) {
-            $productData[] = [
-                'product_no' => $datum['product_no'],
-                'product_sku_no' => $datum['product_sku_id'],
-                'product_num' => $datum['product_num'],
             ];
         }
 

@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace App\Order\Service\Confirm;
+namespace App\Order\Service\Confirm\Tcc;
 
 use App\Order\Cache\OrderCache;
 use App\Order\Vo\OrderAddressVo;
@@ -59,7 +59,7 @@ class BuildOrderTcc extends TccOption
         $orderServiceVo = make(OrderServiceVo::class);
         $orderServiceVo->setUserId((int) $orderInfo['user_data']['order_create_user_id']);
         $orderServiceVo->setTenantId($orderInfo['user_data']['order_tenant_no']);
-        $orderServiceVo->setProductData($orderInfo['product_data']);
+        $orderServiceVo->setGoodsData($orderInfo['product_data']);
         $orderServiceVo->setOrderFreightPrice((float) $orderInfo['order_price_data']['order_freight_price']);
         $orderServiceVo->setOrderPrice((float) $orderInfo['order_price_data']['order_price']);
         $orderServiceVo->setOrderPayPrice((float) $orderInfo['order_price_data']['order_pay_price']);

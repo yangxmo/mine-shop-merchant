@@ -24,8 +24,8 @@ class OrderPayStatusCode extends AbstractConstants
 
     public const PAY_STATUS_FAIL = 1;
 
+    // 支付宝回调状态
     public static array $payStatus = [
-        // 支付宝回调状态
         'TRADE_SUCCESS' => self::PAY_STATUS_SUCCESS,
         'TRADE_FINISHED' => self::PAY_STATUS_SUCCESS,
         'TRADE_CLOSED' => self::PAY_STATUS_FAIL,

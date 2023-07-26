@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Order\Controller;
 
+use App\Order\Request\OrderPayRequest;
 use App\Order\Request\OrderPreviewRequest;
 use App\Order\Service\OrderConfirmService;
 use Hyperf\Di\Annotation\Inject;
@@ -18,7 +19,6 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
-use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Container\ContainerExceptionInterface;
@@ -26,7 +26,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 订单提交控制器
+ * 订单控制器
  * Class OrderConfirmController.
  */
 #[Controller(prefix: 'order/confirm'), Auth]
@@ -40,27 +40,28 @@ class OrderConfirmController extends MineController
     protected OrderConfirmService $service;
 
     /**
-     * 获取确认订单页面.
+     * 获取订单预览.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[GetMapping('preview'), Permission('order:confirm:preview')]
-    public function view(OrderPreviewRequest $request): ResponseInterface
+    #[GetMapping('getOrderPreview'), Permission('order:confirm:getOrderPreview')]
+    public function getOrderPreview(OrderPreviewRequest $request): ResponseInterface
     {
-        $result = $this->service->getPreviewData($request->validated());
+        $result = $this->service->getPreviewOrder($request->validated());
 
         return $this->success($result);
     }
 
     /**
-     * 提交订单.
+     * 提交订单
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[PostMapping('confirm'), Permission('order:confirm:confirm'), OperationLog]
-    public function confirm(OrderPreviewRequest $request): ResponseInterface
+    #[PostMapping('confirm'), Permission('order:confirm:confirm')]
+    public function confirm(OrderPayRequest $request): ResponseInterface
     {
-        $result = $this->service->confirm($request->input('order_no', ''));
+        $orderNo = $request->input('order_no', '');
+        $result = $this->service->confirm($orderNo);
 
         return $this->success($result);
     }

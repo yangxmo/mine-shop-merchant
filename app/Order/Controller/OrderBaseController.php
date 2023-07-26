@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace App\Order\Controller;
 
 use App\Order\Request\OrderBaseRequest;
-use App\Order\Service\OrderBaseService;
+use Api\Service\Order\OrderBaseService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;

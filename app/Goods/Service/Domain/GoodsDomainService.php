@@ -28,5 +28,4 @@ class GoodsDomainService extends AbstractService
     {
         $this->mapper = $mapper;
     }
-
 }

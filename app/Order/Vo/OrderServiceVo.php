@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace App\Order\Vo;
 
 class OrderServiceVo
@@ -21,7 +20,7 @@ class OrderServiceVo
     public string $tenantId;
 
     // 商品数据
-    public array $productData;
+    public array $goodsData;
 
     // 产品总运费
     public float $orderFreightPrice = 0.00;
@@ -58,9 +57,9 @@ class OrderServiceVo
         $this->tenantId = $tenantId;
     }
 
-    public function setProductData(array $productData): void
+    public function setGoodsData(array $goodsData): void
     {
-        $this->productData = $productData;
+        $this->goodsData = $goodsData;
     }
 
     public function setOrderFreightPrice(float $price): void
@@ -103,9 +102,9 @@ class OrderServiceVo
         return $this->tenantId;
     }
 
-    public function getProductData(): array
+    public function getGoodsData(): array
     {
-        return $this->productData;
+        return $this->goodsData;
     }
 
     public function getOrderFreightPrice(): float

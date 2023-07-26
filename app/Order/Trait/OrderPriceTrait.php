@@ -13,13 +13,27 @@ namespace App\Order\Trait;
 
 trait OrderPriceTrait
 {
-    public function calculateOrderPrice(float &$orderPrice, int $productNum, float $productPrice): void
+    /**
+     * 计算产品价格
+     * @param float $orderPrice 订单计算字段
+     * @param int $goodsNum 商品购买数量
+     * @param float $goodsPrice 商品售价
+     * @return void
+     */
+    public function calculateOrderPrice(float &$orderPrice, int $goodsNum, float $goodsPrice): void
     {
-        $price = floatval(bcmul((string) $productNum, (string) $productPrice, 2));
+        $price = floatval(bcmul((string) $goodsNum, (string) $goodsPrice, 2));
 
         $orderPrice = floatval(bcadd((string) $orderPrice, (string) $price, 2));
     }
 
+    /**
+     * 计算运费价格
+     * @param float $orderFreightPrice 运费计算字段
+     * @param int $goodsNum 商品购买数量
+     * @param float $freightPrice 商品设置的运费金额
+     * @return void
+     */
     public function calculateOrderFreightPrice(float &$orderFreightPrice, int $goodsNum, float $freightPrice): void
     {
         $price = floatval(bcmul((string) $goodsNum, (string) $freightPrice, 2));

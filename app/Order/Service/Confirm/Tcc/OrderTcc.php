@@ -9,8 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace App\Order\Service\Confirm;
-
+namespace App\Order\Service\Confirm\Tcc;
 
 use App\Order\Model\OrderBase;
 use App\Order\Service\Confirm\Service\OrderService;
@@ -33,7 +32,7 @@ class OrderTcc extends TccOption
         /** @var OrderService $service */
         $service = make(OrderService::class);
         $order = $service->createOrder($this->vo);
-        $this->orderId = (int)$order->id;
+        $this->orderId = (int) $order->id;
 
         # 返回订单
         return $order;
@@ -47,7 +46,7 @@ class OrderTcc extends TccOption
     public function cancel(): void
     {
         # 删除订单
-        $service = new OrderService;
+        $service = new OrderService();
         $service->deleteOrder($this->orderId);
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "636974b9aa03ed2ffd0b349567024955",
+    "content-hash": "7e83ce3c4e7615ca8f9193f835ea46bf",
     "packages": [
         {
             "name": "alapi/hyperf-meilisearch",
@@ -7106,16 +7106,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.22.1",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0"
+                "reference": "a2b24135c35852b348894320d47b3902a94bc494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/65c39594fbd8c67abfc68bb323f86447bab79cc0",
-                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a2b24135c35852b348894320d47b3902a94bc494",
+                "reference": "a2b24135c35852b348894320d47b3902a94bc494",
                 "shasum": ""
             },
             "require": {
@@ -7147,9 +7147,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.22.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.23.0"
             },
-            "time": "2023-06-29T20:46:06+00:00"
+            "time": "2023-07-23T22:17:56+00:00"
         },
         {
             "name": "psr/cache",
@@ -9828,8 +9828,8 @@
             "version": "dev-master",
             "dist": {
                 "type": "path",
-                "url": "/Users/since/PhpstormProjects/mine-core",
-                "reference": "bc0a1fdb6420adb558b9c430e2b2c39aaf5302de"
+                "url": "/Users/since/PhpstormProjects/mine-shop-core",
+                "reference": "caa3c81ed3829d1057c82951d679841bda5f2fc5"
             },
             "require": {
                 "alapi/hyperf-meilisearch": "^3.0",
@@ -13190,7 +13190,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "ext-bcmath": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
