@@ -53,7 +53,7 @@ class OrderConfirmController extends MineController
     }
 
     /**
-     * 提交订单
+     * 提交订单.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

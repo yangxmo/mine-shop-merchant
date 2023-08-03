@@ -28,6 +28,46 @@ class OrderBaseMapper extends AbstractMapper
     }
 
     /**
+     * 订单列表.
+     */
+    public function getOrderList(array $params, bool $isExport = false): array|\Hyperf\Contract\LengthAwarePaginatorInterface
+    {
+        $query = $this->handleSearch($this->model::query(), $params);
+        $query->orderByDesc('id')->with(['product', 'address']);
+        if ($isExport) {
+            return $query->get()->toArray() ?? [];
+        }
+        return $query->paginate((int) $params['pageSize'], ['*'], 'page', (int) $params['page']);
+    }
+
+    /**
+     * 订单详情.
+     */
+    public function orderInfo(string $orderNo): array
+    {
+        $result = $this->model::query()->where(['order_no' => $orderNo])->with(['product', 'address', 'orderActionRecord'])->tenantWhere()->first();
+        return $result ? $result->toArray() : [];
+    }
+
+    /**
+     * 订单统计.
+     * @param mixed $mark
+     */
+    public function orderStatistics(string $date = null, $mark = true): array
+    {
+        $query = $this->model::query();
+        $createdAtStart = $date . ' 00:00:00';
+        $createdAtEnd = $date . ' 23:59:59';
+        if ($mark) {
+            $query->where('created_at', '<=', $createdAtEnd);
+        } else {
+            $query->whereBetween('created_at', [$createdAtStart, $createdAtEnd]);
+        }
+        $result = $query->tenantWhere()->get();
+        return $result ? $result->toArray() : [];
+    }
+
+    /**
      * 搜索处理器.
      */
     public function handleSearch(Builder $query, array $params): Builder

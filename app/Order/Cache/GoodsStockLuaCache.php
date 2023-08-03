@@ -16,6 +16,7 @@ use Lysice\HyperfRedisLock\RedisLock;
 use Mine\Abstracts\AbstractRedis;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use RedisException;
 
 class GoodsStockLuaCache extends AbstractRedis
 {
@@ -40,14 +41,13 @@ class GoodsStockLuaCache extends AbstractRedis
      * @param string $key1 spuKey
      * @param string $key2 skuKey
      * @param int $num 购买数量
-     * @return int
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function checkLockStock(string $key1, string $key2, int $num): int
     {
-        $script = <<<LUA
+        $script = <<<'LUA'
             local key = KEYS[1]
             local key2 = KEYS[2]
             local value = ARGV[1]
@@ -74,12 +74,12 @@ LUA;
     }
 
     /**
-     * 检查库存
+     * 检查库存.
      * @param array $goodsData 商品数据
      * @return int 返回（0/1）
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function checkStock(array $goodsData): int
     {
@@ -105,12 +105,10 @@ LUA;
     }
 
     /**
-     * 锁定库存
-     * @param array $productData
-     * @return int
+     * 锁定库存.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function addLockStock(array $productData): int
     {
@@ -146,11 +144,9 @@ LUA;
 
     /**
      * 库存扣减，解锁锁定的库存.
-     * @param array $productData
-     * @return int
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function reduceStock(array $productData): int
     {
@@ -201,11 +197,9 @@ LUA;
 
     /**
      * 库存还原.
-     * @param array $productData
-     * @return int
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function addStock(array $productData): int
     {
@@ -236,10 +230,10 @@ LUA;
     }
 
     /**
-     * 退回锁定的库存
+     * 退回锁定的库存.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function releaseStock(array $productData): void
     {
@@ -306,14 +300,10 @@ LUA;
     }
 
     /**
-     * 执行lua脚本
-     * @param string $script
-     * @param array $params
-     * @param int $keyNum
-     * @return mixed
+     * 执行lua脚本.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function execLuaScript(string $script, array $params, int $keyNum = 1): mixed
     {

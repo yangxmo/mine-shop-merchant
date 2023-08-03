@@ -24,7 +24,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 订单提交
+ * 订单提交.
  */
 class OrderConfirmApi
 {

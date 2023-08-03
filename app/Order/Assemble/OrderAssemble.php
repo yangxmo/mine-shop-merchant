@@ -16,9 +16,8 @@ use App\Order\Vo\OrderServiceVo;
 class OrderAssemble
 {
     /**
-     * 构建订单数据
+     * 构建订单数据.
      * @param OrderServiceVo $vo 订单服务对象
-     * @return array
      */
     public static function buildOrderData(OrderServiceVo $vo): array
     {
@@ -34,9 +33,7 @@ class OrderAssemble
     }
 
     /**
-     * 构建订单预览数据
-     * @param OrderServiceVo $vo
-     * @return array
+     * 构建订单预览数据.
      */
     public static function buildOrderPreviewData(OrderServiceVo $vo): array
     {

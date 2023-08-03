@@ -22,7 +22,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 订单确认页面
+ * 订单确认页面.
  */
 class OrderPreviewApi
 {

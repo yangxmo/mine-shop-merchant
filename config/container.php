@@ -23,9 +23,9 @@ if (! $container instanceof \Psr\Container\ContainerInterface) {
     throw new RuntimeException('The dependency injection container is invalid.');
 }
 
-/*     start      */
+/*     start */
 // Add this line between `new Container` and `setContainer()`
 DependencyCollector::walk([$container, 'define']);
-/*      end       */
+/*      end */
 
 return ApplicationContext::setContainer($container);

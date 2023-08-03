@@ -18,7 +18,6 @@ trait OrderPriceTrait
      * @param float $orderPrice 订单计算字段
      * @param int $goodsNum 商品购买数量
      * @param float $goodsPrice 商品售价
-     * @return void
      */
     public function calculateOrderPrice(float &$orderPrice, int $goodsNum, float $goodsPrice): void
     {
@@ -32,7 +31,6 @@ trait OrderPriceTrait
      * @param float $orderFreightPrice 运费计算字段
      * @param int $goodsNum 商品购买数量
      * @param float $freightPrice 商品设置的运费金额
-     * @return void
      */
     public function calculateOrderFreightPrice(float &$orderFreightPrice, int $goodsNum, float $freightPrice): void
     {

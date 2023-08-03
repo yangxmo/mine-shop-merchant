@@ -18,7 +18,6 @@ use Mine\MineApiFormRequest;
  */
 class OrderPreviewRequest extends MineApiFormRequest
 {
-
     /**
      * 获取订单确认页面数据验证规则
      * return array.

@@ -17,9 +17,8 @@ use Carbon\Carbon;
 class OrderProductAssemble
 {
     /**
-     * 构建订单产品数据
+     * 构建订单产品数据.
      * @param OrderServiceVo $vo 订单服务对象
-     * @return array
      */
     public static function buildOrderProductData(OrderServiceVo $vo): array
     {

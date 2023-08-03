@@ -30,9 +30,7 @@ class OrderConfirmService extends AbstractService
     protected OrderPreviewInterface $orderPreview;
 
     /**
-     * 订单预览
-     * @param array $data
-     * @return array
+     * 订单预览.
      */
     public function getPreviewOrder(array $data): array
     {
@@ -64,9 +62,7 @@ class OrderConfirmService extends AbstractService
     }
 
     /**
-     * 创建订单
-     * @param int $previewOrderId
-     * @return array
+     * 创建订单.
      */
     public function confirm(int $previewOrderId): array
     {
@@ -74,7 +70,7 @@ class OrderConfirmService extends AbstractService
          * 创建订单使用TCC分布式事务，后续可扩展为RPC微服务形式进行处理
          * 使用tcc 时，tcc节点服务，必须继承tccOption 如BuildOrderTcc
          * 务必在tcc节点服务中定义 try，cancel，confirm 三个方法，并实现接口方法
-         * 此tcc中暂只支持 throw 形式的异常抛出处理
+         * 此tcc中暂只支持 throw 形式的异常抛出处理.
          */
 
         /** @var Tcc $tcc */
@@ -96,7 +92,7 @@ class OrderConfirmService extends AbstractService
             ->rely([
                 [1, 2], // 第一步，进行数据组装，检查产品等数据，并锁定商品库存
                 [3], // 创建订单，创建的子订单数据（商品，地址，待支付记录，主订单数据）
-                [4, 5, 6] // 订单创建成功，商品真实扣除，扣除redis 库存，扣除锁定的库存，数据库商品库存扣减，发送下单成功消息通知，进行后续处理，以及订单统计
+                [4, 5, 6], // 订单创建成功，商品真实扣除，扣除redis 库存，扣除锁定的库存，数据库商品库存扣减，发送下单成功消息通知，进行后续处理，以及订单统计
             ])->begin();
 
         return ['order_id' => $tcc->get(OrderTcc::class)->id];
