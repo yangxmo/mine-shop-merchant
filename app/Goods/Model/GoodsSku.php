@@ -43,7 +43,7 @@ class GoodsSku extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['goods_no', 'goods_sku_id', 'goods_sku_name', 'goods_sku_value', 'goods_sku_image', 'goods_sku_sale', 'goods_sku_lock_sale', 'goods_sku_price', 'goods_sku_market_price'];
+    protected array $fillable = ['goods_no', 'goods_attr_no', 'goods_sku_id', 'goods_sku_name', 'goods_sku_value', 'goods_sku_image', 'goods_sku_sale', 'goods_sku_lock_sale', 'goods_sku_price', 'goods_sku_market_price'];
 
     /**
      * The attributes that should be cast to native types.

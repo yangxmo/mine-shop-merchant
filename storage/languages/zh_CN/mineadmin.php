@@ -33,4 +33,5 @@ return [
     'interface_exception' => '接口异常',
     'api_auth_exception' => '接口鉴权异常',
     'api_auth_fail' => '接口鉴权失败',
+    'tenant_notfound' => '租户获取失败',
 ];

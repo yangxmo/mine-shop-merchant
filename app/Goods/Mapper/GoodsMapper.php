@@ -50,13 +50,24 @@ class GoodsMapper extends AbstractMapper
     #[Transaction]
     public function save(array $data): int
     {
-        $goods = $this->model::create($data['goods_data']);
+        $skuData = $data['sku_data'] ?? [];
+        $attributesData = $data['attributes_data'] ?? [];
+        $attributesValueData = $data['attributes_value'] ?? [];
+
+        $data = Arr::except($data, 'sku_data');
+        $data = Arr::except($data, 'attributes_data');
+        $data = Arr::except($data, 'attributes_value');
+
+        // 过滤其他字段
+        $this->filterExecuteAttributes($data, $this->getModel()->incrementing);
+
+        $goods = $this->model::create($data);
         // 写入sku
-        $goods->sku()->createMany($data['sku_data']);
+        !empty($skuData) && $goods->sku()->createMany($skuData);
         // 写入属性
-        $goods->attribute()->createMany($data['attributes_data']);
+        !empty($attributesData) && $goods->attribute()->createMany($attributesData);
         // 写入属性值
-        $goods->attributeValue()->createMany($data['attributes_value']);
+        !empty($attributesValueData) && $goods->attributeValue()->createMany($attributesValueData);
 
         return $goods->id;
     }
@@ -69,22 +80,37 @@ class GoodsMapper extends AbstractMapper
     {
         $goods = $this->read($id);
 
-        $goods->save($data['goods_data']);
+        $skuData = $data['sku_data'] ?? [];
+        $attributesData = $data['attributes_data'] ?? [];
+        $attributesValueData = $data['attributes_value'] ?? [];
 
-        Arr::where($data['sku_data'], function ($sku) use ($goods) {
-            $goods->sku()->updateOrCreate(['goods_sku_id' => $sku['goods_sku_id']], $sku);
-        });
-        Arr::where($data['attributes_data'], function ($attribute) use ($goods) {
-            $goods->attribute()->updateOrCreate(['attributes_no' => $attribute['attributes_no']], $attribute);
-        });
-        Arr::where($data['attributes_value'], function ($attributeValue) use ($goods) {
-            $goods->attributeValue()->updateOrCreate(['attr_no' => $attributeValue['attr_no']], $attributeValue);
-        });
+        $data = Arr::except($data, 'sku_data');
+        $data = Arr::except($data, 'attributes_data');
+        $data = Arr::except($data, 'attributes_value');
+
+        $nowAttrIds = array_column($skuData, 'attr_no');
+        $nowAttrValueIds = array_column($skuData, 'attr_value_no');
+        $nowSkuIds = array_column($skuData, 'goods_sku_id');
 
         // 删除其他数据
-        $goods->sku()->whereNotIn('goods_sku_id', array_column($data['sku_data'], 'goods_sku_id'))->delete();
-        $goods->attribute()->whereNotIn('attributes_no', array_column($data['attributes_data'], 'attributes_no'))->delete();
-        $goods->attributeValue()->whereNotIn('attr_no', array_column($data['attributes_value'], 'attr_no'))->delete();
+        $nowSkuIds && $goods->sku()->whereNotIn('goods_sku_id', $nowSkuIds)->delete();
+        $nowAttrIds && $goods->attribute()->whereNotIn('attr_no', $nowAttrIds)->delete();
+        $nowAttrValueIds && $goods->attributeValue()->whereNotIn('attr_value_no', $nowAttrValueIds)->delete();
+
+        // 过滤
+        $this->filterExecuteAttributes($data, true);
+
+        $goods->save($data);
+
+        Arr::where($skuData, function ($sku) use ($goods) {
+            $goods->sku()->updateOrCreate(['goods_sku_id' => $sku['goods_sku_id']], $sku);
+        });
+        Arr::where($attributesData, function ($attribute) use ($goods) {
+            $goods->attribute()->updateOrCreate(['attr_no' => $attribute['attr_no']], $attribute);
+        });
+        Arr::where($attributesValueData, function ($attributeValue) use ($goods) {
+            $goods->attributeValue()->updateOrCreate(['attr_value_no' => $attributeValue['attr_value_no']], $attributeValue);
+        });
 
         return true;
     }

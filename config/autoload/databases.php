@@ -59,7 +59,7 @@ $databaseTemple = [
 return \Hyperf\Support\value(function () use ($databaseTemple, $tenantIds) {
     $database = [];
     array_map(function ($tenant) use (&$database, $databaseTemple) {
-        $tenant != 'default' && $databaseTemple['database'] = 'mine_shop_' . $tenant;
+        $tenant != 'default' && $databaseTemple['database'] .= '_' . $tenant;
         $database[$tenant] = $databaseTemple;
     }, $tenantIds['tenant']);
     return $database;

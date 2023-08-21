@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Goods\Request;
 
+use Hyperf\Validation\Rule;
 use Mine\MineFormRequest;
 
 /**
@@ -34,13 +35,13 @@ class GoodsCategoryRequest extends MineFormRequest
     {
         return [
             // 上级ID 验证
-            'parent_id' => 'required',
+            'parent_id' => ['nullable', Rule::exists('goods_category', 'id')],
             // 分组名称 验证
-            'title' => 'required',
+            'title' => 'required|between:1,7',
             // 分组状态（2无用1有用） 验证
-            'status' => 'required',
+            'status' => 'required|in:1,2',
             // 分类排序 验证
-            'sort' => 'required',
+            'sort' => 'required|integer|min:1|max:999',
         ];
     }
 
@@ -52,13 +53,13 @@ class GoodsCategoryRequest extends MineFormRequest
     {
         return [
             // 上级ID 验证
-            'parent_id' => 'required',
+            'parent_id' => ['nullable', Rule::exists('goods_category', 'id')],
             // 分组名称 验证
-            'title' => 'required',
+            'title' => 'required|between:1,7',
             // 分组状态（2无用1有用） 验证
-            'status' => 'required',
+            'status' => 'required|in:1,2',
             // 分类排序 验证
-            'sort' => 'required',
+            'sort' => 'required|integer|min:1|max:999',
         ];
     }
 
@@ -69,9 +70,9 @@ class GoodsCategoryRequest extends MineFormRequest
     public function attributes(): array
     {
         return [
-            'parent_id' => '上级ID',
+            'parent_id' => '上级分组',
             'title' => '分组名称',
-            'status' => '分组状态（2无用1有用）',
+            'status' => '分组状态',
             'sort' => '分类排序',
         ];
     }

@@ -17,7 +17,8 @@ use Mine\MineModel;
  * @property int $id
  * @property string $goods_no
  * @property int $attr_no
- * @property string $attr_value_data
+ * @property int $attr_value_no
+ * @property string $attr_value
  */
 class GoodsAttributesValue extends MineModel
 {
@@ -33,10 +34,10 @@ class GoodsAttributesValue extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['goods_no', 'attr_no', 'attr_value_data'];
+    protected array $fillable = ['goods_no', 'attr_no', 'attr_value_no', 'attr_value'];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['attr_no' => 'integer'];
+    protected array $casts = ['attr_no' => 'integer', 'attr_value_no' => 'integer'];
 }

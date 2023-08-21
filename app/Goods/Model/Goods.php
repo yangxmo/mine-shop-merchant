@@ -64,12 +64,12 @@ class Goods extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'goods_name', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_lock_sale', 'goods_images', 'goods_video', 'goods_category_id', 'goods_language', 'goods_description', 'created_at', 'updated_at', 'deleted_at'];
+    protected array $fillable = ['id', 'goods_name', 'goods_keyword', 'goods_unit', 'goods_type', 'goods_spec_type', 'goods_vip_price', 'goods_warn_sale', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_lock_sale', 'goods_images', 'goods_video', 'goods_category_id', 'goods_language', 'goods_description', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'goods_price' => 'float', 'goods_market_price' => 'float', 'goods_sale' => 'integer', 'goods_lock_sale' => 'integer', 'goods_category_id' => 'integer', 'goods_status' => 'integer', 'goods_language' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected array $casts = ['id' => 'integer', 'goods_unit' => 'string', 'goods_type' => 'integer', 'goods_spec_type' => 'integer', 'goods_vip_price' => 'float', 'goods_warn_sale' => 'integer', 'goods_price' => 'float', 'goods_market_price' => 'float', 'goods_sale' => 'integer', 'goods_lock_sale' => 'integer', 'goods_category_id' => 'integer', 'goods_status' => 'integer', 'goods_language' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     public function setGoodsImagesAttribute($value): void
     {
@@ -83,7 +83,7 @@ class Goods extends MineModel
 
     public function attribute(): HasMany
     {
-        return $this->hasMany(GoodsAttribute::class, 'goods_no', 'id');
+        return $this->hasMany(GoodsAttributes::class, 'goods_no', 'id');
     }
 
     public function attributeValue(): HasMany
