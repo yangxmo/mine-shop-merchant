@@ -39,6 +39,10 @@ class GoodsClauseMapper extends AbstractMapper
             $query->where('name', 'like', '%' . $params['name']);
         }
 
+        if (! empty($params['term']) && is_array($params['term'])) {
+//            $query->whereJsonContains('term', );
+        }
+
         if (! empty($params['sort'])) {
             $query->where('sort', '=', $params['sort']);
         }

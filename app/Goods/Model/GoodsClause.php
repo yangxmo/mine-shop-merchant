@@ -29,12 +29,12 @@ class GoodsClause extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = [];
+    protected array $fillable = ['id', 'name', 'term', 'sort', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = [];
+    protected array $casts = ['id' => 'integer', 'sort' => 'integer'];
 
     public function setTermAttribute($value)
     {
@@ -43,7 +43,7 @@ class GoodsClause extends MineModel
 
     public function getTermAttribute($value)
     {
-        $this->attributes['term'] = Json::decode($value);
+        return Json::decode($value);
     }
 
     public function getCreatedAt()
