@@ -15,6 +15,8 @@ use App\Order\Model\OrderBase;
 use App\Order\Service\Confirm\Service\OrderService;
 use App\Order\Vo\OrderServiceVo;
 use Hyperf\Database\Model\Model;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Tcc\TccTransaction\TccOption;
 
 class OrderTcc extends TccOption
@@ -23,6 +25,10 @@ class OrderTcc extends TccOption
 
     protected OrderServiceVo $vo;
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function try(): Model|OrderBase
     {
         # 获取依赖数据

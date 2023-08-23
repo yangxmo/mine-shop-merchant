@@ -18,6 +18,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class OrderPayRecordAssemble
 {
     /**
+     * 构建订单支付记录
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

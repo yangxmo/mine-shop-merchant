@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Goods\Request;
 
 use Hyperf\Validation\Rule;
@@ -25,6 +26,15 @@ class GoodsCategoryRequest extends MineFormRequest
     public function commonRules(): array
     {
         return [];
+    }
+
+    public function changeStatusRules(): array
+    {
+        return [
+            'id' => ['required', 'integer', Rule::exists('goods_category', 'id')->whereNull('deleted_at')],
+            'statusValue' => 'required',
+            'statusName' => 'required'
+        ];
     }
 
     /**

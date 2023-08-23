@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingGenerateTablesMapper;
@@ -58,12 +59,13 @@ class SettingGenerateTablesService extends AbstractService
      * SettingGenerateTablesService constructor.
      */
     public function __construct(
-        SettingGenerateTablesMapper $mapper,
-        DataMaintainService $dataMaintainService,
+        SettingGenerateTablesMapper   $mapper,
+        DataMaintainService           $dataMaintainService,
         SettingGenerateColumnsService $settingGenerateColumnsService,
-        ModuleService $moduleService,
-        ContainerInterface $container
-    ) {
+        ModuleService                 $moduleService,
+        ContainerInterface            $container
+    )
+    {
         $this->mapper = $mapper;
         $this->dataMaintainService = $dataMaintainService;
         $this->settingGenerateColumnsService = $settingGenerateColumnsService;
@@ -81,8 +83,8 @@ class SettingGenerateTablesService extends AbstractService
         // 非系统数据源，同步远程库的表结构到本地
         if ($params['source'] !== \Mine\Mine::getMineName()) {
             foreach ($params['names'] as $sourceName => $item) {
-                if (! \Hyperf\Database\Schema\Schema::hasTable($item['name'])) {
-                    $this->container->get(SettingDatasourceService::class)->syncRemoteTableStructToLocal((int) $params['source'], $item);
+                if (!\Hyperf\Database\Schema\Schema::hasTable($item['name'])) {
+                    $this->container->get(SettingDatasourceService::class)->syncRemoteTableStructToLocal((int)$params['source'], $item);
                 }
             }
         }
@@ -125,7 +127,8 @@ class SettingGenerateTablesService extends AbstractService
         $model = $this->settingGenerateColumnsService->mapper->getModel();
         $ids = $model->newQuery()->where('table_id', $table['id'])->pluck('id');
 
-        $this->settingGenerateColumnsService->mapper->delete($ids->toArray());
+        !empty($ids->toArray()) && $this->settingGenerateColumnsService->mapper->delete($ids->toArray());
+
         foreach ($columns as &$column) {
             $column['table_id'] = $id;
         }
@@ -144,7 +147,7 @@ class SettingGenerateTablesService extends AbstractService
 
         unset($data['columns']);
 
-        if (! empty($data['belong_menu_id'])) {
+        if (!empty($data['belong_menu_id'])) {
             $data['belong_menu_id'] = is_array($data['belong_menu_id']) ? array_pop($data['belong_menu_id']) : $data['belong_menu_id'];
         } else {
             $data['belong_menu_id'] = 0;
@@ -178,7 +181,7 @@ class SettingGenerateTablesService extends AbstractService
         $this->initGenerateSetting();
         $adminId = user()->getId();
         foreach ($ids as $id) {
-            $this->generateCodeFile((int) $id, $adminId);
+            $this->generateCodeFile((int)$id, $adminId);
         }
 
         return $this->packageCodeFile();

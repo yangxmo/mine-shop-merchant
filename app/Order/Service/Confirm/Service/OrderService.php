@@ -9,101 +9,94 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Order\Service\Confirm\Service;
 
-use Api\Service\Order\Confirm\Service\Db;
-use Api\Service\Order\Confirm\Service\Expression;
-use App\Order\Assemble\OrderAddressAssemble;
 use App\Order\Assemble\OrderAssemble;
-use App\Order\Assemble\OrderPayRecordAssemble;
-use App\Order\Assemble\OrderProductAssemble;
 use App\Order\Mapper\OrderBaseMapper;
 use App\Order\Model\OrderBase;
 use App\Order\Vo\OrderServiceVo;
 use Hyperf\Database\Model\Model;
+use Hyperf\Database\Query\Expression;
+use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Annotation\Transaction;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class OrderService
 {
     #[Inject]
     protected OrderBaseMapper $orderBaseMapper;
 
-    # 创建订单
+    /**
+     * 创建订单
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     #[Transaction]
     public function createOrder(OrderServiceVo $vo): Model|OrderBase
     {
         // 订单基础信息
         $orderData = OrderAssemble::buildOrderData($vo);
         // 订单商品信息
-        $goodsData = OrderProductAssemble::buildOrderProductData($vo);
+        $goodsData = OrderAssemble::buildOrderProductData($vo);
         // 订单地址信息
-        $addressData = OrderAddressAssemble::buildOrderAddressData($vo);
-        // 订单支付信息
-        $payData = OrderPayRecordAssemble::buildOrderPayRecordData($vo);
+        $addressData = OrderAssemble::buildOrderAddressData($vo);
         // 创建订单
         $order = $this->orderBaseMapper->create($orderData);
         // 创建商品
         $order->goods()->insert($goodsData);
         // 创建地址
         $order->address()->create($addressData);
-        // 创建支付记录
-        $order->payRecord()->create($payData);
 
         return $order;
     }
 
     # 删除订单
-    public function deleteOrder(int $orderId)
+    #[Transaction]
+    public function deleteOrder(int $orderId): void
     {
-        Db::transaction(function () use ($orderId) {
-            Db::table('tcc_order')
-                ->where('id', $orderId)
-                ->delete();
-        });
+        Db::table('tcc_order')
+            ->where('id', $orderId)
+            ->delete();
     }
 
     # 创建订单消息
+    #[Transaction]
     public function createMessage(int $orderId, string $message): int
     {
-        $id = null;
-        Db::transaction(function () use (&$id, $orderId) {
-            $id = (int) Db::table('tcc_order_message')
-                ->insertGetId([
-                    'order_id' => $orderId,
-                    'message' => '订单创建成功, 通知管理员',
-                ]);
-        });
-        return $id;
+        return Db::table('tcc_order_message')
+            ->insertGetId([
+                'order_id' => $orderId,
+                'message' => '订单创建成功, 通知管理员',
+            ]);
     }
 
     # 删除订单消息
-    public function deleteMessage(int $msgId)
+    #[Transaction]
+    public function deleteMessage(int $msgId): void
     {
-        Db::transaction(function () use ($msgId) {
-            Db::table('tcc_order_message')
-                ->where('id', $msgId)
-                ->delete();
-        });
+        Db::table('tcc_order_message')
+            ->where('id', $msgId)
+            ->delete();
     }
 
     # 增加订单统计
-    public function incOrderStatistics()
+    #[Transaction]
+    public function incOrderStatistics(): void
     {
-        Db::transaction(function () {
-            Db::table('tcc_order_statistics')
-                ->where('id', 1)
-                ->update(['order_num' => new Expression('order_num + 1')]);
-        });
+        Db::table('tcc_order_statistics')
+            ->where('id', 1)
+            ->update(['order_num' => new Expression('order_num + 1')]);
     }
 
     # 减少订单统计
-    public function decOrderStatistics()
+    #[Transaction]
+    public function decOrderStatistics(): void
     {
-        Db::transaction(function () {
-            Db::table('tcc_order_statistics')
-                ->where('id', 1)
-                ->update(['order_num' => new Expression('order_num - 1')]);
-        });
+        Db::table('tcc_order_statistics')
+            ->where('id', 1)
+            ->update(['order_num' => new Expression('order_num - 1')]);
     }
 }

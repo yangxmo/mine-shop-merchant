@@ -137,12 +137,12 @@ class GoodsCategoryController extends MineController
      * @throws NotFoundExceptionInterface
      */
     #[PutMapping('changeStatus'), Permission('goods:category:update'), OperationLog]
-    public function changeStatus(): ResponseInterface
+    public function changeStatus(GoodsCategoryRequest $request): ResponseInterface
     {
         return $this->service->changeStatus(
-            (int) $this->request->input('id'),
-            (string) $this->request->input('statusValue'),
-            (string) $this->request->input('statusName', 'status')
+            (int) $request->input('id', 0),
+            (string) $request->input('statusValue'),
+            (string) $request->input('statusName', 'status')
         ) ? $this->success() : $this->error();
     }
 
@@ -155,41 +155,6 @@ class GoodsCategoryController extends MineController
     public function update(int $id, GoodsCategoryRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 数据导入.
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    #[PostMapping('import'), Permission('goods:category:import')]
-    public function import(): ResponseInterface
-    {
-        return $this->service->import(\App\Goods\Dto\GoodsCategoryDto::class) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 下载导入模板
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    #[PostMapping('downloadTemplate')]
-    public function downloadTemplate(): ResponseInterface
-    {
-        return (new \Mine\MineCollection())->export(\App\Goods\Dto\GoodsCategoryDto::class, '模板下载', []);
-    }
-
-    /**
-     * 数据导出.
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    #[PostMapping('export'), Permission('goods:category:export'), OperationLog]
-    public function export(): ResponseInterface
-    {
-        return $this->service->export($this->request->all(), \App\Goods\Dto\GoodsCategoryDto::class, '导出数据列表');
     }
 
     /**
