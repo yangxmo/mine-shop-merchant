@@ -183,7 +183,6 @@ class SettingGenerateTablesService extends AbstractService
         foreach ($ids as $id) {
             $this->generateCodeFile((int)$id, $adminId);
         }
-
         return $this->packageCodeFile();
     }
 

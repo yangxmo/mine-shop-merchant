@@ -12,21 +12,14 @@ declare(strict_types=1);
 namespace App\Goods\Model;
 
 use Hyperf\Codec\Json;
-use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
 
 /**
- * @property int $id
- * @property string $name 服务名称
- * @property string $term 服务条款
- * @property int $sort 排序
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property string $deleted_at
+ * @property mixed $term 
  */
 class GoodsClause extends MineModel
 {
-    use SoftDeletes;
+    public bool $timestamps = false;
 
     /**
      * The table associated with the model.
@@ -36,12 +29,12 @@ class GoodsClause extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'name', 'term', 'sort', 'created_at', 'updated_at', 'deleted_at'];
+    protected array $fillable = [];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'sort' => 'integer','created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected array $casts = [];
 
     public function setTermAttribute($value)
     {

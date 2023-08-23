@@ -14,6 +14,7 @@ namespace App\System\Service;
 use Hyperf\Database\Model\Collection;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
+use Mine\Kernel\Tenant\Tenant;
 
 class DataMaintainService extends AbstractService
 {
@@ -38,7 +39,8 @@ class DataMaintainService extends AbstractService
                 . 'ORDER BY ORDINAL_POSITION';
             // 加载主表的列
             $columnList = [];
-            foreach (Db::select($sql, [env('DB_DATABASE'), $table]) as $column) {
+            $databaseName = env('DB_DATABASE') . '_' .Tenant::instance()->getId();
+            foreach (Db::select($sql, [$databaseName, $table]) as $column) {
                 $columnList[] = [
                     'column_key' => $column->COLUMN_KEY,
                     'column_name' => $column->COLUMN_NAME,
