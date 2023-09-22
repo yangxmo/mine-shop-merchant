@@ -30,6 +30,7 @@ class WsAuthMiddleware implements MiddlewareInterface
             if ($token && user()->check($token)) {
                 return $handler->handle($request);
             }
+
             return container()->get(\Hyperf\HttpServer\Contract\ResponseInterface::class)->raw(t('jwt.validate_fail'));
         } catch (Exception $e) {
             return container()->get(\Hyperf\HttpServer\Contract\ResponseInterface::class)->raw($e->getMessage());

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Goods\Service;
 
+use App\Goods\Assemble\AssembleGoodsData;
 use App\Goods\Mapper\GoodsMapper;
 use Hyperf\Collection\Arr;
 use Mine\Abstracts\AbstractService;
@@ -37,34 +38,13 @@ class GoodsService extends AbstractService
     public function save(array $data): int
     {
         $skuData = [];
-        // build 属性
-        $data['attributes_data'] = Arr::where($data['attributes_data'], function (&$value) use (&$skuData) {
-            $attributesNo = snowflake_id();
-            $value['attr_no'] = rand(10000, (int)$attributesNo);
-
-            // build 属性
-            $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
-                $values['attr_no'] = $value['attr_no'];
-                $values['attr_value_no'] = (int)snowflake_id();
-
-                // build sku
-                $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
-                    $sku['goods_attr_no'] = $values['attr_value_no'];
-                    $sku['goods_sku_id'] = (int)snowflake_id();
-                    return $sku;
-                });
-
-                unset($values['sku_data']);
-
-                return $values;
-            });
-
-            return $value;
-        }
-        );
-
+        // build 商品规格属性
+        $data['attributes_data'] = AssembleGoodsData::buildGoodsAttribute($data, $skuData);
+        // build 商品附属属性
+        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data);
         // build 属性值
         $data['attributes_value'] = Arr::collapse(array_column($data['attributes_data'], 'value'));
+        // build sku数据
         $data['sku_data'] = $skuData;
 
         return $this->mapper->save($data);
@@ -75,35 +55,14 @@ class GoodsService extends AbstractService
      */
     public function update(int $id, array $data): bool
     {
+        $skuData = [];
         // build 属性
-        $data['attributes_data'] = Arr::where($data['attributes_data'], function (&$value) use (&$skuData) {
-            // 处理新增
-            empty($value['attr_no']) && $value['attr_no'] = rand(10000, (int)snowflake_id());
-
-            // build 属性
-            $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
-                $values['attr_no'] = $value['attr_no'];
-                // 新增
-                empty($value['attr_value_no']) && $value['attr_value_no'] = (int)snowflake_id();
-
-                // build sku
-                $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
-                    $sku['goods_attr_no'] = $values['attr_value_no'];
-                    empty($sku['goods_sku_id']) && $sku['goods_sku_id'] = (int)snowflake_id();
-                    return $sku;
-                });
-
-                unset($values['sku_data']);
-
-                return $values;
-            });
-
-            return $value;
-        }
-        );
-
+        $data['attributes_data'] = AssembleGoodsData::buildUpdateGoodsAttribute($data, $skuData);
+        // build 商品附属属性
+        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data);
         // build 属性值
         $data['attributes_value'] = Arr::collapse(array_column($data['attributes_data'], 'value'));
+        // build sku数据
         $data['sku_data'] = $skuData;
 
         return $this->mapper->update($id, $data);

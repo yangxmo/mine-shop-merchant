@@ -20,6 +20,7 @@ use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
+use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\Annotation\RemoteState;
@@ -33,7 +34,7 @@ use Psr\Http\Message\ResponseInterface;
  * 商品控制器
  * Class GoodsController.
  */
-#[Controller(prefix: 'goods/manage')]
+#[Controller(prefix: 'goods/manage'), Auth]
 class GoodsController extends MineController
 {
     /**

@@ -9,8 +9,10 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Goods\Resource;
 
+use Hyperf\Codec\Json;
 use Hyperf\Resource\Json\JsonResource;
 
 /**
@@ -37,18 +39,27 @@ class GoodsResource extends JsonResource
         $newData = [];
 
         foreach ($data['items'] as $datum) {
-            $newData[] = [
-                'id' => $datum['id'] ?? '',
+
+            $affiliate = !empty($datum->affiliate) ? $datum->affiliate->toArray() : [];
+
+            $goods = [
+                'id' => $datum['id'],
                 'goods_name' => $datum['goods_name'] ?? '',
-                'goods_images' => $datum['goods_images'] ?? [],
+                'goods_type' => $datum['goods_type'] ?? 1,
+                'goods_category_id' => $datum['goods_category_id'] ?? 0,
+                'goods_images' => $datum['goods_images'] ? Json::decode($datum['goods_images']) : [],
+                'goods_image' => $datum['goods_images'] ? Json::decode($datum['goods_images'])[0] ?? '': '',
                 'goods_status' => $datum['goods_status'] ?? 2,
                 'goods_sale' => $datum['goods_sale'] ?? 0,
                 'goods_language' => $datum['goods_language'],
                 'goods_price' => $datum['goods_price'],
                 'goods_market_price' => $datum['goods_market_price'],
                 'goods_category_name' => $datum->category->title ?? '-',
+                'goods_description' => $datum['goods_description'],
                 'created_at' => $datum['created_at']->toDateTimeString(),
             ];
+
+            $newData[] = array_merge($goods, $affiliate);
         }
 
         $data['items'] = $newData;

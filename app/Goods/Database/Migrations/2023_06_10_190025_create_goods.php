@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * This file is part of Hyperf.
  *
@@ -9,6 +10,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Schema\Schema;
 use Mine\Abstracts\AbstractMigration;
@@ -46,15 +48,17 @@ class CreateGoods extends AbstractMigration
             // 商品分组
             $table->integer('goods_category_id')->default(0)->comment('分组ID');
             // 商品类型
-            $table->enum('goods_type', [1,2])->default(1)->comment('商品类型（1普通商品2虚拟商品）');
+            $table->enum('goods_type', [1, 2])->default(1)->comment('商品类型（1普通商品2虚拟商品）');
             // 商品规格类型
-            $table->enum('goods_spec_type', [1,2])->default(1)->comment('商品类型（1普通商品2虚拟商品）');
+            $table->enum('goods_spec_type', [1, 2])->default(1)->comment('商品类型（1普通商品2虚拟商品）');
             // 商品状态
-            $table->enum('goods_status', [1,2,3,4])->default(1)->comment('商品状态 (1上架2下架3平台下架4作废)');
+            $table->enum('goods_status', [1, 2, 3, 4])->default(1)->comment('商品状态 (1上架2下架3平台下架4作废)');
             // 商品语言
-            $table->enum('goods_language', [1,2])->default(1)->comment('商品语言（1中文2英文）');
+            $table->enum('goods_language', [1, 2])->default(1)->comment('商品语言（1中文2英文）');
             // 商品描述
             $table->text('goods_description')->nullable()->comment('商品详情描述，可包含图片中心的图片URL');
+            // 排序
+            $table->bigInteger('goods_sort')->unsigned()->default(0)->comment('商品排序');
 
             $table->datetimes();
 
@@ -66,7 +70,7 @@ class CreateGoods extends AbstractMigration
             $table->index(['goods_price'], 'idx_price');
             $table->index(['goods_status'], 'idx_status');
             $table->index(['goods_keyword'], 'idx_keyword');
-            $table->index(['goods_category_id','goods_status'], 'idx_cid_status');
+            $table->index(['goods_category_id', 'goods_status'], 'idx_cid_status');
 
             $table->comment('商品表');
         });

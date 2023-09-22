@@ -64,6 +64,30 @@ class GoodsRequest extends MineFormRequest
             'goods_language' => 'required|integer|in:1,2',
             // 商品详情描述，可包含图片中心的图片URL 验证
             'goods_description' => 'required_with:goods_data',
+
+            //是否预售商品（1否2是） 验证
+            'goods_is_presell' => 'required|in:1,2|integer',
+            //是否限购商品（1否2是） 验证
+            'goods_is_purchase' => 'required|in:1,2|integer',
+            //限购商品类型（1单次限购2全部限购） 验证
+            'goods_purchase_type' => 'required_with:goods_is_purchase,2|integer|in:1,2',
+            //限购商品数量 验证
+            'goods_purchase_num' => 'required_with:goods_is_purchase,2|integer|min:0|max:99999',
+            //是否会员商品（1否2是） 验证
+            'goods_is_vip' => 'required|integer|in:1,2',
+            //商品购买送积分 验证
+            'goods_buy_point' => 'required|integer|min:0|max:9999',
+            //商品已售数量 验证
+            'goods_sales' => 'nullable|integer|min:0',
+            //商品推荐 验证
+            'goods_recommend' => 'nullable|integer|in:1,2',
+            //商品运费方式，（1固定邮费2运费模板）
+            'goods_freight_type' => 'nullable|integer|in:1,2',
+            //商品物流方式
+            'goods_logistics_type' => 'nullable|integer|in:1,2',
+
+
+
             // 商品属性数据
             'attributes_data' => 'required_if:goods_spec_type,2|array',
             // 商品属性数据名称
@@ -126,6 +150,25 @@ class GoodsRequest extends MineFormRequest
             'goods_language' => 'required|integer|in:1,2',
             // 商品详情描述，可包含图片中心的图片URL 验证
             'goods_description' => 'required_with:goods_data',
+
+            //是否预售商品（1否2是） 验证
+            'goods_is_presell' => 'required|in:1,2|integer',
+            //是否限购商品（1否2是） 验证
+            'goods_is_purchase' => 'required|in:1,2|integer',
+            //限购商品类型（1单次限购2全部限购） 验证
+            'goods_purchase_type' => 'required_with:goods_is_purchase,2|integer|in:1,2',
+            //限购商品数量 验证
+            'goods_purchase_num' => 'required_with:goods_is_purchase,2|integer|min:1|max:99999',
+            //是否会员商品（1否2是） 验证
+            'goods_is_vip' => 'required|integer|in:1,2',
+            //商品购买送积分 验证
+            'goods_buy_point' => 'required|integer|min:0|max:9999',
+            //商品已售数量 验证
+            'goods_sales' => 'nullable|integer|min:0',
+            //商品推荐 验证
+            'goods_recommend' => 'nullable|integer|in:1,2',
+
+
             // 商品属性数据
             'attributes_data' => 'nullable|array',
             // 商品属性数据no
@@ -166,6 +209,8 @@ class GoodsRequest extends MineFormRequest
         return [
             // 商品名称
             'goods_name' => '商品名称',
+            // 商品类型
+            'goods_type' => '商品类型',
             // 商品单位
             'goods_unit' => '商品单位名称',
             // 分类排序 验证
@@ -186,6 +231,23 @@ class GoodsRequest extends MineFormRequest
             'goods_language' => '商品语言',
             // 说明
             'goods_description' => '商品说明',
+
+            //是否预售商品（1否2是） 验证
+            'goods_is_presell' => '是否预售商品',
+            //是否限购商品（1否2是） 验证
+            'goods_is_purchase' => '是否限购商品',
+            //限购商品类型（1单次限购2全部限购） 验证
+            'goods_purchase_type' => '限购商品类型',
+            //限购商品数量 验证
+            'goods_purchase_num' => '限购商品数量',
+            //是否会员商品（1否2是） 验证
+            'goods_is_vip' => '是否会员商品',
+            //商品购买送积分 验证
+            'goods_buy_point' => '商品购买送积分',
+            //商品已售数量 验证
+            'goods_sales' => '商品已售数量',
+            //商品推荐 验证
+            'goods_recommend' => '商品推荐',
 
             // 商品属性数据
             'attributes_data' => '商品属性',

@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Goods\Model;
 
 use App\Goods\Event\GoodsEvent;
@@ -48,7 +49,6 @@ use Mine\MineModel;
 class Goods extends MineModel
 {
     use SoftDeletes;
-    use Snowflake;
 
     /**
      * The table associated with the model.
@@ -76,14 +76,14 @@ class Goods extends MineModel
         $this->attributes['goods_images'] = Json::encode($value);
     }
 
-    public function getGoodsImagesAttribute($value): void
-    {
-        $this->attributes['goods_images'] = Json::decode($value);
-    }
-
     public function attribute(): HasMany
     {
         return $this->hasMany(GoodsAttributes::class, 'goods_no', 'id');
+    }
+
+    public function affiliate()
+    {
+        return $this->hasOne(GoodsAffiliate::class, 'goods_no', 'id');
     }
 
     public function attributeValue(): HasMany
@@ -110,4 +110,6 @@ class Goods extends MineModel
     {
         event(new GoodsEvent($event));
     }
+
+
 }

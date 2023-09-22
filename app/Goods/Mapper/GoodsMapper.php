@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Goods\Mapper;
 
 use App\Goods\Model\Goods;
@@ -41,7 +42,7 @@ class GoodsMapper extends AbstractMapper
     #[Cacheable(prefix: 'goods', value: '#{id}', group: 'goods')]
     public function read(int $id, array $column = ['*']): ?MineModel
     {
-        return $this->model::with(['attribute', 'attribute.attributeValue', 'sku'])->first($column);
+        return $this->model::with(['attribute', 'affiliate', 'attribute.attributeValue', 'sku'])->first($column);
     }
 
     /**
@@ -51,10 +52,13 @@ class GoodsMapper extends AbstractMapper
     public function save(array $data): int
     {
         $skuData = $data['sku_data'] ?? [];
+        $affiliateData = $data['affiliate_data'] ?? [];
         $attributesData = $data['attributes_data'] ?? [];
         $attributesValueData = $data['attributes_value'] ?? [];
 
+        // 移除其他数据
         $data = Arr::except($data, 'sku_data');
+        $data = Arr::except($data, 'affiliate_data');
         $data = Arr::except($data, 'attributes_data');
         $data = Arr::except($data, 'attributes_value');
 
@@ -66,6 +70,8 @@ class GoodsMapper extends AbstractMapper
         !empty($skuData) && $goods->sku()->createMany($skuData);
         // 写入属性
         !empty($attributesData) && $goods->attribute()->createMany($attributesData);
+        // 写入附属属性
+        !empty($affiliateData) && $goods->affiliate()->create($affiliateData);
         // 写入属性值
         !empty($attributesValueData) && $goods->attributeValue()->createMany($attributesValueData);
 
@@ -81,6 +87,7 @@ class GoodsMapper extends AbstractMapper
         $goods = $this->read($id);
 
         $skuData = $data['sku_data'] ?? [];
+        $affiliateData = $data['affiliate_data'] ?? [];
         $attributesData = $data['attributes_data'] ?? [];
         $attributesValueData = $data['attributes_value'] ?? [];
 
@@ -101,6 +108,7 @@ class GoodsMapper extends AbstractMapper
         $this->filterExecuteAttributes($data, true);
 
         $goods->save($data);
+        $goods->affiliate()->update($affiliateData);
 
         Arr::where($skuData, function ($sku) use ($goods) {
             $goods->sku()->updateOrCreate(['goods_sku_id' => $sku['goods_sku_id']], $sku);
@@ -124,29 +132,81 @@ class GoodsMapper extends AbstractMapper
         return parent::delete([$ids['id']]);
     }
 
+    /**
+     * 分页
+     */
+    public function getPageList(?array $params, bool $isScope = true, string $pageName = 'page'): array
+    {
+        $query = $this->listQuerySetting($params, $isScope);
+        // 筛选
+        $query->with(['affiliate' => function ($query) use ($params){ $this->handleAffiliateSearch($query, $params); }]);
+        // 分页
+        $paginate = $query->paginate((int)$params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int)$params[$pageName] ?? 1);
+
+        return $this->setPaginate($paginate, $params);
+    }
+
+    /**
+     * 查询附属信息
+     */
+    function handleAffiliateSearch( $query, array $params)
+    {
+        // 是否预售商品（1否2是）
+        if (!empty($params['goods_is_presell'])) {
+            $query->where('goods_is_presell', '=', $params['goods_is_presell']);
+        }
+
+        // 是否限购商品（1否2是）
+        if (!empty($params['goods_is_purchase'])) {
+            $query->where('goods_is_purchase', '=', $params['goods_is_purchase']);
+        }
+
+        // 限购商品类型（1单次限购2全部限购）
+        if (!empty($params['goods_purchase_type'])) {
+            $query->where('goods_purchase_type', '=', $params['goods_purchase_type']);
+        }
+
+        // 是否会员商品（1否2是）
+        if (!empty($params['goods_is_vip'])) {
+            $query->where('goods_is_vip', '=', $params['goods_is_vip']);
+        }
+
+        // 商品物流方式，（1物流2到店核销）
+        if (!empty($params['goods_logistics_type'])) {
+            $query->where('goods_logistics_type', '=', $params['goods_logistics_type']);
+        }
+
+        // 商品运费方式，（1固定邮费2运费模板）
+        if (!empty($params['goods_freight_type'])) {
+            $query->where('goods_freight_type', '=', $params['goods_freight_type']);
+        }
+
+        return $query;
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
-        if (! empty($params['id']) && is_array($params['id'])) {
+        if (!empty($params['id']) && is_array($params['id'])) {
             $query->whereIn('id', $params['id']);
         }
 
-        if (! empty($params['goods_status'])) {
+        if (!empty($params['goods_status'])) {
             $query->where('goods_status', $params['goods_status']);
         }
 
-        if (! empty($params['goods_category_id'])) {
+        if (!empty($params['goods_category_id'])) {
             $query->where('goods_category_id', $params['goods_category_id']);
         }
 
-        if (! empty($params['goods_sale'])) {
+        if (!empty($params['goods_sale'])) {
             $query->where('goods_sale', $params['goods_sale']);
         }
 
-        if (! empty($params['goods_lock_sale'])) {
+        if (!empty($params['goods_lock_sale'])) {
             $query->where('goods_lock_sale', $params['goods_lock_sale']);
         }
 
-        if (! empty($params['goods_name'])) {
+        if (!empty($params['goods_name'])) {
             $query->where('goods_name', 'like', $params['goods_name'] . '%');
         }
 
