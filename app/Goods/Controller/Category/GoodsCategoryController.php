@@ -157,6 +157,21 @@ class GoodsCategoryController extends MineController
     }
 
     /**
+     * 数字运算操作.
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    #[PutMapping('numberOperation'), Permission('goods:category:update'), OperationLog]
+    public function numberOperation(): ResponseInterface
+    {
+        return $this->service->numberOperation(
+            (int) $this->request->input('id'),
+            (string) $this->request->input('numberName'),
+            (int) $this->request->input('numberValue', 1),
+        ) ? $this->success() : $this->error();
+    }
+
+    /**
      * 远程万能通用列表接口.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

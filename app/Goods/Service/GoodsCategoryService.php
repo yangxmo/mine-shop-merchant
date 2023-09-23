@@ -66,7 +66,7 @@ class GoodsCategoryService extends AbstractService
      */
     public function save(array $data): int
     {
-        return $this->mapper->save($this->handleData($data));
+        return $this->mapper->create($this->handleData($data))->id;
     }
 
     /**
@@ -108,7 +108,7 @@ class GoodsCategoryService extends AbstractService
      * 处理数据.
      * @param mixed $data
      */
-    protected function handleData($data): array
+    protected function handleData(mixed $data): array
     {
         if (! empty($data['parent_id']) && is_array($data['parent_id'])) {
             $data['parent_id'] = array_pop($data['parent_id']);

@@ -65,6 +65,7 @@ class GoodsMapper extends AbstractMapper
         // 过滤其他字段
         $this->filterExecuteAttributes($data, $this->getModel()->incrementing);
 
+        // 创建商品
         $goods = $this->model::create($data);
         // 写入sku
         !empty($skuData) && $goods->sku()->createMany($skuData);
@@ -139,7 +140,9 @@ class GoodsMapper extends AbstractMapper
     {
         $query = $this->listQuerySetting($params, $isScope);
         // 筛选
-        $query->with(['affiliate' => function ($query) use ($params){ $this->handleAffiliateSearch($query, $params); }]);
+        $query = $query->whereHas('affiliate', function ($query) use ($params) {
+            $this->handleAffiliateSearch($query, $params);
+        })->with(['affiliate']);
         // 分页
         $paginate = $query->paginate((int)$params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int)$params[$pageName] ?? 1);
 
@@ -149,7 +152,7 @@ class GoodsMapper extends AbstractMapper
     /**
      * 查询附属信息
      */
-    function handleAffiliateSearch( $query, array $params)
+    private function handleAffiliateSearch($query, array $params): void
     {
         // 是否预售商品（1否2是）
         if (!empty($params['goods_is_presell'])) {
@@ -181,7 +184,11 @@ class GoodsMapper extends AbstractMapper
             $query->where('goods_freight_type', '=', $params['goods_freight_type']);
         }
 
-        return $query;
+        // 商品推荐，（1不推荐2推荐）
+        if (!empty($params['goods_recommend'])) {
+            $query->where('goods_recommend', '=', $params['goods_recommend']);
+        }
+
     }
 
     public function handleSearch(Builder $query, array $params): Builder
@@ -190,23 +197,33 @@ class GoodsMapper extends AbstractMapper
             $query->whereIn('id', $params['id']);
         }
 
+        // 判断是否传入了商品状态
         if (!empty($params['goods_status'])) {
+            // 设置商品状态
             $query->where('goods_status', $params['goods_status']);
         }
 
+        // 判断是否传入了商品分类
         if (!empty($params['goods_category_id'])) {
+            // 设置商品分类
             $query->where('goods_category_id', $params['goods_category_id']);
         }
 
-        if (!empty($params['goods_sale'])) {
-            $query->where('goods_sale', $params['goods_sale']);
+        // 判断是否传入了商品类型
+        if (!empty($params['goods_type'])) {
+            // 设置商品类型
+            $query->where('goods_type', $params['goods_type']);
         }
 
+        // 判断是否传入了商品锁定销量
         if (!empty($params['goods_lock_sale'])) {
+            // 设置商品锁定销量
             $query->where('goods_lock_sale', $params['goods_lock_sale']);
         }
 
+        // 判断是否传入了商品名称
         if (!empty($params['goods_name'])) {
+            // 设置商品名称
             $query->where('goods_name', 'like', $params['goods_name'] . '%');
         }
 
