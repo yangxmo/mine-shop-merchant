@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-namespace App\User\Request;
+namespace App\Users\Request;
 
 use Hyperf\Validation\Rule;
 use Mine\MineFormRequest;
@@ -18,7 +18,7 @@ use Mine\MineFormRequest;
 /**
  * 用户数据表验证数据类
  */
-class UserDataRequest extends MineFormRequest
+class UserRequest extends MineFormRequest
 {
     /**
      * 公共规则

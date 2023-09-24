@@ -1,18 +1,18 @@
 <?php
 declare (strict_types=1);
 
-namespace App\User\Model;
+namespace App\Users\Model;
 
 use Mine\MineModel;
 
-class UserData extends MineModel
+class UsersUser extends MineModel
 {
     /**
      * The table associated with the model.
      *
      * @var string|null
      */
-    protected ?string $table = 'user_data';
+    protected ?string $table = 'users_user';
     /**
      * The attributes that are mass assignable.
      *

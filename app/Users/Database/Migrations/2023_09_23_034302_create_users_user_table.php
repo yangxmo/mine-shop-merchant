@@ -1,16 +1,16 @@
 <?php
-/**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
- *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
- */
 
-use Hyperf\Database\Schema\Schema;
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Schema\Schema;
 use Mine\Abstracts\AbstractMigration;
 
 class CreateUserDataTable extends AbstractMigration
@@ -20,12 +20,12 @@ class CreateUserDataTable extends AbstractMigration
      */
     public function up(): void
     {
-        Schema::create('user_data', function (Blueprint $table) {
+        Schema::create('users_user', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('用户数据表');
             $table->bigIncrements('id')->comment('主键');
 
-            #帮我生成手机号的迁移代码，手机号唯一
+            # 帮我生成手机号的迁移代码，手机号唯一
             $table->string('mobile', 11)->unique()->comment('手机号');
             $table->string('email', 100)->nullable()->comment('邮箱');
             $table->string('password', 100)->comment('密码');
@@ -58,6 +58,6 @@ class CreateUserDataTable extends AbstractMigration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_data');
+        Schema::dropIfExists('users_user');
     }
 }

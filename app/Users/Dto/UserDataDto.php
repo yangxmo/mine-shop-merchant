@@ -1,5 +1,5 @@
 <?php
-namespace App\User\Dto;
+namespace App\Users\Dto;
 
 use Mine\Interfaces\MineModelExcel;
 use Mine\Annotation\ExcelData;

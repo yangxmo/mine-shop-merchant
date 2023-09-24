@@ -13,14 +13,14 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Mine\Abstracts\AbstractMigration;
 
-class CreateUserBalanceLogTable extends AbstractMigration
+class CreateUsersBalanceLogTable extends AbstractMigration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('user_balance_log', function (Blueprint $table) {
+        Schema::create('users_balance_log', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('表注释');
             $table->bigIncrements('id')->comment('主键');
@@ -46,6 +46,6 @@ class CreateUserBalanceLogTable extends AbstractMigration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_balance_log');
+        Schema::dropIfExists('users_balance_log');
     }
 }

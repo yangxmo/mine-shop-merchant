@@ -13,31 +13,30 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Mine\Abstracts\AbstractMigration;
 
-class CreateUserBalanceTable extends AbstractMigration
+class CreateUsersNoticeTable extends AbstractMigration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('user_balance', function (Blueprint $table) {
+        Schema::create('users_notice', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('用户钱包表');
+            $table->comment('用户通知表');
             $table->bigIncrements('id')->comment('主键');
-            $table->unsignedBigInteger('user_id')->comment('用户ID');
-            $table->foreign('user_id')->references('id')->on('user_data')->onDelete('cascade');
+            $table->bigInteger('user_id')->comment('用户ID');
 
-            $table->decimal('available_amount', 12, 2)->default(0)->comment('用户可用金额');
-            $table->decimal('frozen_amount', 12, 2)->default(0)->comment('用户冻结金额');
-            $table->decimal('refund_amount', 12, 2)->default(0)->comment('退款总金额');
-            $table->decimal('pay_amount', 12, 2)->default(0)->comment('支付总金额');
-
-            $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
-            $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
+            $table->json('user_ids')->comment('接收消息的用户IDs');
+            $table->enum('notice_type', [1, 2])->comment('通知类型（1系统消息，2用户消息)');
+            $table->bigInteger('send_user', false, true)->comment('发送人');
+            $table->string('title', 255)->comment('通知消息的标题');
+            $table->json('content')->nullable()->comment('消息的内容json');
+            $table->timestamp('send_time')->comment('发送时间');
+            $table->enum('status', [1, 2])->comment('发送状态');
+            $table->timestamp('real_send_time')->nullable()->comment('实际发送时间');
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
             $table->addColumn('timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间'])->nullable();
             $table->addColumn('timestamp', 'deleted_at', ['precision' => 0, 'comment' => '删除时间'])->nullable();
-            $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
         });
     }
 
@@ -46,6 +45,6 @@ class CreateUserBalanceTable extends AbstractMigration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_balance');
+        Schema::dropIfExists('users_notice');
     }
 }

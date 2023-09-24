@@ -10,22 +10,22 @@ declare(strict_types=1);
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-namespace App\User\Service;
+namespace App\Users\Service;
 
-use App\User\Mapper\UserDataMapper;
+use App\Users\Mapper\UserMapper;
 use Mine\Abstracts\AbstractService;
 
 /**
  * 用户数据表服务类
  */
-class UserDataService extends AbstractService
+class UserService extends AbstractService
 {
     /**
-     * @var UserDataMapper
+     * @var UserMapper
      */
     public $mapper;
 
-    public function __construct(UserDataMapper $mapper)
+    public function __construct(UserMapper $mapper)
     {
         $this->mapper = $mapper;
     }

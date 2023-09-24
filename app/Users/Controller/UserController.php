@@ -1,19 +1,19 @@
 <?php
+
 declare(strict_types=1);
 /**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
+ * This file is part of Hyperf.
  *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace App\User\Controller;
+namespace App\Users\Controller;
 
-use App\User\Service\UserDataService;
-use App\User\Request\UserDataRequest;
+use App\Users\Request\UserRequest;
+use App\Users\Service\UserService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -21,121 +21,109 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
-use Mine\Annotation\RemoteState;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
+use Mine\Annotation\RemoteState;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * 用户数据表控制器
- * Class UserDataController
+ * Class UserDataController.
  */
-#[Controller(prefix: "user/data"), Auth]
-class UserDataController extends MineController
+#[Controller(prefix: 'users/user'), Auth]
+class UserController extends MineController
 {
     /**
      * 业务处理服务
-     * UserDataService
+     * UserDataService.
      */
     #[Inject]
-    protected UserDataService $service;
+    protected UserService $service;
 
     /**
-     * 列表
-     * @return ResponseInterface
+     * 列表.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[GetMapping("index"), Permission("user:data, user:data:index")]
+    #[GetMapping('index'), Permission('users:user, users:user:index')]
     public function index(): ResponseInterface
     {
         return $this->success($this->service->getPageList($this->request->all()));
     }
 
     /**
-     * 回收站列表
-     * @return ResponseInterface
+     * 回收站列表.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[GetMapping("recycle"), Permission("user:data:recycle")]
+    #[GetMapping('recycle'), Permission('users:user:recycle')]
     public function recycle(): ResponseInterface
     {
         return $this->success($this->service->getPageListByRecycle($this->request->all()));
     }
 
     /**
-     * 单个或批量真实删除数据 （清空回收站）
-     * @return ResponseInterface
+     * 单个或批量真实删除数据 （清空回收站）.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[DeleteMapping("realDelete"), Permission("user:data:realDelete"), OperationLog]
+    #[DeleteMapping('realDelete'), Permission('users:user:realDelete'), OperationLog]
     public function realDelete(): ResponseInterface
     {
         return $this->service->realDelete((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
     }
 
     /**
-     * 单个或批量恢复在回收站的数据
-     * @return ResponseInterface
+     * 单个或批量恢复在回收站的数据.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PutMapping("recovery"), Permission("user:data:recovery"), OperationLog]
+    #[PutMapping('recovery'), Permission('users:user:recovery'), OperationLog]
     public function recovery(): ResponseInterface
     {
         return $this->service->recovery((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
     }
 
     /**
-     * 新增
-     * @param UserDataRequest $request
-     * @return ResponseInterface
+     * 新增.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PostMapping("save"), Permission("user:data:save"), OperationLog]
-    public function save(UserDataRequest $request): ResponseInterface
+    #[PostMapping('save'), Permission('users:user:save'), OperationLog]
+    public function save(UserRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
-     * 更新
-     * @param int $id
-     * @param UserDataRequest $request
-     * @return ResponseInterface
+     * 更新.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PutMapping("update/{id}"), Permission("user:data:update"), OperationLog]
-    public function update(int $id, UserDataRequest $request): ResponseInterface
+    #[PutMapping('update/{id}'), Permission('users:user:update'), OperationLog]
+    public function update(int $id, UserRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**
-     * 读取数据
-     * @param int $id
-     * @return ResponseInterface
+     * 读取数据.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[GetMapping("read/{id}"), Permission("user:data:read")]
+    #[GetMapping('read/{id}'), Permission('users:user:read')]
     public function read(int $id): ResponseInterface
     {
         return $this->success($this->service->read($id));
     }
 
     /**
-     * 单个或批量删除数据到回收站
-     * @return ResponseInterface
+     * 单个或批量删除数据到回收站.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[DeleteMapping("delete"), Permission("user:data:delete"), OperationLog]
+    #[DeleteMapping('delete'), Permission('users:user:delete'), OperationLog]
     public function delete(): ResponseInterface
     {
         return $this->service->delete((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
@@ -143,11 +131,10 @@ class UserDataController extends MineController
 
     /**
      * 更改数据状态
-     * @return ResponseInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PutMapping("changeStatus"), Permission("user:data:update"), OperationLog]
+    #[PutMapping('changeStatus'), Permission('users:user:update'), OperationLog]
     public function changeStatus(): ResponseInterface
     {
         return $this->service->changeStatus(
@@ -158,12 +145,11 @@ class UserDataController extends MineController
     }
 
     /**
-     * 数字运算操作
-     * @return ResponseInterface
+     * 数字运算操作.
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PutMapping("numberOperation"), Permission("user:data:update"), OperationLog]
+    #[PutMapping('numberOperation'), Permission('users:user:update'), OperationLog]
     public function numberOperation(): ResponseInterface
     {
         return $this->service->numberOperation(
@@ -174,24 +160,21 @@ class UserDataController extends MineController
     }
 
     /**
-     * 数据导出
-     * @return ResponseInterface
+     * 数据导出.
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    #[PostMapping("export"), Permission("user:data:export"), OperationLog]
+    #[PostMapping('export'), Permission('users:user:export'), OperationLog]
     public function export(): ResponseInterface
     {
-        return $this->service->export($this->request->all(), \App\User\Dto\UserDataDto::class, '导出数据列表');
+        return $this->service->export($this->request->all(), \App\Users\Dto\UserDataDto::class, '导出数据列表');
     }
 
-
     /**
-     * 远程万能通用列表接口
-     * @return ResponseInterface
+     * 远程万能通用列表接口.
      */
-    #[PostMapping("remote"), RemoteState(true)]
+    #[PostMapping('remote'), RemoteState(true)]
     public function remote(): ResponseInterface
     {
         return $this->success($this->service->getRemoteList($this->request->all()));
