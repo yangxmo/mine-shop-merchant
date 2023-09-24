@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace App\Goods\Controller\Category;
+namespace App\Goods\Controller;
 
 use App\Goods\Request\GoodsCategoryRequest;
 use App\Goods\Service\GoodsCategoryService;

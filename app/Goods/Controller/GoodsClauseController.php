@@ -10,10 +10,10 @@ declare(strict_types=1);
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-namespace App\Goods\Controller\Clause;
+namespace App\Goods\Controller;
 
-use App\Goods\Service\GoodsClauseService;
 use App\Goods\Request\GoodsClauseRequest;
+use App\Goods\Service\GoodsClauseService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -21,9 +21,9 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
-use Mine\Annotation\RemoteState;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
+use Mine\Annotation\RemoteState;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
