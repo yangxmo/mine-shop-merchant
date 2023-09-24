@@ -41,7 +41,7 @@ class GoodsService extends AbstractService
         // build 商品规格属性
         $data['attributes_data'] = AssembleGoodsData::buildGoodsAttribute($data, $skuData);
         // build 商品附属属性
-        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data);
+        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data['affiliate']);
         // build 属性值
         $data['attributes_value'] = Arr::collapse(array_column($data['attributes_data'], 'value'));
         // build sku数据
@@ -59,7 +59,7 @@ class GoodsService extends AbstractService
         // build 属性
         $data['attributes_data'] = AssembleGoodsData::buildUpdateGoodsAttribute($data, $skuData);
         // build 商品附属属性
-        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data);
+        $data['affiliate_data'] = AssembleGoodsData::buildGoodsAffiliate($data['affiliate']);
         // build 属性值
         $data['attributes_value'] = Arr::collapse(array_column($data['attributes_data'], 'value'));
         // build sku数据

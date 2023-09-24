@@ -66,7 +66,7 @@ class GoodsCategoryService extends AbstractService
      */
     public function save(array $data): int
     {
-        return $this->mapper->create($this->handleData($data))->id;
+        return $this->mapper->save($this->handleData($data));
     }
 
     /**

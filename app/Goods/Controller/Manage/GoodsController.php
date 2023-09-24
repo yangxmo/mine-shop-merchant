@@ -54,7 +54,7 @@ class GoodsController extends MineController
     {
         $result = $this->service->getPageList($this->request->all());
 
-        return $this->success(GoodsResource::make($result)->toArray());
+        return $this->success($result);
     }
 
     /**

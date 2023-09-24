@@ -21,6 +21,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use RedisException;
+use Yansongda\HyperfPay\Pay;
 
 #[DependProxy(values: [ConfigServiceInterface::class])]
 class SettingConfigService extends AbstractService implements ConfigServiceInterface

@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Goods\Resource;
 
 use Hyperf\Codec\Json;
-use Hyperf\Resource\Json\JsonResource;
+use Hyperf\Collection\Arr;
+use Hyperf\Resource\Json\ResourceCollection;
+use function Clue\StreamFilter\fun;
 
 /**
  * This file is part of Hyperf.
@@ -23,32 +25,21 @@ use Hyperf\Resource\Json\JsonResource;
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-class GoodsResource extends JsonResource
+class GoodsResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
      */
     public function toArray(): array
     {
-        $data = $this->resource;
-
-        if (empty($data['items'])) {
-            return $this->resource;
-        }
-
-        $newData = [];
-
-        foreach ($data['items'] as $datum) {
-
-            $affiliate = !empty($datum->affiliate) ? $datum->affiliate->toArray() : [];
-
+        $newData[] = Arr::mapWithKeys($this->collection['items'], function ($datum) use (&$newData) {
             $goods = [
                 'id' => $datum['id'],
                 'goods_name' => $datum['goods_name'] ?? '',
                 'goods_type' => $datum['goods_type'] ?? 1,
                 'goods_category_id' => $datum['goods_category_id'] ?? 0,
                 'goods_images' => $datum['goods_images'] ? Json::decode($datum['goods_images']) : [],
-                'goods_image' => $datum['goods_images'] ? Json::decode($datum['goods_images'])[0] ?? '': '',
+                'goods_image' => $datum['goods_images'] ? Json::decode($datum['goods_images'])[0] ?? '' : '',
                 'goods_status' => $datum['goods_status'] ?? 2,
                 'goods_sale' => $datum['goods_sale'] ?? 0,
                 'goods_language' => $datum['goods_language'],
@@ -59,11 +50,9 @@ class GoodsResource extends JsonResource
                 'created_at' => $datum['created_at']->toDateTimeString(),
             ];
 
-            $newData[] = array_merge($goods, $affiliate);
-        }
+            return array_merge($goods, $datum->affiliate->toArray());
+        });
 
-        $data['items'] = $newData;
-
-        return $data;
+        return ['items' => $newData, 'pageInfo' => $this->collection['pageInfo']];
     }
 }

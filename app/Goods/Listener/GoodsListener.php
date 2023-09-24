@@ -41,10 +41,12 @@ class GoodsListener extends AbstractListener
         $stockCache = make(GoodsStockCache::class);
 
         if ($modelEvent instanceof Deleted) {
+            //如果商品没有sku，则从缓存中删除
             if (! $goods->sku()->count()) {
                 $stockCache->delStockCache($goods->id, null);
             }
         } else {
+            //如果商品没有sku，则从缓存中设置
             if (! $goods->sku()->count()) {
                 $stockCache->setStockCache($goods->id, null, $goods->goods_sale);
             }

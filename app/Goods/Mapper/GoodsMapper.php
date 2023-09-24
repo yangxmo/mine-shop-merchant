@@ -17,6 +17,7 @@ use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Collection\Arr;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Task\Annotation\Task;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
 use Mine\MineModel;
@@ -85,7 +86,7 @@ class GoodsMapper extends AbstractMapper
     #[CacheEvict(prefix: 'goodsInfo', value: '#{id}', group: 'goods'), Transaction]
     public function update(int $id, array $data): bool
     {
-        $goods = $this->read($id);
+        $goods = $this->first(['id' => $id], ['id']);
 
         $skuData = $data['sku_data'] ?? [];
         $affiliateData = $data['affiliate_data'] ?? [];
@@ -108,11 +109,11 @@ class GoodsMapper extends AbstractMapper
         // 过滤
         $this->filterExecuteAttributes($data, true);
 
-        $goods->save($data);
+        $goods->update($data);
         $goods->affiliate()->update($affiliateData);
 
-        Arr::where($skuData, function ($sku) use ($goods) {
-            $goods->sku()->updateOrCreate(['goods_sku_id' => $sku['goods_sku_id']], $sku);
+        Arr::where($skuData, function ($sku) use ($id, $goods) {
+            $goods->sku()->updateOrCreate(['goods_no' => $id, 'goods_sku_id' => $sku['goods_sku_id']], $sku);
         });
         Arr::where($attributesData, function ($attribute) use ($goods) {
             $goods->attribute()->updateOrCreate(['attr_no' => $attribute['attr_no']], $attribute);
@@ -140,9 +141,9 @@ class GoodsMapper extends AbstractMapper
     {
         $query = $this->listQuerySetting($params, $isScope);
         // 筛选
-        $query = $query->whereHas('affiliate', function ($query) use ($params) {
+        $query = $query->with(['affiliate' => function ($query) use ($params) {
             $this->handleAffiliateSearch($query, $params);
-        })->with(['affiliate']);
+        }]);
         // 分页
         $paginate = $query->paginate((int)$params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int)$params[$pageName] ?? 1);
 

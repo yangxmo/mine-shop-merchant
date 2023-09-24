@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace Api\InterfaceApi\v1;
 
-use Api\Request\v1\DemoApiRequest;
 use Api\Request\v1\UserInfoRequest;
 use App\System\Mapper\SystemDeptMapper;
 use App\System\Mapper\SystemUserMapper;
