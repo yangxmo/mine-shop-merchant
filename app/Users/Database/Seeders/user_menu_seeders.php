@@ -56,6 +56,13 @@ class UserMenuSeeders extends AbstractSeeder
             "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (@id, @level, CONCAT('用户数据表', '真实删除'), CONCAT('users:user',':realDelete'), NULL, NULL, NULL, NULL, '2', 'B', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
 
             "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (@id, @level, CONCAT('用户数据表', '导出'), CONCAT('users:user',':export'), NULL, NULL, NULL, NULL, '2', 'B', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
+
+            "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (@pid, @plevel, '消费管理', 'users:balanceLog', 'IconCopy', 'users/balanceLog', 'users/balanceLog/index', NULL, '2', 'M', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
+
+            'SET @bid := LAST_INSERT_ID()',
+            "SET @blevel := CONCAT('0', ',', @bid)",
+
+            "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (@bid, @blevel, CONCAT('钱包记录', '列表'), CONCAT('users:balanceLog',':index'), NULL, NULL, NULL, NULL, '2', 'B', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
         ];
     }
 }
