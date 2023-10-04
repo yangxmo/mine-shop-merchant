@@ -19,8 +19,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
-    'order_no_pay' => '订单未支付',
-    'order_refund_running' => '订单退款中',
-    'order_refund_status_error' => '该状态无法退款',
-    'order_no_notfound' => '订单号不存在',
+    'order_no_pay' => 'order no pay',
+    'order_refund_running' => 'order refund running',
+    'order_refund_status_error' => 'The Order status error',
 ];

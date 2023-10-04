@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Order\Mapper;
 
-use App\OrderModule\Public\Model\OrderPayRecord;
+use App\Order\Model\OrderPayRecord;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Model;
 use Mine\Abstracts\AbstractMapper;

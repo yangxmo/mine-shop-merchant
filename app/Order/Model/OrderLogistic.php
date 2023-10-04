@@ -18,8 +18,6 @@ use Mine\MineModel;
  * @property string $logistics_name
  * @property string $logistics_no
  * @property int $sku_id
- * @property string $from
- * @property string $from_mobile
  * @property string $delivered_time
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -35,7 +33,7 @@ class OrderLogistic extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['order_no', 'logistics_name', 'logistics_no', 'sku_id', 'from', 'from_mobile', 'delivered_time', 'created_at', 'updated_at', 'deleted_at'];
+    protected array $fillable = ['order_no', 'logistics_name', 'logistics_no', 'sku_id', 'delivered_time', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be cast to native types.

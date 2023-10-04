@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Order\Controller;
 
 use App\Order\Request\OrderBaseRequest;
@@ -17,6 +18,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
@@ -47,6 +49,18 @@ class OrderBaseController extends MineController
     }
 
     /**
+     * 获取订单产品
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    #[GetMapping('getGoodsList/{orderNo}')]
+    public function getGoodsList(int $orderNo): ResponseInterface
+    {
+        $result = $this->service->getGoodsList($orderNo);
+        return $this->success($result);
+    }
+
+    /**
      * 订单详情.
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -54,8 +68,20 @@ class OrderBaseController extends MineController
     #[GetMapping('read'), Permission('order:base', 'order:base:read')]
     public function read(OrderBaseRequest $request): ResponseInterface
     {
-        $result = $this->service->orderInfo($request->input('order_no'));
+        $result = $this->service->read((int) $request->input('order_no'));
         return $this->success($result);
+    }
+
+    /**
+     * 订单取消.
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    #[PutMapping('cancel'), Permission('order:base', 'order:base:cancel')]
+    public function cancel(OrderBaseRequest $request): ResponseInterface
+    {
+        $this->service->orderCancel((int) $request->input('order_no'));
+        return $this->success();
     }
 
     /**

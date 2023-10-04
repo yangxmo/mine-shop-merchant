@@ -25,7 +25,7 @@ class CreateOrderBaseTable extends AbstractMigration
             $table->comment('订单基础表');
             $table->bigIncrements('id')->comment('主键');
 
-            $table->bigInteger('order_no')->unique()->unsigned()->comment('订单唯一号');
+            $table->string('order_no', 30)->unique()->unsigned()->comment('订单唯一号');
             $table->decimal('order_price', 10, 2)->default(0.00)->comment('订单总金额');
             $table->decimal('order_discount_price', 10, 2)->default(0.00)->comment('订单优惠金额');
             $table->decimal('order_freight_price', 10, 2)->default(0.00)->comment('订单运费金额');
@@ -38,7 +38,7 @@ class CreateOrderBaseTable extends AbstractMigration
 
             $table->tinyInteger('order_status')->default(1)->comment('订单状态（1正常2用户取消3系统取消4待发货5待收货6订单完成7卖家取消8运营商取消）');
             $table->tinyInteger('order_pay_status')->default(1)->comment('订单支付状态（1待支付2支付成功）');
-            $table->tinyInteger('order_refund_status')->default(1)->comment('订单退款状态（1未退款2部分退款3全商品退款）');
+            $table->tinyInteger('order_refund_status')->default(1)->comment('订单退款状态（1无2审核中3审核成功4审核失败5部分退款成功6全商品退款成功7退款失败）');
             $table->tinyInteger('order_pay_type')->default(1)->comment('订单支付类型（1余额支付2支付宝3微信4其他）');
 
             $table->string('order_remark')->default('')->comment('订单备注');

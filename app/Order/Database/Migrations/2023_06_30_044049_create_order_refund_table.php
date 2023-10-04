@@ -12,8 +12,9 @@ declare(strict_types=1);
 use Hyperf\Database\Migrations\Migration;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Schema\Schema;
+use Mine\Abstracts\AbstractMigration;
 
-class CreateOrderRefundTable extends Migration
+class CreateOrderRefundTable extends AbstractMigration
 {
     /**
      * Run the migrations.
@@ -34,6 +35,7 @@ class CreateOrderRefundTable extends Migration
             $table->tinyInteger('refund_examine_status')->default(1)->comment('退款审核状态（1待审核2审核成功3审核失败）');
             $table->string('refund_examine_fail_msg', 255)->default('')->comment('退款审核失败原因');
             $table->tinyInteger('refund_status')->default(1)->comment('退款状态（1待退款2退款成功3退款失败）');
+            $table->tinyInteger('refund_type')->default(2)->comment('退款类型（1部分退款2全部退款）');
             $table->string('refund_order_tenant_no', 20)->comment('所属企业租户');
 
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();

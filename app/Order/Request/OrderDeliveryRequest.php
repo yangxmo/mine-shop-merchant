@@ -18,7 +18,7 @@ use Mine\MineFormRequest;
 /**
  * 订单验证数据类.
  */
-class OrderBaseRequest extends MineFormRequest
+class OrderDeliveryRequest extends MineFormRequest
 {
     /**
      * 公共规则.
@@ -71,24 +71,16 @@ class OrderBaseRequest extends MineFormRequest
     }
 
     /**
-     * 取消订单.
+     * 订单发货.
      * @return array[]
      */
-    public function cancelRules(): array
+    public function deliveryRules(): array
     {
         return [
-            'order_no' => ['required', 'integer'],
-        ];
-    }
-
-    /**
-     * 订单统计
-     * @return array[]
-     */
-    public function statisticsRules(): array
-    {
-        return [
-            'order_date' => ['nullable', 'date_format:Y-m-d'],
+            'order_no' => ['required', Rule::exists('order_base')],
+            'logistics_name' => ['required'],
+            'logistics_no' => ['required'],
+            'sku_id' => ['required'],
         ];
     }
 

@@ -9,8 +9,11 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Order\Model;
 
+use App\Users\Model\UsersUser;
+use Hyperf\Database\Model\Relations\belongsTo;
 use Hyperf\Database\Model\Relations\HasMany;
 use Hyperf\Database\Model\Relations\HasOne;
 use Mine\MineModel;
@@ -50,7 +53,7 @@ class OrderBase extends MineModel
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'int', 'order_no' => 'integer', 'order_price' => 'decimal:2', 'order_discount_price' => 'decimal:2', 'order_freight_price' => 'decimal:2', 'order_pay_price' => 'decimal:2', 'order_create_user_id' => 'integer', 'order_status' => 'integer', 'order_pay_status' => 'integer', 'order_refund_status' => 'integer', 'order_pay_type' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected array $casts = ['id' => 'int', 'order_no' => 'int', 'order_price' => 'decimal:2', 'order_discount_price' => 'decimal:2', 'order_freight_price' => 'decimal:2', 'order_pay_price' => 'decimal:2', 'order_create_user_id' => 'integer', 'order_status' => 'int', 'order_pay_status' => 'int', 'order_refund_status' => 'int', 'order_pay_type' => 'int', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     public function address(): HasOne
     {
@@ -70,5 +73,13 @@ class OrderBase extends MineModel
     public function orderActionRecord(): HasMany
     {
         return $this->hasMany(OrderActionRecord::class, 'order_no', 'order_no');
+    }
+
+    /**
+     * 定义 userInfo 关联.
+     */
+    public function userInfo(): belongsTo
+    {
+        return $this->belongsTo(UsersUser::class, 'order_create_user_id', 'id');
     }
 }

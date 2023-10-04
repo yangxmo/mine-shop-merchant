@@ -12,8 +12,9 @@ declare(strict_types=1);
 use Hyperf\Database\Migrations\Migration;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Schema\Schema;
+use Mine\Abstracts\AbstractMigration;
 
-class CreateOrderActionRecordTable extends Migration
+class CreateOrderActionRecordTable extends AbstractMigration
 {
     /**
      * Run the migrations.

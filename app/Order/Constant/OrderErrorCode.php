@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Order\Constant;
 
 use Hyperf\Constants\AbstractConstants;
@@ -20,12 +21,9 @@ use Hyperf\Constants\Annotation\Constants;
 #[Constants]
 class OrderErrorCode extends AbstractConstants
 {
-    public static array $aliyunOrderError = [
-        '500_005' => '商品的购买数量小于起批量',
-        '500_006' => '商品的购买数量或者总金额均不满足混批条件',
-        '500_004' => '商品的某个规格库存不足',
-        '500_002' => '存在多个卖家的商品或者商品没有指定specId',
-        '500_003' => '存在多个卖家的商品或者商品不存在specId的规格',
-        '500_001' => '商品不支持在线交易，目前不能购买',
-    ];
+    public const ORDER_NOT_PAY_ERROR = 20000;
+
+    public const ORDER_REFUND_RUNNING = 20001;
+
+    public const ORDER_REFUND_ERROR = 20002;
 }

@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Order\Mapper;
 
-use App\OrderModule\Public\Model\OrderActionRecord;
+use App\Order\Model\OrderActionRecord;
 use Mine\Abstracts\AbstractMapper;
 
 class OrderActionRecordMapper extends AbstractMapper

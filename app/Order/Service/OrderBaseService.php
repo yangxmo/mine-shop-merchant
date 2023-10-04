@@ -9,31 +9,33 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Order\Service;
 
+use App\Order\Assemble\OrderExportAssemble;
+use App\Order\Constant\OrderErrorCode;
 use App\Order\Constant\OrderPayStatusCode;
 use App\Order\Constant\OrderStatusCode;
 use App\Order\Dto\OrderDto;
 use App\Order\Mapper\OrderBaseMapper;
+use App\Order\Mapper\OrderGoodsMapper;
+use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
+use Mine\Annotation\Transaction;
+use Mine\Exception\NormalStatusException;
 use Mine\MineCollection;
+use Psr\Http\Message\ResponseInterface;
 
 class OrderBaseService extends AbstractService
 {
     public $mapper;
 
+    #[Inject]
+    public OrderGoodsMapper $orderGoodsMapper;
+
     public function __construct(OrderBaseMapper $mapper)
     {
         $this->mapper = $mapper;
-    }
-
-    /**
-     * 订单导出.
-     */
-    public function orderExport(array $params): \Psr\Http\Message\ResponseInterface
-    {
-        $result = $this->getOrderList($params, true);
-        return (new MineCollection())->export(OrderDto::class, date('YmdHis'), $this->handleOrderExportData($result));
     }
 
     /**
@@ -50,21 +52,70 @@ class OrderBaseService extends AbstractService
     }
 
     /**
-     * 订单详情.
+     * 获取订单产品
      */
-    public function orderInfo(string $orderNo): array
+    public function getGoodsList(int $orderNo): array
     {
-        return $this->mapper->orderInfo($orderNo);
+        $result = [];
+        $fields = ['id', 'order_no', 'goods_sku_name', 'goods_sku_value', 'goods_sku_no'];
+        $list = $this->orderGoodsMapper->getList(['order_no' => $orderNo, 'select' => $fields], false);
+
+        if ($list) {
+            foreach ($list as $value) {
+                $result[] = [
+                    'label' => $value['goods_sku_no'],
+                    'value' => $value['goods_sku_name'],
+                ];
+            }
+        }
+
+        return $result;
     }
 
     /**
-     * 订单统计
+     * 更新订单状态
      */
-    public function orderStatistics(string $date = null): array
+    public function changeStatus(int $id, string $value, string $filed = 'status'): bool
     {
-        $all = $this->handleOrderData($this->mapper->orderStatistics($date));
-        $yesterday = $this->handleOrderData($this->mapper->orderStatistics($date, false));
-        return ['all' => $all, 'yesterday' => $yesterday];
+        return $this->mapper->updateData($id, [$filed => $value]);
+    }
+
+    /**
+     * 订单取消.
+     */
+    #[Transaction]
+    public function orderCancel(int $orderNo): void
+    {
+        // 查看订单状态
+        $info = $this->orderInfo($orderNo);
+
+        if ($info->order_pay_status != OrderPayStatusCode::PAY_STATUS_SUCCESS) {
+            // 订单未支付
+            throw new NormalStatusException(t('order.order_no_pay'), OrderErrorCode::ORDER_NOT_PAY_ERROR);
+        }
+        // 订单在退款审核中
+        if ($info->order_refund_status == OrderStatusCode::ORDER_BASE_REFUND_AUDIT_RUNNING) {
+            // 订单审核中
+            throw new NormalStatusException(t('order.order_refund_running'), OrderErrorCode::ORDER_REFUND_RUNNING);
+        }
+        // 改订单状态无法退款
+        if (in_array($info->order_status, [OrderStatusCode::ORDER_STATUS_PROCESSED, OrderStatusCode::ORDER_STATUS_SHIPPED])) {
+            // 改订单状态无法退款
+            throw new NormalStatusException(t('order.order_refund_status_error'), OrderErrorCode::ORDER_REFUND_ERROR);
+        }
+
+        // 更改订单状态
+        $this->mapper->updateData($info->id, ['order_status' => OrderStatusCode::ORDER_STATUS_SELLER_CANCEL]);
+        // TODO 执行退款
+    }
+
+    /**
+     * 订单导出.
+     */
+    public function orderExport(array $params): ResponseInterface
+    {
+        $result = $this->getOrderList($params, true);
+        return (new MineCollection())->export(OrderDto::class, date('YmdHis'), OrderExportAssemble::handleOrderExportData($result));
     }
 
     /**
@@ -84,71 +135,5 @@ class OrderBaseService extends AbstractService
             'closed' => [OrderStatusCode::ORDER_STATUS_CANCEL, OrderStatusCode::ORDER_STATUS_SYSTEM_CANCEL],
         ];
         return $transformStatus[$status] ?? '';
-    }
-
-    /**
-     * 处理订单数据.
-     */
-    private function handleOrderData(array $data): array
-    {
-        $orderCollect = \Hyperf\Collection\collect($data);
-        // 选品数
-        $selectionCount = '0';
-        // 交易金额
-        $gmv = $orderCollect->where('order_pay_status', '=', OrderPayStatusCode::PAY_STATUS_SUCCESS)->sum('order_pay_price');
-        // 订单生成数
-        $orderGenerateCount = $orderCollect->count();
-        // 支付订单数
-        $payCount = $orderCollect->where('order_pay_status', '=', OrderPayStatusCode::PAY_STATUS_SUCCESS)->count();
-        // 支付买家数
-        $payBuyCount = $orderCollect->where('order_pay_status', '=', OrderPayStatusCode::PAY_STATUS_SUCCESS)->groupBy('order_create_user_id')->count();
-        // cvr 支付转化率 （实际支付数 / 访客人数）× 100%
-        $visitorCount = $orderCollect->where('order_status', '=', OrderStatusCode::ORDER_STATUS_TRUE)->count();
-        $cvr = $visitorCount ? bcdiv((string) $payCount, (string) $visitorCount) : '0';
-        // 售后订单数
-        $afterSalesCount = '0';
-        // aov 客单价 销售总额 / 订单数
-        $aov = $payCount ? bcdiv((string) $gmv, (string) $payCount) : '0';
-        return [
-            'selection_count' => $selectionCount,
-            'gmv' => $gmv,
-            'order_generate_count' => $orderGenerateCount,
-            'pay_count' => $payCount,
-            'pay_buy_count' => $payBuyCount,
-            'cvr' => $cvr,
-            'after_sales_count' => $afterSalesCount,
-            'aov' => $aov,
-        ];
-    }
-
-    /**
-     * 处理订单导出数据.
-     */
-    private function handleOrderExportData(array $orderData): array
-    {
-        if (empty($orderData)) {
-            return $orderData;
-        }
-        $orderList = [];
-        foreach ($orderData as $key => $item) {
-            if (! empty($item['product']) && is_array($item['product'])) {
-                foreach ($item['product'] as $val) {
-                    $orderList[$key]['order_no'] = $item['order_no'];
-                    $orderList[$key]['order_price'] = $item['order_price'];
-                    $orderList[$key]['order_status'] = $item['order_status'];
-                    $orderList[$key]['order_pay_type'] = $item['order_pay_type'];
-                    $orderList[$key]['created_at'] = $item['created_at'];
-                    $orderList[$key]['product_name'] = $val['product_name'];
-                    $orderList[$key]['product_num'] = $val['product_num'];
-                    $orderList[$key]['receive_user_name'] = $item['address']['receive_user_name'];
-                    $orderList[$key]['receive_user_mobile'] = $item['address']['receive_user_mobile'];
-                    $orderList[$key]['receive_user_province'] = $item['address']['receive_user_province'];
-                    $orderList[$key]['receive_user_city'] = $item['address']['receive_user_city'];
-                    $orderList[$key]['receive_user_street'] = $item['address']['receive_user_street'];
-                    $orderList[$key]['receive_user_address'] = $item['address']['receive_user_address'];
-                }
-            }
-        }
-        return $orderList;
     }
 }

@@ -12,8 +12,9 @@ declare(strict_types=1);
 use Hyperf\Database\Migrations\Migration;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Schema\Schema;
+use Mine\Abstracts\AbstractMigration;
 
-class CreateOrderLogistics extends Migration
+class CreateOrderLogistics extends AbstractMigration
 {
     /**
      * Run the migrations.
@@ -27,8 +28,6 @@ class CreateOrderLogistics extends Migration
             $table->string('logistics_name', 20)->comment('物流公司名称');
             $table->string('logistics_no', 50)->comment('物流单号');
             $table->string('sku_id', 30)->comment('发货的产品ID');
-            $table->string('from', 150)->nullable()->comment('发货的地址');
-            $table->string('from_mobile', 20)->nullable()->comment('发货人手机号');
             $table->timestamp('delivered_time')->nullable()->comment('发货时间');
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
             $table->addColumn('timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间'])->nullable();

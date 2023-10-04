@@ -18,7 +18,7 @@ use Mine\MineFormRequest;
 /**
  * 订单验证数据类.
  */
-class OrderBaseRequest extends MineFormRequest
+class OrderRefundRequest extends MineFormRequest
 {
     /**
      * 公共规则.
@@ -38,13 +38,12 @@ class OrderBaseRequest extends MineFormRequest
         return [
             'page' => ['required', 'integer'],
             'pageSize' => ['required', 'integer'],
-            'order_time_begin' => ['nullable', 'date_format:Y-m-d'],
-            'order_time_end' => ['nullable', 'date_format:Y-m-d'],
-            'order_price' => ['nullable', 'numeric'],
-            'consignee_name' => ['nullable', 'string'],
-            'consignee_phone' => ['nullable', 'string'],
-            'keyword' => ['nullable', 'string'],
-            'status' => ['nullable', 'string'],
+            'refund_apply_time' => ['nullable', 'date_format:Y-m-d'],
+            'refund_price_time' => ['nullable', 'date_format:Y-m-d'],
+            'refund_examine_status' => ['nullable', 'numeric'],
+            'refund_status' => ['nullable', 'numeric'],
+            'refund_order_no' => ['nullable', 'string'],
+            'order_no' => ['nullable', 'string'],
         ];
     }
 
@@ -66,29 +65,16 @@ class OrderBaseRequest extends MineFormRequest
     public function readRules(): array
     {
         return [
-            'order_no' => ['required', 'string'],
+            'refund_order_no' => ['required', Rule::exists('order_refund', 'refund_order_no')],
         ];
     }
 
-    /**
-     * 取消订单.
-     * @return array[]
-     */
-    public function cancelRules(): array
+    public function auditRules(): array
     {
         return [
-            'order_no' => ['required', 'integer'],
-        ];
-    }
-
-    /**
-     * 订单统计
-     * @return array[]
-     */
-    public function statisticsRules(): array
-    {
-        return [
-            'order_date' => ['nullable', 'date_format:Y-m-d'],
+            'refund_order_no' => ['required', 'integer', Rule::exists('order_refund')],
+            'refund_examine_status' => ['required', 'integer', 'in:1,2'],
+            'refund_examine_fail_msg' => ['required_with:refund_examine_status,1'],
         ];
     }
 
@@ -99,7 +85,7 @@ class OrderBaseRequest extends MineFormRequest
     public function attributes(): array
     {
         return [
-            'order_no' => '订单号',
+            'refund_order_no' => '订单号',
             'order_price' => '订单金额',
             'order_time_begin' => '下单开始时间',
             'order_time_end' => '下单结算时间',
