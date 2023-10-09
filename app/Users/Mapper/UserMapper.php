@@ -13,8 +13,11 @@ declare(strict_types=1);
 namespace App\Users\Mapper;
 
 use App\Users\Model\UsersUser;
+use Hyperf\Cache\Annotation\Cacheable;
+use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
+use Mine\MineModel;
 
 /**
  * 用户数据表Mapper类.
@@ -29,6 +32,52 @@ class UserMapper extends AbstractMapper
     public function assignModel()
     {
         $this->model = UsersUser::class;
+    }
+
+    /**
+     * 根据手机号获取信息.
+     * @param string $mobile
+     */
+    #[Cacheable(prefix: 'UserInfo', value: '#{mobile}', ttl: 1200)]
+    public function getInfoByMobile(string $mobile)
+    {
+        return $this->first(['mobile' => $mobile]);
+    }
+
+    /**
+     * 更新用户信息.
+     * @param string $mobile
+     * @param array $params
+     * @return bool
+     */
+    #[CacheEvict(prefix: 'UserInfo', value: '#{mobile}')]
+    public function upInfoByMobile(string $mobile, array $params): bool
+    {
+        $info = $this->first(['mobile' => $mobile]);
+
+        return $info && $info->update($params);
+    }
+
+    /**
+     * 检查是否重复.
+     * @param string $mobile
+     * @param int $id
+     * @return bool
+     */
+    public function checkUserMobile(string $mobile, int $id): bool
+    {
+        return $this->model::where('mobile', $mobile)->where('id', '<>', $id)->exists();
+    }
+
+    /**
+     * 检查是否重复.
+     * @param string $email
+     * @param int $id
+     * @return bool
+     */
+    public function checkUserEmail(string $email, int $id): bool
+    {
+        return $this->model::where('email', $email)->where('id', '<>', $id)->exists();
     }
 
     /**

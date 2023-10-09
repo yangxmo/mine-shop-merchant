@@ -24,6 +24,7 @@ use Mine\MineModel;
 /**
  * @property int $id
  * @property int $goods_plat_no
+ * @property string $goods_image
  * @property string $goods_name
  * @property string $goods_plat_name
  * @property string $goods_price
@@ -64,7 +65,7 @@ class Goods extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'goods_name', 'goods_keyword', 'goods_unit', 'goods_type', 'goods_spec_type', 'goods_vip_price', 'goods_warn_sale', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_lock_sale', 'goods_images', 'goods_video', 'goods_category_id', 'goods_language', 'goods_description', 'created_at', 'updated_at', 'deleted_at'];
+    protected array $fillable = ['id', 'goods_image', 'goods_name', 'goods_keyword', 'goods_unit', 'goods_type', 'goods_spec_type', 'goods_vip_price', 'goods_warn_sale', 'goods_price', 'goods_market_price', 'goods_sale', 'goods_lock_sale', 'goods_images', 'goods_video', 'goods_category_id', 'goods_language', 'goods_description', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be cast to native types.

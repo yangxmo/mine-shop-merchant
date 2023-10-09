@@ -50,6 +50,8 @@ class GoodsRequest extends MineFormRequest
             'goods_sale' => 'required|integer|min:0|max:9999999',
             // 预警库存
             'goods_warn_sale' => 'nullable|integer|min:0|max:9999999',
+            // 商品首图片 验证
+            'goods_image' => 'required|string',
             // 商品图片 验证
             'goods_images' => 'required|array',
             // 商品状态(2下架1上架) 验证

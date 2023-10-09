@@ -54,7 +54,8 @@
     "sort-packages": true,
     "allow-plugins": {
       "composer/package-versions-deprecated": true,
-      "php-http/discovery": true
+      "php-http/discovery": true,
+      "easywechat-composer/easywechat-composer": true
     }
   },
   "extra": [],

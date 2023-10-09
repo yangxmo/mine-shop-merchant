@@ -41,6 +41,8 @@ class CreateGoods extends AbstractMigration
             $table->bigInteger('goods_sale')->default(0)->comment('商品库存');
             // 商品预警库存
             $table->bigInteger('goods_warn_sale')->default(0)->comment('商品库存');
+            // 商品首图
+            $table->json('goods_image')->nullable()->comment('商品首图');
             // 商品图片
             $table->json('goods_images')->nullable()->comment('商品图片');
             // 商品视频

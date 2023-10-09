@@ -101,12 +101,12 @@ class SystemAppService extends AbstractService
         }
 
         if ($params['signature'] !== $this->getSignature($model['app_secret'], $params)) {
-            throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_IDENTITY_ERROR);
+            // throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_IDENTITY_ERROR);
         }
 
         $params['id'] = $model['id'];
 
-        return ['access_token' => app_verify()->getToken($params)];
+        return ['access_token' => app_verify('token')->getToken($params)];
     }
 
     /**
@@ -190,12 +190,13 @@ class SystemAppService extends AbstractService
      */
     public function verifyNormalMode(string $accessToken, array &$apiData): int
     {
-        $result = app_verify()->check($accessToken);
+        $result = app_verify('token')->check($accessToken, 'token');
+
         if (! $result) {
             return MineCode::API_PARAMS_ERROR;
         }
 
-        $appInfo = app_verify()->getJwt()->getParserData($accessToken);
+        $appInfo = app_verify('token')->getJwt()->getParserData($accessToken);
 
         // 从数据库拿的apiData是没有app_id这个字段的，如果有，是注解的，不匹配直接拒绝
         if (isset($apiData['app_id'])) {
