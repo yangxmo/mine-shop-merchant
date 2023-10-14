@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace App\Goods\Controller;
 
 use App\Goods\Request\GoodsRequest;
-use App\goods\Service\goodsService;
+use App\Goods\Service\GoodsService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;

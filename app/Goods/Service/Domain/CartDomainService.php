@@ -15,9 +15,9 @@ use App\Goods\Mapper\GoodsMapper;
 use Mine\Abstracts\AbstractService;
 
 /**
- * 商品分类服务类.
+ * 购物车服务类.
  */
-class GoodsDomainService extends AbstractService
+class CartDomainService extends AbstractService
 {
     /**
      * @var GoodsMapper

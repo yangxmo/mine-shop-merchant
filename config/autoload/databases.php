@@ -60,7 +60,7 @@ return \Hyperf\Support\value(function () use ($databaseTemple, $tenantIds) {
     $database = [];
     array_map(function ($tenant) use (&$database, $databaseTemple) {
         if (\Hyperf\Support\env('APP_ENV') !== 'local') {
-            $databaseTemple['username'] .= '_' . $tenant;
+            $tenant != 'default' && $databaseTemple['username'] .= '_' . $tenant;
         }
         $tenant != 'default' && $databaseTemple['database'] .= '_' . $tenant;
         $database[$tenant] = $databaseTemple;
