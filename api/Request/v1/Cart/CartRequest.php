@@ -26,53 +26,47 @@ class CartRequest extends MineApiFormRequest
     }
 
     /**
-     * 获取列表.
+     * 新增数据验证规则
+     * return array.
      */
-    public function listRules(): array
+    public function saveRules(): array
     {
         return [
-            'page' => 'required|integer|min:1|max:50',
-            'pageSize' => 'nullable|integer|min:1|max:50',
+            // 商品ID 验证
+            'goods_id' => ['required', 'integer', Rule::exists('goods', 'id')],
+            // 商品skuID
+            'goods_sku_id' => ['nullable', Rule::exists('goods_sku', 'goods_sku_id')],
+            // 商品数量 验证
+            'num' => 'required|integer|min:1',
         ];
     }
 
     /**
-     * 新增.
+     * 减少购物车
+     * return array.
      */
-    public function saveCartRules(): array
+    public function reduceRules(): array
     {
         return [
-            'pid' => ['required', Rule::exists('goods', 'id'), 'integer'],
-            'sku_id' => ['nullable', 'integer', Rule::exists('goods_sku', 'id')],
-            'num' => 'nullable|integer|min:1|max:9999',
+            // 商品ID 验证
+            'goods_id' => ['required', 'integer', Rule::exists('goods', 'id')],
+            // 商品skuID
+            'goods_sku_id' => ['nullable', Rule::exists('goods_sku', 'goods_sku_id')],
+            // 商品数量 验证
+            'num' => 'required|integer|min:1',
         ];
     }
 
     /**
-     * 减少.
-     */
-    public function reduceCartRules(): array
-    {
-        return [
-            'pid' => ['required', Rule::exists('goods', 'id'), 'integer'],
-            'sku_id' => ['nullable', 'integer', Rule::exists('goods_sku', 'id')],
-            'num' => 'nullable|integer|min:1|max:9999',
-        ];
-    }
-
-    /*
-     * 验证消息.
+     * 字段映射名称
+     * return array.
      */
     public function attributes(): array
     {
         return [
-            'mobile' => '手机号',
-            'email' => '邮箱',
-            'nickname' => '昵称',
-            'password' => '密码',
-            'avatar' => '头像',
-            'sex' => '性别',
-            'real_name' => '真实名称',
+            'goods_id' => '产品ID',
+            'goods_sku_id' => '产品skuID',
+            'num' => '商品数量',
         ];
     }
 }

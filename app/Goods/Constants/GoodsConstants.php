@@ -37,4 +37,6 @@ class GoodsConstants extends AbstractConstants
     public const GOODS_LOGISTICS = 1;
     // 门店核销
     public const GOODS_VERIFICATION = 2;
+    // 库存不足
+    public const GOODS_STATUS_STOCK_FAIL = 4;
 }

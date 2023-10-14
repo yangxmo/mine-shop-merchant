@@ -29,7 +29,7 @@ class GoodsStockCache extends AbstractRedis
      * @throws NotFoundExceptionInterface
      * @throws RedisException
      */
-    public function setStockCache(int $goodsNo, ?int $skuId, int $sale): void
+    public function setStockCache(int $goodsNo, ?string $skuId, int $sale): void
     {
         $key = $this->getKey($skuId ? $goodsNo . '_' . $skuId : $goodsNo);
         $this->redis('goods')->incrBy($key, $sale);
@@ -40,7 +40,7 @@ class GoodsStockCache extends AbstractRedis
      * @throws NotFoundExceptionInterface
      * @throws RedisException
      */
-    public function getStockCache(int $goodsNo, ?int $skuId): int
+    public function getStockCache(int $goodsNo, ?string $skuId): int
     {
         $key = $this->getKey($skuId ? $goodsNo . '_' . $skuId : $goodsNo);
         return (int) $this->redis('goods')->get($key);
@@ -51,7 +51,7 @@ class GoodsStockCache extends AbstractRedis
      * @throws NotFoundExceptionInterface
      * @throws RedisException
      */
-    public function delStockCache(int $goodsNo, ?int $skuId): void
+    public function delStockCache(int $goodsNo, ?string $skuId): void
     {
         $key = $this->getKey($skuId ? $goodsNo . '_' . $skuId : $goodsNo);
         $this->redis('goods')->del($key);

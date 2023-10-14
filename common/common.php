@@ -60,3 +60,17 @@ if (! function_exists('make')) {
         return \Hyperf\Support\make($name, $parameters);
     }
 }
+
+if (! function_exists('clientUserId')) {
+    /**
+     * Create an object instance, if the DI container exist in ApplicationContext,
+     * then the object will be created by DI container via `make()` method, if not,
+     * the object will create by `new` keyword.
+     */
+    function clientUserId(): ?int
+    {
+        $data = app_verify()->getJwt()->getParserData();
+
+        return $data['id'] ?? null;
+    }
+}

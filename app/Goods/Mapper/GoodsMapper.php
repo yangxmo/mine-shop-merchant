@@ -17,7 +17,6 @@ use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Collection\Arr;
 use Hyperf\Database\Model\Builder;
-use Hyperf\Task\Annotation\Task;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
 use Mine\MineModel;
@@ -69,13 +68,13 @@ class GoodsMapper extends AbstractMapper
         // 创建商品
         $goods = $this->model::create($data);
         // 写入sku
-        !empty($skuData) && $goods->sku()->createMany($skuData);
+        ! empty($skuData) && $goods->sku()->createMany($skuData);
         // 写入属性
-        !empty($attributesData) && $goods->attribute()->createMany($attributesData);
+        ! empty($attributesData) && $goods->attribute()->createMany($attributesData);
         // 写入附属属性
-        !empty($affiliateData) && $goods->affiliate()->create($affiliateData);
+        ! empty($affiliateData) && $goods->affiliate()->create($affiliateData);
         // 写入属性值
-        !empty($attributesValueData) && $goods->attributeValue()->createMany($attributesValueData);
+        ! empty($attributesValueData) && $goods->attributeValue()->createMany($attributesValueData);
 
         return $goods->id;
     }
@@ -135,7 +134,7 @@ class GoodsMapper extends AbstractMapper
     }
 
     /**
-     * 分页
+     * 分页.
      */
     public function getPageList(?array $params, bool $isScope = true, string $pageName = 'page'): array
     {
@@ -145,89 +144,89 @@ class GoodsMapper extends AbstractMapper
             $this->handleAffiliateSearch($query, $params);
         }]);
         // 分页
-        $paginate = $query->paginate((int)$params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int)$params[$pageName] ?? 1);
+        $paginate = $query->paginate((int) $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int) $params[$pageName] ?? 1);
 
         return $this->setPaginate($paginate, $params);
     }
 
-    /**
-     * 查询附属信息
-     */
-    private function handleAffiliateSearch($query, array $params): void
-    {
-        // 是否预售商品（1否2是）
-        if (!empty($params['goods_is_presell'])) {
-            $query->where('goods_is_presell', '=', $params['goods_is_presell']);
-        }
-
-        // 是否限购商品（1否2是）
-        if (!empty($params['goods_is_purchase'])) {
-            $query->where('goods_is_purchase', '=', $params['goods_is_purchase']);
-        }
-
-        // 限购商品类型（1单次限购2全部限购）
-        if (!empty($params['goods_purchase_type'])) {
-            $query->where('goods_purchase_type', '=', $params['goods_purchase_type']);
-        }
-
-        // 是否会员商品（1否2是）
-        if (!empty($params['goods_is_vip'])) {
-            $query->where('goods_is_vip', '=', $params['goods_is_vip']);
-        }
-
-        // 商品物流方式，（1物流2到店核销）
-        if (!empty($params['goods_logistics_type'])) {
-            $query->where('goods_logistics_type', '=', $params['goods_logistics_type']);
-        }
-
-        // 商品运费方式，（1固定邮费2运费模板）
-        if (!empty($params['goods_freight_type'])) {
-            $query->where('goods_freight_type', '=', $params['goods_freight_type']);
-        }
-
-        // 商品推荐，（1不推荐2推荐）
-        if (!empty($params['goods_recommend'])) {
-            $query->where('goods_recommend', '=', $params['goods_recommend']);
-        }
-
-    }
-
     public function handleSearch(Builder $query, array $params): Builder
     {
-        if (!empty($params['id']) && is_array($params['id'])) {
+        if (! empty($params['id']) && is_array($params['id'])) {
             $query->whereIn('id', $params['id']);
         }
 
         // 判断是否传入了商品状态
-        if (!empty($params['goods_status'])) {
+        if (! empty($params['goods_status'])) {
             // 设置商品状态
             $query->where('goods_status', $params['goods_status']);
         }
 
         // 判断是否传入了商品分类
-        if (!empty($params['goods_category_id'])) {
+        if (! empty($params['goods_category_id'])) {
             // 设置商品分类
             $query->where('goods_category_id', $params['goods_category_id']);
         }
 
         // 判断是否传入了商品类型
-        if (!empty($params['goods_type'])) {
+        if (! empty($params['goods_type'])) {
             // 设置商品类型
             $query->where('goods_type', $params['goods_type']);
         }
 
         // 判断是否传入了商品锁定销量
-        if (!empty($params['goods_lock_sale'])) {
+        if (! empty($params['goods_lock_sale'])) {
             // 设置商品锁定销量
             $query->where('goods_lock_sale', $params['goods_lock_sale']);
         }
 
         // 判断是否传入了商品名称
-        if (!empty($params['goods_name'])) {
+        if (! empty($params['goods_name'])) {
             // 设置商品名称
             $query->where('goods_name', 'like', $params['goods_name'] . '%');
         }
 
         return $query;
+    }
+
+    /**
+     * 查询附属信息.
+     * @param mixed $query
+     */
+    private function handleAffiliateSearch($query, array $params): void
+    {
+        // 是否预售商品（1否2是）
+        if (! empty($params['goods_is_presell'])) {
+            $query->where('goods_is_presell', '=', $params['goods_is_presell']);
+        }
+
+        // 是否限购商品（1否2是）
+        if (! empty($params['goods_is_purchase'])) {
+            $query->where('goods_is_purchase', '=', $params['goods_is_purchase']);
+        }
+
+        // 限购商品类型（1单次限购2全部限购）
+        if (! empty($params['goods_purchase_type'])) {
+            $query->where('goods_purchase_type', '=', $params['goods_purchase_type']);
+        }
+
+        // 是否会员商品（1否2是）
+        if (! empty($params['goods_is_vip'])) {
+            $query->where('goods_is_vip', '=', $params['goods_is_vip']);
+        }
+
+        // 商品物流方式，（1物流2到店核销）
+        if (! empty($params['goods_logistics_type'])) {
+            $query->where('goods_logistics_type', '=', $params['goods_logistics_type']);
+        }
+
+        // 商品运费方式，（1固定邮费2运费模板）
+        if (! empty($params['goods_freight_type'])) {
+            $query->where('goods_freight_type', '=', $params['goods_freight_type']);
+        }
+
+        // 商品推荐，（1不推荐2推荐）
+        if (! empty($params['goods_recommend'])) {
+            $query->where('goods_recommend', '=', $params['goods_recommend']);
+        }
     }
 }

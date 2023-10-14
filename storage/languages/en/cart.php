@@ -10,16 +10,9 @@
  */
 
 declare(strict_types=1);
-/**
- * This file is part of Hyperf.
- *
- * @link     https://www.hyperf.io
- * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
- */
+
 return [
-    'goods_is_not_found' => '商品信息不存在',
-    'goods_sku_is_not_found' => '商品sku信息不存在',
-    'goods_stock_lack' => '商品库存不足',
+    'goods_is_not_found' => 'goods id not found',
+    'goods_sku_is_not_found' => 'goods skuId is not found',
+    'goods_stock_lack' => 'goods stock lack',
 ];

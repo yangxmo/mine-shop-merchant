@@ -51,9 +51,9 @@ class CartApi
      * @throws NotFoundExceptionInterface
      */
     #[MApi(accessName: 'getCart', name: '获取购物车商品', description: '获取购物车商品', appId: 'c5fb05c7f7', groupId: 2)]
-    public function getCart(CartRequest $request): ResponseInterface
+    public function getCart(): ResponseInterface
     {
-        return $this->response->success('操作成功', $this->cartDomainService->getPageList($request->validated(), false));
+        return $this->response->success('操作成功', $this->cartDomainService->cartList());
     }
 
     /**
@@ -64,7 +64,9 @@ class CartApi
     #[MApi(accessName: 'saveCart', name: '新增购物车', description: '新增购物车', appId: 'c5fb05c7f7', groupId: 2)]
     public function saveCart(CartRequest $request): ResponseInterface
     {
-        return $this->response->success('操作成功', $this->cartDomainService->getPageList($request->validated(), false));
+        $params = $request->validated();
+        $action = $this->cartDomainService->saveCart($params['goods_id'], $params['goods_sku_id'], $params['num']);
+        return $action ? $this->response->success() : $this->response->error();
     }
 
     /**
@@ -75,7 +77,9 @@ class CartApi
     #[MApi(accessName: 'reduceCart', name: '删除购物车产品', description: '删除购物车产品', appId: 'c5fb05c7f7', groupId: 2)]
     public function reduceCart(CartRequest $request): ResponseInterface
     {
-        return $this->response->success('操作成功', $this->cartDomainService->getPageList($request->validated(), false));
+        $params = $request->validated();
+        $action = $this->cartDomainService->reduceCart($params['goods_id'], $params['goods_sku_id']);
+        return $action ? $this->response->success() : $this->response->error();
     }
 
     /**
@@ -84,9 +88,10 @@ class CartApi
      * @throws NotFoundExceptionInterface
      */
     #[MApi(accessName: 'clearCart', name: '清空购物车', description: '清空购物车', appId: 'c5fb05c7f7', groupId: 2)]
-    public function clearCart(CartRequest $request): ResponseInterface
+    public function clearCart(): ResponseInterface
     {
-        return $this->response->success('操作成功', $this->cartDomainService->getPageList($request->validated(), false));
+        $action = $this->cartDomainService->clearCart();
+        return $action ? $this->response->success() : $this->response->error();
     }
 
 }
