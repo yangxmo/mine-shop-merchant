@@ -24,7 +24,7 @@ class CreateOrderActionRecordTable extends AbstractMigration
         Schema::create('order_action_record', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('订单操作记录');
-            $table->bigInteger('order_no')->comment('商户订单号');
+            $table->string('order_no')->comment('商户订单号');
             $table->addColumn('integer', 'action_type', ['length' => 1, 'comment' => '订单操作类型（1正常2用户取消3系统取消4待发货5待收货6订单完成）']);
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
             $table->addColumn('timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间'])->nullable();

@@ -25,7 +25,7 @@ class CreateOrderBaseTable extends AbstractMigration
             $table->comment('订单基础表');
             $table->bigIncrements('id')->comment('主键');
 
-            $table->string('order_no', 30)->unique()->unsigned()->comment('订单唯一号');
+            $table->string('order_no', 30)->unique()->comment('订单唯一号');
             $table->decimal('order_price', 10, 2)->default(0.00)->comment('订单总金额');
             $table->decimal('order_discount_price', 10, 2)->default(0.00)->comment('订单优惠金额');
             $table->decimal('order_freight_price', 10, 2)->default(0.00)->comment('订单运费金额');
@@ -33,7 +33,6 @@ class CreateOrderBaseTable extends AbstractMigration
 
             $table->timestamp('order_pay_time')->nullable()->comment('订单支付时间');
             $table->timestamp('order_cancel_time')->nullable()->comment('订单关闭时间');
-            $table->string('tenant_id', 20)->comment('订单所属企业租户');
             $table->bigInteger('order_create_user_id')->comment('订单创建用户ID');
 
             $table->tinyInteger('order_status')->default(1)->comment('订单状态（1正常2用户取消3系统取消4待发货5待收货6订单完成7卖家取消8运营商取消）');
@@ -49,16 +48,14 @@ class CreateOrderBaseTable extends AbstractMigration
 
             // 订单号
             $table->index('order_no', 'idx_order_no');
-            // 企业下所有订单
-            $table->index('tenant_id', 'idx_tenant_no');
             // 企业下指定用户所有订单
-            $table->index(['tenant_id', 'order_create_user_id'], 'idx_tenant_user_id');
+            $table->index(['order_create_user_id'], 'idx_user_id');
             // 企业下用户订单状态
-            $table->index(['tenant_id', 'order_create_user_id', 'order_status'], 'idx_tenant_user_status');
+            $table->index(['order_create_user_id', 'order_status'], 'idx_user_status');
             // 企业下用户订单支付状态
-            $table->index(['tenant_id', 'order_create_user_id', 'order_pay_status'], 'idx_tenant_user_pay_status');
+            $table->index(['order_create_user_id', 'order_pay_status'], 'idx_user_pay_status');
             // 企业下用户订单退款状态
-            $table->index(['tenant_id', 'order_create_user_id', 'order_refund_status'], 'idx_tenant_user_refund_status');
+            $table->index(['order_create_user_id', 'order_refund_status'], 'idx_user_refund_status');
         });
     }
 

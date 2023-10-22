@@ -24,7 +24,7 @@ class CreateOrderPayRecordTable extends AbstractMigration
         Schema::create('order_pay_record', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('订单支付记录');
-            $table->unsignedBigInteger('order_no');
+            $table->string('order_no');
             $table->foreign('order_no')->references('order_no')->on('order_base')->comment('订单唯一号');
             $table->string('pay_trade_no')->default('')->comment('商家支付交易单号');
             $table->decimal('pay_price', 10, 2)->comment('支付金额');

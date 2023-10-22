@@ -22,7 +22,7 @@ class CreateOrderLogistics extends AbstractMigration
     public function up(): void
     {
         Schema::create('order_logistics', function (Blueprint $table) {
-            $table->unsignedBigInteger('order_no');
+            $table->string('order_no');
             $table->comment('订单物流表');
             $table->foreign('order_no')->references('order_no')->on('order_base')->comment('订单唯一号');
             $table->string('logistics_name', 20)->comment('物流公司名称');

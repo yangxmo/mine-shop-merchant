@@ -23,7 +23,7 @@ class CreateOrderGoodsTable extends AbstractMigration
         Schema::create('order_goods', function (Blueprint $table) {
             $table->engine = 'InnoDb';
             $table->comment('订单产品表');
-            $table->unsignedBigInteger('order_no');
+            $table->string('order_no');
             $table->foreign('order_no')->references('order_no')->on('order_base')->comment('订单唯一号');
             $table->string('goods_name', 50)->comment('产品名称');
             $table->string('goods_sku_name', 150)->nullable()->comment('产品sku名称');

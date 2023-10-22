@@ -13,7 +13,7 @@ use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Schema\Schema;
 use Mine\Abstracts\AbstractMigration;
 
-class CreateUserDataTable extends AbstractMigration
+class CreateUsersUserTable extends AbstractMigration
 {
     /**
      * Run the migrations.
@@ -47,7 +47,7 @@ class CreateUserDataTable extends AbstractMigration
             $table->addColumn('timestamp', 'deleted_at', ['precision' => 0, 'comment' => '删除时间'])->nullable();
             $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
 
-            $table->index('username', 'idx_username');
+            $table->index('nickname', 'idx_nickname');
             $table->index('email', 'idx_email');
             $table->index('mobile', 'idx_mobile');
         });

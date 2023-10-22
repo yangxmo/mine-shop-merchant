@@ -34,7 +34,7 @@ class OrderMenuSeeders extends AbstractSeeder
             'SET @order_id := LAST_INSERT_ID()',
             "SET @order_level := CONCAT('0', ',', @order_id)",
 
-            "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (order_id, @order_level, '订单管理', 'order:base', 'IconDragDotVertical', 'order/base', 'order/base/index', NULL, '2', 'M', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
+            "INSERT INTO `{$model}`(`parent_id`, `level`, `name`, `code`, `icon`, `route`, `component`, `redirect`, `is_hidden`, `type`, `status`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (@order_id, @order_level, '订单管理', 'order:base', 'IconDragDotVertical', 'order/base', 'order/base/index', NULL, '2', 'M', '1', 0, 1, NULL, now(), now(), NULL, NULL)",
 
             'SET @id := LAST_INSERT_ID()',
             "SET @level := CONCAT('0', ',', @id)",

@@ -26,7 +26,7 @@ class CreateOrderRefundTable extends AbstractMigration
             $table->comment('订单退款表');
             $table->bigInteger('refund_order_no')->index()->unsigned()->unique()->comment('退款单号');
 
-            $table->unsignedBigInteger('order_no');
+            $table->string('order_no');
             $table->foreign('order_no')->references('order_no')->on('order_base')->comment('订单唯一号');
             $table->string('refund_trade_no', 150)->unique()->comment('退款交易号');
             $table->decimal('refund_price', 10, 2)->comment('退款金额');

@@ -23,7 +23,7 @@ class CreateOrderAddressTable extends AbstractMigration
         Schema::create('order_address', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('订单地址表');
-            $table->unsignedBigInteger('order_no');
+            $table->string('order_no');
             $table->foreign('order_no')->references('order_no')->on('order_base')->comment('订单唯一号');
             $table->string('receive_user_name', 20)->comment('收货人名称');
             $table->string('receive_user_mobile', 20)->comment('收货人手机号号码/座机');
