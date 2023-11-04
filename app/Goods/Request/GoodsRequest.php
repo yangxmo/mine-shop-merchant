@@ -85,11 +85,11 @@ class GoodsRequest extends MineFormRequest
             // 商品已售数量 验证
             'affiliate.goods_sales' => 'nullable|integer|min:0',
             // 商品推荐 验证
-            'affiliate.goods_recommend' => 'nullable|integer|in:1,2',
+            'affiliate.goods_recommend' => 'required|integer|in:1,2',
             // 商品运费方式，（1固定邮费2运费模板）
-            'affiliate.goods_freight_type' => 'nullable|integer|in:1,2',
+            'affiliate.goods_freight_type' => 'required|integer|in:1,2',
             // 商品物流方式，（1物流2自提）
-            'affiliate.goods_logistics_type' => 'nullable|integer|in:1,2',
+            'affiliate.goods_logistics_type' => 'required|integer|in:1,2',
 
             // 商品属性数据
             'attributes_data' => 'required_if:goods_spec_type,2|array',
@@ -182,13 +182,13 @@ class GoodsRequest extends MineFormRequest
             // 商品属性数据no
             'attributes_data.*.attr_no' => ['nullable', 'integer'],
             // 商品属性数据名称
-            'attributes_data.*.attributes_name' => ['required_with:attributes_data', 'between:1,20'],
+            'attributes_data.*.attr_name' => ['required_with:attributes_data', 'between:1,20'],
             // 商品属性值数据
             'attributes_data.*.value' => 'required_with:attributes_data|array',
             // 商品属性值编号
             'attributes_data.*.value.*.attr_value_no' => ['nullable', 'integer'],
             // 商品属性值数据
-            'attributes_data.*.value.*.attr_value' => ['required_with:attributes_data', 'between:1,20'],
+            'attributes_data.*.value.*.attr_value_data' => ['required_with:attributes_data', 'between:1,20'],
             // 商品sku
             'attributes_data.*.value.*.sku_data' => 'required_if:goods_spec_type,2|array',
             // 商品sku id
@@ -260,17 +260,19 @@ class GoodsRequest extends MineFormRequest
             // 商品属性数据
             'attributes_data' => '商品属性',
             // 商品属性数据数组
-            'attributes_data.*.attributes_no' => '商品属性ID',
+            'attributes_data.*.attr_no' => '商品属性ID',
             // 商品属性分类ID
             'attributes_data.*.goods_category_id' => '商品分类ID',
             // 商品属性数据名称
-            'attributes_data.*.attributes_name' => '商品属性名称',
+            'attributes_data.*.attr_name' => '商品属性名称',
             // 商品属性值数据
             'attributes_data.*.value' => '商品属性值',
             // 商品属性值数据编号
             'attributes_data.*.value.*.attr_no' => '商品属性值编号',
             // 商品属性值数据
-            'attributes_value_data.*.value.*.attr_value' => '商品属性值数据',
+            'attributes_value_data.*.value.*.attr_value_data' => '商品属性值数据',
+            // 商品属性值编号
+            'attributes_value_no.*.value.*.attr_value_no' => '商品属性值编号',
             // 商品sku
             'attributes_value_data.*.value.*.sku_data' => '商品规格数据',
             // 商品skuID

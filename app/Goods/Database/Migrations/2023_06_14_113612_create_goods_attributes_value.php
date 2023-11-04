@@ -24,6 +24,7 @@ class CreateGoodsAttributesValue extends AbstractMigration
             $table->unsignedBigInteger('goods_no');
             $table->foreign('goods_no')->references('id')->on('goods')->comment('商品编号');
             $table->bigInteger('attr_no')->comment('商品属性编号');
+            $table->bigInteger('attr_value_no')->comment('商品属性值编号');
             $table->string('attr_value_data', 100)->comment('商品属性值');
             $table->comment('产品属性值');
         });

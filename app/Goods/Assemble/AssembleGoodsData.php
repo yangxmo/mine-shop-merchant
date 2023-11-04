@@ -28,7 +28,7 @@ class AssembleGoodsData
                 // build 属性
                 $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
                     $values['attr_no'] = $value['attr_no'];
-
+                    $values['attr_value_no'] = (int) snowflake_id();
                     // build sku
                     $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
                         $sku['goods_attr_no'] = $values['attr_no'];
@@ -50,7 +50,8 @@ class AssembleGoodsData
     {
         return Arr::where(
             $params['attributes_data'],
-            function (&$value) use (&$skuData) {
+            function (&$value) use (&$skuData, $params) {
+                $value['goods_category_id'] = $params['goods_category_id'];
                 // 处理新增
                 empty($value['attr_no']) && $value['attr_no'] = rand(10000, (int) snowflake_id());
 

@@ -96,8 +96,8 @@ class GoodsMapper extends AbstractMapper
         $data = Arr::except($data, 'attributes_data');
         $data = Arr::except($data, 'attributes_value');
 
-        $nowAttrIds = array_column($skuData, 'attr_no');
-        $nowAttrValueIds = array_column($skuData, 'attr_value_no');
+        $nowAttrIds = array_column($attributesData, 'attr_no');
+        $nowAttrValueIds = array_column($attributesValueData, 'attr_value_no');
         $nowSkuIds = array_column($skuData, 'goods_sku_id');
 
         // 删除其他数据
