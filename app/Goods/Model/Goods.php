@@ -77,6 +77,11 @@ class Goods extends MineModel
         $this->attributes['goods_images'] = Json::encode($value);
     }
 
+    public function getGoodsImagesAttribute($value): void
+    {
+        $this->attributes['goods_images'] = Json::decode($value);
+    }
+
     public function attribute(): HasMany
     {
         return $this->hasMany(GoodsAttributes::class, 'goods_no', 'id');
