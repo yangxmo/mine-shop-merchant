@@ -1,80 +1,82 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
+
 namespace App\Goods\Assemble;
 
 use Hyperf\Collection\Arr;
 
 class AssembleGoodsData
 {
-    /**
-     * @param array $params
-     * @return array
-     */
     public static function buildGoodsAttribute(array $params, array &$skuData): array
     {
-        return Arr::where($params['attributes_data'], function (&$value) use (&$skuData) {
-            $attributesNo = snowflake_id();
-            $value['attr_no'] = rand(10000, (int)$attributesNo);
+        return Arr::where(
+            $params['attributes_data'],
+            function (&$value) use (&$skuData, $params) {
+                $attributesNo = snowflake_id();
+                $value['attr_no'] = rand(10000, (int) $attributesNo);
+                $value['goods_category_id'] = $params['goods_category_id'];
 
-            // build 属性
-            $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
-                $values['attr_no'] = $value['attr_no'];
-                $values['attr_value_no'] = (int)snowflake_id();
+                // build 属性
+                $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
+                    $values['attr_no'] = $value['attr_no'];
 
-                // build sku
-                $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
-                    $sku['goods_attr_no'] = $values['attr_value_no'];
-                    $sku['goods_sku_id'] = (int)snowflake_id();
-                    return $sku;
+                    // build sku
+                    $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
+                        $sku['goods_attr_no'] = $values['attr_no'];
+                        $sku['goods_sku_id'] = (int) snowflake_id();
+                        return $sku;
+                    });
+
+                    unset($values['sku_data']);
+
+                    return $values;
                 });
 
-                unset($values['sku_data']);
-
-                return $values;
-            });
-
-            return $value;
-        }
+                return $value;
+            }
         );
     }
 
-    /**
-     * @param array $params
-     * @return array
-     */
     public static function buildUpdateGoodsAttribute(array $params, array &$skuData): array
     {
-        return Arr::where($params['attributes_data'], function (&$value) use (&$skuData) {
-            // 处理新增
-            empty($value['attr_no']) && $value['attr_no'] = rand(10000, (int)snowflake_id());
+        return Arr::where(
+            $params['attributes_data'],
+            function (&$value) use (&$skuData) {
+                // 处理新增
+                empty($value['attr_no']) && $value['attr_no'] = rand(10000, (int) snowflake_id());
 
-            // build 属性
-            $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
-                $values['attr_no'] = $value['attr_no'];
-                // 新增
-                empty($value['attr_value_no']) && $value['attr_value_no'] = (int)snowflake_id();
+                // build 属性
+                $value['value'] = Arr::where($value['value'], function (&$values) use ($value, &$skuData) {
+                    $values['attr_no'] = $value['attr_no'];
+                    // 新增
+                    empty($value['attr_no']) && $value['attr_no'] = (int) snowflake_id();
 
-                // build sku
-                $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
-                    $sku['goods_attr_no'] = $values['attr_value_no'];
-                    empty($sku['goods_sku_id']) && $sku['goods_sku_id'] = (int)snowflake_id();
-                    return $sku;
+                    // build sku
+                    $skuData = Arr::where($values['sku_data'], function (&$sku) use ($values) {
+                        $sku['goods_attr_no'] = $values['attr_value_no'];
+                        empty($sku['goods_sku_id']) && $sku['goods_sku_id'] = (int) snowflake_id();
+                        return $sku;
+                    });
+
+                    unset($values['sku_data']);
+
+                    return $values;
                 });
 
-                unset($values['sku_data']);
-
-                return $values;
-            });
-
-            return $value;
-        }
+                return $value;
+            }
         );
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
     public static function buildGoodsAffiliate(array $data): array
     {
         return [

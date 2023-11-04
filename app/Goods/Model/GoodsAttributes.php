@@ -17,7 +17,7 @@ use Mine\MineModel;
  * @property int $goods_no 
  * @property int $goods_category_id 商品分类ID
  * @property int $attr_no 商品属性编号
- * @property string $attributes_name 商品属性名
+ * @property string $attr_name 商品属性名
  * @property-read \Hyperf\Database\Model\Collection[]|null $attributeValue
  */
 class GoodsAttributes extends MineModel
@@ -34,12 +34,12 @@ class GoodsAttributes extends MineModel
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['goods_no', 'attr_no', 'attributes_name'];
+    protected array $fillable = ['goods_no', 'attr_no', 'attr_name', 'goods_category_id'];
 
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['goods_no' => 'integer', 'attr_no' => 'integer'];
+    protected array $casts = ['goods_no' => 'integer', 'attr_no' => 'integer', 'goods_category_id' => 'integer'];
 
     public function attributeValue(): \Hyperf\Database\Model\Relations\HasMany
     {

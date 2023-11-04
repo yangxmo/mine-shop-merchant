@@ -27,8 +27,6 @@ class CreateGoods extends AbstractMigration
             $table->bigIncrements('id')->autoIncrement();
             // 商品名称
             $table->string('goods_name', 150)->comment('商品名称');
-            // 单价
-            $table->char('goods_unit', 5)->default('')->comment('商品单位');
             // 商品关键词
             $table->string('goods_keyword', 100)->default('')->comment('商品关键词');
             // 商品价格

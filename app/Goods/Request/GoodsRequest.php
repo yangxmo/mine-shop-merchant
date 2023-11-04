@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\Goods\Request;
 
 use Hyperf\Validation\Rule;
@@ -35,9 +36,9 @@ class GoodsRequest extends MineFormRequest
     {
         return [
             // 商品名称 验证
-            'goods_name' => ['required','between:2,50', Rule::unique('goods', 'goods_name')],
+            'goods_name' => ['required', 'between:2,50', Rule::unique('goods', 'goods_name')],
             // 商品关键词
-            'goods_keyword' => 'nullable|between:1,20',
+            'goods_keyword' => 'required|between:1,20',
             // 分类排序 验证
             'goods_category_id' => ['required', 'integer', Rule::exists('goods_category', 'id')],
             // 产品价格
@@ -69,35 +70,35 @@ class GoodsRequest extends MineFormRequest
             'affiliate' => 'required',
             // 商品单位
             'affiliate.goods_unit' => 'required|between:1,2',
-            //是否预售商品（1否2是） 验证
+            // 是否预售商品（1否2是） 验证
             'affiliate.goods_is_presell' => 'required|in:1,2|integer',
-            //是否限购商品（1否2是） 验证
+            // 是否限购商品（1否2是） 验证
             'affiliate.goods_is_purchase' => 'required|in:1,2|integer',
-            //限购商品类型（1单次限购2全部限购） 验证
+            // 限购商品类型（1单次限购2全部限购） 验证
             'affiliate.goods_purchase_type' => 'required_with:goods_is_purchase,2|integer|in:1,2',
-            //限购商品数量 验证
+            // 限购商品数量 验证
             'affiliate.goods_purchase_num' => 'required_with:goods_is_purchase,2|integer|min:0|max:99999',
-            //是否会员商品（1否2是） 验证
+            // 是否会员商品（1否2是） 验证
             'affiliate.goods_is_vip' => 'required|integer|in:1,2',
-            //商品购买送积分 验证
+            // 商品购买送积分 验证
             'affiliate.goods_buy_point' => 'required|integer|min:0|max:9999',
-            //商品已售数量 验证
+            // 商品已售数量 验证
             'affiliate.goods_sales' => 'nullable|integer|min:0',
-            //商品推荐 验证
+            // 商品推荐 验证
             'affiliate.goods_recommend' => 'nullable|integer|in:1,2',
-            //商品运费方式，（1固定邮费2运费模板）
+            // 商品运费方式，（1固定邮费2运费模板）
             'affiliate.goods_freight_type' => 'nullable|integer|in:1,2',
-            //商品物流方式
+            // 商品物流方式，（1物流2自提）
             'affiliate.goods_logistics_type' => 'nullable|integer|in:1,2',
 
             // 商品属性数据
             'attributes_data' => 'required_if:goods_spec_type,2|array',
             // 商品属性数据名称
-            'attributes_data.*.attributes_name' => ['required_with:attributes_data', 'between:1,20'],
+            'attributes_data.*.attr_name' => ['required_with:attributes_data', 'between:1,20'],
             // 商品属性值数据
             'attributes_data.*.value' => 'required_with:attributes_data|array',
             // 商品属性值数据
-            'attributes_data.*.value.*.attr_value' => ['required_with:attributes_data', 'between:1,20'],
+            'attributes_data.*.value.*.attr_value_data' => ['required_with:attributes_data', 'between:1,20'],
             // 商品sku
             'attributes_data.*.value.*.sku_data' => 'required_if:goods_spec_type,2|array',
             // 商品sku名称
@@ -123,7 +124,7 @@ class GoodsRequest extends MineFormRequest
     {
         return [
             // 商品名称 验证
-            'goods_name' => ['required','between:2,50', Rule::unique('goods', 'goods_name')->ignore($this->route('id'), 'id')],
+            'goods_name' => ['required', 'between:2,50', Rule::unique('goods', 'goods_name')->ignore($this->route('id'), 'id')],
             // 商品单位
             'affiliate.goods_unit' => 'required|between:1,2',
             // 商品关键词
@@ -155,22 +156,26 @@ class GoodsRequest extends MineFormRequest
 
             // 商品附属信息
             'affiliate' => 'required',
-            //是否预售商品（1否2是） 验证
+            // 是否预售商品（1否2是） 验证
             'affiliate.goods_is_presell' => 'required|in:1,2|integer',
-            //是否限购商品（1否2是） 验证
+            // 是否限购商品（1否2是） 验证
             'affiliate.goods_is_purchase' => 'required|in:1,2|integer',
-            //限购商品类型（1单次限购2全部限购） 验证
+            // 限购商品类型（1单次限购2全部限购） 验证
             'affiliate.goods_purchase_type' => 'required_with:goods_is_purchase,2|integer|in:1,2',
-            //限购商品数量 验证
+            // 限购商品数量 验证
             'affiliate.goods_purchase_num' => 'required_with:goods_is_purchase,2|integer|min:1|max:99999',
-            //是否会员商品（1否2是） 验证
+            // 是否会员商品（1否2是） 验证
             'affiliate.goods_is_vip' => 'required|integer|in:1,2',
-            //商品购买送积分 验证
+            // 商品购买送积分 验证
             'affiliate.goods_buy_point' => 'required|integer|min:0|max:9999',
-            //商品已售数量 验证
+            // 商品已售数量 验证
             'affiliate.goods_sales' => 'nullable|integer|min:0',
-            //商品推荐 验证
-            'affiliate.goods_recommend' => 'nullable|integer|in:1,2',
+            // 商品是否推荐（1否2是） 验证
+            'affiliate.goods_recommend' => 'required|integer|in:1,2',
+            // 商品运费方式，（1固定邮费2运费模板）
+            'affiliate.goods_freight_type' => 'required|integer|in:1,2',
+            // 商品物流方式，（1物流2自提）
+            'affiliate.goods_logistics_type' => 'required|integer|in:1,2',
 
             // 商品属性数据
             'attributes_data' => 'nullable|array',
@@ -235,21 +240,21 @@ class GoodsRequest extends MineFormRequest
             // 说明
             'goods_description' => '商品说明',
 
-            //是否预售商品（1否2是） 验证
+            // 是否预售商品（1否2是） 验证
             'affiliate.goods_is_presell' => '是否预售商品',
-            //是否限购商品（1否2是） 验证
+            // 是否限购商品（1否2是） 验证
             'affiliate.goods_is_purchase' => '是否限购商品',
-            //限购商品类型（1单次限购2全部限购） 验证
+            // 限购商品类型（1单次限购2全部限购） 验证
             'affiliate.goods_purchase_type' => '限购商品类型',
-            //限购商品数量 验证
+            // 限购商品数量 验证
             'affiliate.goods_purchase_num' => '限购商品数量',
-            //是否会员商品（1否2是） 验证
+            // 是否会员商品（1否2是） 验证
             'affiliate.goods_is_vip' => '是否会员商品',
-            //商品购买送积分 验证
+            // 商品购买送积分 验证
             'affiliate.goods_buy_point' => '商品购买送积分',
-            //商品已售数量 验证
+            // 商品已售数量 验证
             'affiliate.goods_sales' => '商品已售数量',
-            //商品推荐 验证
+            // 商品推荐 验证
             'affiliate.goods_recommend' => '商品推荐',
 
             // 商品属性数据

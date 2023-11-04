@@ -24,6 +24,7 @@ class CreateGoodsSku extends AbstractMigration
             $table->unsignedBigInteger('goods_no');
             $table->foreign('goods_no')->references('id')->on('goods')->comment('商品编号');
             $table->string('goods_sku_id', 50)->unique()->comment('商品sku唯一标识');
+            $table->string('goods_attr_no', 50)->comment('商品属性唯一标识');
             $table->string('goods_sku_name', 150)->default('')->comment('商品sku名称');
             $table->string('goods_sku_value', 150)->default('')->comment('sku属性ID所对应的显示名，比如颜色，尺码');
             $table->string('goods_sku_image', 255)->default('')->comment('商品sku图片');
