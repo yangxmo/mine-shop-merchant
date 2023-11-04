@@ -142,7 +142,7 @@ class GoodsMapper extends AbstractMapper
         // 筛选
         $query = $query->with(['affiliate' => function ($query) use ($params) {
             $this->handleAffiliateSearch($query, $params);
-        }]);
+        }, 'attribute', 'attributeValue']);
         // 分页
         $paginate = $query->paginate((int) $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, (int) $params[$pageName] ?? 1);
 
