@@ -12,7 +12,12 @@ declare(strict_types=1);
 
 use Api\Handler\Factory\MiniAppServiceFactory;
 use Api\Handler\Interface\MiniAppInterface;
+use Hyperf\JsonRpc\JsonRpcHttpTransporter;
+use Hyperf\JsonRpc\JsonRpcPoolTransporter;
+use Hyperf\JsonRpc\JsonRpcTransporter;
 
 return [
     MiniAppInterface::class => MiniAppServiceFactory::class,
+    JsonRpcHttpTransporter::class => \App\System\Kernel\Rpc\JsonRpcHttpTransporter::class,
+    JsonRpcTransporter::class => JsonRpcPoolTransporter::class,
 ];

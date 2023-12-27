@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Order\Model;
 
-use App\Users\Model\UsersUser;
+use App\Users\Model\UsersBase;
 use Hyperf\Database\Model\Relations\belongsTo;
 use Hyperf\Database\Model\Relations\HasMany;
 use Hyperf\Database\Model\Relations\HasOne;
@@ -80,6 +80,6 @@ class OrderBase extends MineModel
      */
     public function userInfo(): belongsTo
     {
-        return $this->belongsTo(UsersUser::class, 'order_create_user_id', 'id');
+        return $this->belongsTo(UsersBase::class, 'order_create_user_id', 'id');
     }
 }

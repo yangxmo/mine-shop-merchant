@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Users\Mapper;
 
-use App\Users\Model\UsersUser;
+use App\Users\Model\UsersBase;
 use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Database\Model\Builder;
@@ -25,18 +25,18 @@ use Mine\MineModel;
 class UserMapper extends AbstractMapper
 {
     /**
-     * @var UsersUser
+     * @var UsersBase
      */
     public $model;
 
     public function assignModel()
     {
-        $this->model = UsersUser::class;
+        $this->model = UsersBase::class;
     }
 
     /**
      * 根据手机号获取信息.
-     * @param string $mobile
+     * @return null|MineModel|mixed
      */
     #[Cacheable(prefix: 'UserInfo', value: '#{mobile}', ttl: 1200)]
     public function getInfoByMobile(string $mobile)
@@ -46,9 +46,6 @@ class UserMapper extends AbstractMapper
 
     /**
      * 更新用户信息.
-     * @param string $mobile
-     * @param array $params
-     * @return bool
      */
     #[CacheEvict(prefix: 'UserInfo', value: '#{mobile}')]
     public function upInfoByMobile(string $mobile, array $params): bool
@@ -60,9 +57,6 @@ class UserMapper extends AbstractMapper
 
     /**
      * 检查是否重复.
-     * @param string $mobile
-     * @param int $id
-     * @return bool
      */
     public function checkUserMobile(string $mobile, int $id): bool
     {
@@ -71,9 +65,6 @@ class UserMapper extends AbstractMapper
 
     /**
      * 检查是否重复.
-     * @param string $email
-     * @param int $id
-     * @return bool
      */
     public function checkUserEmail(string $email, int $id): bool
     {
@@ -95,11 +86,6 @@ class UserMapper extends AbstractMapper
             $query->where('email', 'like', '%' . $params['email'] . '%');
         }
 
-        // 用户名
-        if (! empty($params['username'])) {
-            $query->where('username', 'like', '%' . $params['username'] . '%');
-        }
-
         // 用户昵称
         if (! empty($params['nickname'])) {
             $query->where('nickname', 'like', '%' . $params['nickname'] . '%');
@@ -111,38 +97,13 @@ class UserMapper extends AbstractMapper
         }
 
         // 用户真实姓名
-        if (! empty($params['real_name'])) {
-            $query->where('real_name', 'like', '%' . $params['real_name'] . '%');
-        }
-
-        // 用户连续签到天数
-        if (! empty($params['sign_in_days'])) {
-            $query->where('sign_in_days', '=', $params['sign_in_days']);
-        }
-
-        // 用户会员经验进度
-        if (! empty($params['experience'])) {
-            $query->where('experience', '=', $params['experience']);
+        if (! empty($params['truename'])) {
+            $query->where('truename', 'like', '%' . $params['truename'] . '%');
         }
 
         // 用户状态，含（正常，封禁）两种状态
         if (! empty($params['status'])) {
             $query->where('status', '=', $params['status']);
-        }
-
-        // 用户会员等级
-        if (! empty($params['level'])) {
-            $query->where('level', '=', $params['level']);
-        }
-
-        // 用户邀请码
-        if (! empty($params['invite_code'])) {
-            $query->where('invite_code', 'like', '%' . $params['invite_code'] . '%');
-        }
-
-        // 用户邀请人
-        if (! empty($params['invite_code_by'])) {
-            $query->where('invite_code_by', 'like', '%' . $params['invite_code_by'] . '%');
         }
 
         return $query;

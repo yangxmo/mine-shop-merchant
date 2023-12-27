@@ -16,7 +16,7 @@ use Api\Event\LoginAfterEvent;
 use Api\Handler\Interface\MiniAppInterface;
 use App\Users\Mapper\UserMapper;
 use App\Users\Mapper\UserPlatFormMapper;
-use App\Users\Model\UsersUser;
+use App\Users\Model\UsersBase;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
 use Mine\Exception\NormalStatusException;
@@ -81,7 +81,7 @@ class LoginService extends AbstractService
      */
     public function loginByWap(array $params): string
     {
-        /** @var UsersUser $userInfo */
+        /** @var UsersBase $userInfo */
         $userInfo = $this->mapper->getInfoByMobile($params['mobile']);
         // 密码检测
         if (! password_verify($params['password'], $userInfo->password)) {

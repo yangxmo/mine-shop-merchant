@@ -1,16 +1,16 @@
 <?php
-/**
- * MineAdmin is committed to providing solutions for quickly building web applications
- * Please view the LICENSE file that was distributed with this source code,
- * For the full copyright and license information.
- * Thank you very much for using MineAdmin.
- *
- * @Author X.Mo<root@imoi.cn>
- * @Link   https://gitee.com/xmo/MineAdmin
- */
 
-use Hyperf\Database\Schema\Schema;
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Schema\Schema;
 use Mine\Abstracts\AbstractMigration;
 
 class CreateUsersBalanceLogTable extends AbstractMigration
@@ -26,7 +26,7 @@ class CreateUsersBalanceLogTable extends AbstractMigration
             $table->bigIncrements('id')->comment('主键');
 
             $table->bigInteger('user_id')->comment('用户ID');
-            #生成迁移代码，含用户交易类型，交易金额，交易状态，交易前余额，交易后余额，交易时间，交易备注
+            # 生成迁移代码，含用户交易类型，交易金额，交易状态，交易前余额，交易后余额，交易时间，交易备注
             $table->enum('type', [1, 2, 3, 4, 5, 6])->comment('交易类型(1:充值,2:提现,3:转账,4:退款,5:扣款,6:系统)');
             $table->decimal('amount', 10, 2)->comment('交易金额');
             $table->enum('status', [1, 2, 3])->default(3)->comment('交易状态(1:成功,2:失败,3:处理中');

@@ -9,9 +9,11 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace App\System\Service;
 
 use App\System\Cache\UserCache;
+use App\System\JsonRpc\SystemContract;
 use App\System\Mapper\SystemUserMapper;
 use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Cache\Annotation\CacheEvict;
@@ -20,8 +22,6 @@ use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\DependProxy;
 use Mine\Cache\MineCache;
-use Mine\Event\UserAdd;
-use Mine\Event\UserDelete;
 use Mine\Exception\MineException;
 use Mine\Exception\NormalStatusException;
 use Mine\Interfaces\ServiceInterface\UserServiceInterface;
@@ -48,31 +48,26 @@ class SystemUserService extends AbstractService implements UserServiceInterface
 
     protected ContainerInterface $container;
 
-    protected SystemMenuService $sysMenuService;
+    #[Inject]
+    protected SystemContract $systemContract;
+    #[Inject]
+    protected SystemMenuService $systemMenuService;
+    #[Inject]
+    protected SystemRoleService $systemRoleService;
 
-    protected SystemRoleService $sysRoleService;
-
+    #[Inject]
     protected UserCache $userCache;
 
+    #[Inject]
     protected MineCache $mineCache;
 
     /**
      * SystemUserService constructor.
      */
-    public function __construct(
-        ContainerInterface $container,
-        SystemUserMapper $mapper,
-        UserCache $userCache,
-        MineCache $mineCache,
-        SystemMenuService $systemMenuService,
-        SystemRoleService $systemRoleService
-    ) {
+    public function __construct(ContainerInterface $container, SystemUserMapper $mapper)
+    {
         $this->mapper = $mapper;
-        $this->sysMenuService = $systemMenuService;
-        $this->sysRoleService = $systemRoleService;
         $this->container = $container;
-        $this->userCache = $userCache;
-        $this->mineCache = $mineCache;
     }
 
     /**
@@ -98,16 +93,12 @@ class SystemUserService extends AbstractService implements UserServiceInterface
         if ($this->mapper->existsByUsername($data['username'])) {
             throw new NormalStatusException(t('system.username_exists'));
         }
-        $id = $this->mapper->save($this->handleData($data));
-        $data['id'] = $id;
-        event(new UserAdd($data));
-        return $id;
+        return $this->systemContract->save($data);
     }
 
     /**
      * 更新用户信息.
      */
-    #[CacheEvict(prefix: 'loginInfo', value: 'userId_#{id}', group: 'user')]
     public function update(int $id, array $data): bool
     {
         if (isset($data['username'])) {
@@ -116,7 +107,7 @@ class SystemUserService extends AbstractService implements UserServiceInterface
         if (isset($data['password'])) {
             unset($data['password']);
         }
-        return $this->mapper->update($id, $this->handleData($data));
+        return $this->systemContract->update($id, $data);
     }
 
     /**
@@ -147,40 +138,18 @@ class SystemUserService extends AbstractService implements UserServiceInterface
 
     /**
      * 删除用户.
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function delete(array $ids): bool
     {
-        if (! empty($ids)) {
-            if (($key = array_search(env('SUPER_ADMIN'), $ids)) !== false) {
-                unset($ids[$key]);
-            }
-            $result = $this->mapper->delete($ids);
-            event(new UserDelete($ids));
-            return $result;
-        }
-
-        return false;
+        return $this->systemContract->delete($ids);
     }
 
     /**
      * 真实删除用户.
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function realDelete(array $ids): bool
     {
-        if (! empty($ids)) {
-            if (($key = array_search(env('SUPER_ADMIN'), $ids)) !== false) {
-                unset($ids[$key]);
-            }
-            $result = $this->mapper->realDelete($ids);
-            event(new UserDelete($ids));
-            return $result;
-        }
-
-        return false;
+        return $this->systemContract->realDelete($ids);
     }
 
     /**
@@ -201,7 +170,7 @@ class SystemUserService extends AbstractService implements UserServiceInterface
      */
     public function initUserPassword(int $id, string $password = '123456'): bool
     {
-        return $this->mapper->initUserPassword($id, $password);
+        return $this->systemContract->initUserPassword($id, $password);
     }
 
     /**
@@ -244,24 +213,14 @@ class SystemUserService extends AbstractService implements UserServiceInterface
 
     /**
      * 用户更新个人资料.
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
-    #[CacheEvict(prefix: 'user', value: 'userInfo_#{params.id}', group: 'user')]
     public function updateInfo(array $params): bool
     {
         if (! isset($params['id'])) {
             return false;
         }
 
-        $model = $this->mapper->getModel()::find($params['id']);
-        unset($params['id'], $params['password']);
-        foreach ($params as $key => $param) {
-            $model[$key] = $param;
-        }
-
-        $this->clearCache();
-        return $model->save();
+        return $this->systemContract->updateInfo($params);
     }
 
     /**
@@ -269,7 +228,7 @@ class SystemUserService extends AbstractService implements UserServiceInterface
      */
     public function modifyPassword(array $params): bool
     {
-        return $this->mapper->initUserPassword((int) user()->getId(), $params['newPassword']);
+        return $this->systemContract->initUserPassword(user()->getId(), $params['newPassword']);
     }
 
     /**
@@ -277,28 +236,29 @@ class SystemUserService extends AbstractService implements UserServiceInterface
      */
     public function getUserInfoByIds(array $ids): array
     {
-        return $this->mapper->getUserInfoByIds($ids);
+        return $this->systemContract->getUserInfoByIds($ids);
     }
 
     /**
      * 获取缓存用户信息.
      */
-    #[Cacheable(prefix: 'user', ttl: 0, value: 'userInfo_#{id}', group: 'user')]
+    #[Cacheable(prefix: 'user', value: 'userInfo_#{id}', ttl: 0, group: 'user')]
     protected function getCacheInfo(int $id): array
     {
         $user = $this->mapper->getModel()->find($id);
         $user->addHidden('deleted_at', 'password');
         $data['user'] = $user->toArray();
+
         if (user()->isSuperAdmin()) {
             $data['roles'] = ['superAdmin'];
-            $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
+            $data['routers'] = $this->systemMenuService->mapper->getSuperAdminRouters();
             $data['codes'] = ['*'];
         } else {
-            $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
+            $roles = $this->systemRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
             $ids = $this->filterMenuIds($roles);
             $data['roles'] = $user->roles()->pluck('code')->toArray();
-            $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($ids);
-            $data['codes'] = $this->sysMenuService->mapper->getMenuCode($ids);
+            $data['routers'] = $this->systemMenuService->mapper->getRoutersByIds($ids);
+            $data['codes'] = $this->systemMenuService->mapper->getMenuCode($ids);
         }
 
         return $data;
@@ -317,26 +277,5 @@ class SystemUserService extends AbstractService implements UserServiceInterface
         }
         unset($roleData);
         return array_unique($ids);
-    }
-
-    /**
-     * 处理提交数据.
-     * @param mixed $data
-     */
-    protected function handleData($data): array
-    {
-        if (! is_array($data['role_ids'])) {
-            $data['role_ids'] = explode(',', $data['role_ids']);
-        }
-        if (($key = array_search(env('ADMIN_ROLE'), $data['role_ids'])) !== false) {
-            unset($data['role_ids'][$key]);
-        }
-        if (! empty($data['post_ids']) && ! is_array($data['post_ids'])) {
-            $data['post_ids'] = explode(',', $data['post_ids']);
-        }
-        if (! empty($data['dept_ids']) && ! is_array($data['dept_ids'])) {
-            $data['dept_ids'] = explode(',', $data['dept_ids']);
-        }
-        return $data;
     }
 }

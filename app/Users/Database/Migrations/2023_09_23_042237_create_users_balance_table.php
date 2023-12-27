@@ -25,7 +25,7 @@ class CreateUsersBalanceTable extends AbstractMigration
             $table->comment('用户钱包表');
             $table->bigIncrements('id')->comment('主键');
             $table->unsignedBigInteger('user_id')->comment('用户ID');
-            $table->foreign('user_id')->references('id')->on('users_user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users_base')->onDelete('cascade');
 
             $table->decimal('available_amount', 12, 2)->default(0)->comment('用户可用金额');
             $table->decimal('frozen_amount', 12, 2)->default(0)->comment('用户冻结金额');
