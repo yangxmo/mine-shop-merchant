@@ -70,6 +70,11 @@ class SystemUserService extends AbstractService implements UserServiceInterface
         $this->container = $container;
     }
 
+    public function getPageList(?array $params = null, bool $isScope = true): array
+    {
+        return $this->systemContract->getPageList($params, $isScope);
+    }
+
     /**
      * 获取用户信息.
      * @throws ContainerExceptionInterface

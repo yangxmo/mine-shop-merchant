@@ -17,6 +17,11 @@ interface SystemContract
     public function getInfoById(int $uid);
 
     /**
+     * 获取列表.
+     */
+    public function getPageList(?array $params = null, bool $isScope = true): array;
+
+    /**
      * 新增用户.
      */
     public function save(array $data);
