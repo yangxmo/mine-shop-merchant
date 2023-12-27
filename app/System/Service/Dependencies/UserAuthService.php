@@ -11,17 +11,9 @@ declare(strict_types=1);
  */
 namespace App\System\Service\Dependencies;
 
-use App\System\Mapper\SystemUserMapper;
-use App\System\Model\SystemUser;
-use Exception;
-use Hyperf\Database\Model\ModelNotFoundException;
+use App\System\JsonRpc\LoginContract;
+use Hyperf\Di\Annotation\Inject;
 use Mine\Annotation\DependProxy;
-use Mine\Event\UserLoginAfter;
-use Mine\Event\UserLoginBefore;
-use Mine\Event\UserLogout;
-use Mine\Exception\NormalStatusException;
-use Mine\Exception\UserBanException;
-use Mine\Helper\MineCode;
 use Mine\Interfaces\UserServiceInterface;
 use Mine\Vo\UserServiceVo;
 
@@ -31,66 +23,19 @@ use Mine\Vo\UserServiceVo;
 #[DependProxy(values: [UserServiceInterface::class])]
 class UserAuthService implements UserServiceInterface
 {
-    /**
-     * 登录.
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+
+    #[Inject]
+    protected LoginContract $loginContract;
+
+    // 登录
     public function login(UserServiceVo $userServiceVo): string
     {
-        $mapper = container()->get(SystemUserMapper::class);
-        try {
-            event(new UserLoginBefore(['username' => $userServiceVo->getUsername(), 'password' => $userServiceVo->getPassword()]));
-            $userinfo = $mapper->checkUserByUsername($userServiceVo->getUsername())->toArray();
-            $password = $userinfo['password'];
-            unset($userinfo['password']);
-            $userLoginAfter = new UserLoginAfter($userinfo);
-            if ($mapper->checkPass($userServiceVo->getPassword(), $password)) {
-                if (
-                    ($userinfo['status'] == SystemUser::USER_NORMAL)
-                    || ($userinfo['status'] == SystemUser::USER_BAN && $userinfo['id'] == env('SUPER_ADMIN'))
-                ) {
-                    $userLoginAfter->message = t('jwt.login_success');
-                    $token = user()->getToken($userLoginAfter->userinfo);
-                    $userLoginAfter->token = $token;
-                    event($userLoginAfter);
-                    return $token;
-                }
-                $userLoginAfter->loginStatus = false;
-                $userLoginAfter->message = t('jwt.user_ban');
-                event($userLoginAfter);
-                throw new UserBanException();
-            }
-            $userLoginAfter->loginStatus = false;
-            $userLoginAfter->message = t('jwt.password_error');
-            event($userLoginAfter);
-            throw new NormalStatusException();
-        } catch (Exception $e) {
-            if ($e instanceof ModelNotFoundException) {
-                throw new NormalStatusException(t('jwt.username_error'), MineCode::NO_DATA);
-            }
-            if ($e instanceof NormalStatusException) {
-                throw new NormalStatusException(t('jwt.password_error'), MineCode::PASSWORD_ERROR);
-            }
-            if ($e instanceof UserBanException) {
-                throw new NormalStatusException(t('jwt.user_ban'), MineCode::USER_BAN);
-            }
-            console()->error($e->getMessage());
-            throw new NormalStatusException(t('jwt.unknown_error'));
-        }
+        return $this->loginContract->loginByAccount(serialize($userServiceVo));
     }
 
-    /**
-     * 用户退出.
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function logout()
+    // 用户退出.
+    public function logout(): void
     {
-        $user = user();
-        event(new UserLogout($user->getUserInfo()));
-        $user->getJwt()->logout();
+        $this->loginContract->logout();
     }
 }

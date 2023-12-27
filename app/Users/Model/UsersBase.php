@@ -42,7 +42,7 @@ class UsersBase extends MineModel
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'user_base';
+    protected ?string $table = 'users_base';
 
     /**
      * The attributes that are mass assignable.

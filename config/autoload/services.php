@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
+use App\System\JsonRpc\LoginContract;
 use App\System\JsonRpc\SystemContract;
 
 $registry = [
@@ -55,6 +57,7 @@ $config = [
         // 下面的 FooServiceInterface 和 BarServiceInterface 仅示例多服务，并不是在文档示例中真实存在的
         $services = [
             'user.merchant' => SystemContract::class,
+            'login.merchant' => LoginContract::class,
         ];
         foreach ($services as $name => $interface) {
             $consumers[] = [
